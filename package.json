@@ -1,0 +1,35 @@
+{
+  "name": "febs",
+  "version": "1.0.0",
+  "description": "FEBSv2: REI's next-gen JavaScript build system re-designed from the ground up. - It is a work in progress and will change as we communicate with teams to determine requirements.",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha",
+    "test-watch": "mocha --watch",
+    "dev": "webpack-dev-server --config src/webpack.dev.conf.js",
+    "dev-server": "NODE_ENV=dev node test/harness/entry-webpack-dev-server.js"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.6.0",
+    "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.4",
+    "riot": "^3.6.1",
+    "riot-tag-loader": "^1.0.0",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.5.0",
+    "webpack-merge": "^4.1.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {},
+  "author": "Alex Perkins"
+}
