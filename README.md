@@ -15,24 +15,16 @@
 - npm-based scripts, no gulp
 - Overridable defaults
 
-## Current state
-
-Current Capabilities:
-- Builds JS, ES-next.
-- Builds LESS
-- Builds Riot components
-- Development build
-- Live reloading
-
 ## Features:
 - All build tasks are run through webpack. Why?
-  - Take advantage of the large community that currently rallies around webpack: new development, issue resolution, etc.
-  - Webpack contains functionality that we need and loader/plugin system to support the future.
-  - Maintainable due to the fact that we have minimal code to maintain.
+  - Take advantage of the very large community that currently rallies around webpack: new development, issue resolution, etc.
+  - Webpack contains functionality that we need either itself or through its loaders and plugins.
+  - Maintainable due to the fact that there is minimal code.
   - Updateable via webpack's ecosystem and local webpack conf overrides.
 - No gulp. Why?
     - It's just a task runner; we want to keep it simple by utilizing package.json scripts.
 - Development and production modes.
+- Live reloading for fast prototyping and development.
 - All features unit tested.
 
 ## Installation
