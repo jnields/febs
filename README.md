@@ -49,6 +49,10 @@ Todo:
 
 [x] Riot
 
+[x] Sourcemaps (development, inline)
+
+[ ] Sourcemaps (production, external)
+
 [ ] Production build (asset versioning, minification)
 
 [x] Live reloading
