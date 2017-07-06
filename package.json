@@ -12,12 +12,16 @@
     "dev": "webpack-dev-server --config src/webpack.dev.conf.js",
     "dev-server": "NODE_ENV=dev node test/harness/entry-webpack-dev-server.js"
   },
+  "bin": {
+    "febs": "./bin/febs"
+  },
   "keywords": [],
   "license": "ISC",
   "dependencies": {
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "babel-preset-env": "^1.6.0",
+    "commander": "^2.11.0",
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^2.1.2",
     "less": "^2.7.2",

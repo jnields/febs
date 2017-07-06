@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+const program = require('commander');
+const febs = require('../src/index.js');
+
+program
+  .usage('[task] [options]')
+  .description('Builds and bundles front-end assets with minimal configuration\n')
+  .version(require('../package.json').version)
+  .option('-v, --verbose', 'Increase logging verbosity of build system')
+  .option('--debug', 'Higher level of verbosity, including debug output');
+
+program
+  .command('build')
+  .description('(Default) Builds front-end assets optimized for production\n');
+
+program
+  .command('dev')
+  .description('Build/Serves front-end assets optimized for local development\n');
+
+program
+  .on('--help', () => {
+    process.stdout.write(`  Examples:
+        $ febs dev --no-watch
+        $ febs build --verbose
+    `);
+  });
+
+program.parse(process.argv);
+
+const options = program.opts();
+delete options.version;
+
+const task = program.args[0] || 'build';
+
+febs.compile({
+  confPath: './webpack.overrides.conf.js',
+});
+
+// febs(task, options, (err) => {
+//   if (!err) {
+//     process.exit(0);
+//   } else {
+//     process.exit(1);
+//   }
+// });
