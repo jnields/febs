@@ -34,6 +34,14 @@
     "webpack-merge": "^4.1.0",
     "winston": "^2.3.1"
   },
-  "devDependencies": {},
-  "author": "Alex Perkins"
+  "devDependencies": {
+    "memory-fs": "^0.4.1"
+  },
+  "contributors": [{
+    "name": "Alex Perkins",
+    "email": "aperkin@rei.com"
+  }, {
+    "name": "DeShawn Williams",
+    "email": "dewilli@rei.com"
+  }]
 }
