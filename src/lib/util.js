@@ -45,6 +45,8 @@ const getWebpackErrors = (err, stats) => {
  * @param {*} errors
  */
 const logErrors = (errors) => {
+  if (!errors) return;
+
   // Fatal error (wp)
   if (errors.err) {
     logger.error(errors.err.stack || errors.err);
