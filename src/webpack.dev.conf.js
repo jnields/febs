@@ -15,8 +15,12 @@ module.exports = {
     filename: '[name].bundle.js',
   },
 
-
   devtool: 'cheap-eval-source-map', // internal, cheap, fast
+
+  // Resolve loaders relative to rei-febs (as this will be a dependency of another module.)
+  resolveLoader: {
+    modules: [path.resolve(__dirname, '../node_modules')],
+  },
 
   module: {
     rules: [{
