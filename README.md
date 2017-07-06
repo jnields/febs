@@ -28,7 +28,7 @@
 - All features unit tested.
 
 ## Installation
-- `npm install`
+- `npm install git+https://git.rei.com:7999/fedpack/rei-febs.git`
 
 ## Usage
 
@@ -42,9 +42,6 @@
   // Run unit tests
   $ febs test
 ```
-
-## To run unit tests:
-`npm test`
 
 Todo:
 
