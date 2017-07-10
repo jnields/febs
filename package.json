@@ -24,6 +24,7 @@
     "commander": "^2.11.0",
     "css-loader": "^0.28.4",
     "extract-text-webpack-plugin": "^2.1.2",
+    "fs-extra": "^3.0.1",
     "less": "^2.7.2",
     "less-loader": "^4.0.4",
     "riot": "^3.6.1",
@@ -37,11 +38,14 @@
   "devDependencies": {
     "memory-fs": "^0.4.1"
   },
-  "contributors": [{
-    "name": "Alex Perkins",
-    "email": "aperkin@rei.com"
-  }, {
-    "name": "DeShawn Williams",
-    "email": "dewilli@rei.com"
-  }]
+  "contributors": [
+    {
+      "name": "Alex Perkins",
+      "email": "aperkin@rei.com"
+    },
+    {
+      "name": "DeShawn Williams",
+      "email": "dewilli@rei.com"
+    }
+  ]
 }
