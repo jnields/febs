@@ -31,16 +31,7 @@ program.parse(process.argv);
 const options = program.opts();
 delete options.version;
 
-const task = program.args[0] || 'build';
+// const task = program.args[0] || 'build';
 
-febs.compile({
-  confPath: './webpack.overrides.conf.js',
-});
-
-// febs(task, options, (err) => {
-//   if (!err) {
-//     process.exit(0);
-//   } else {
-//     process.exit(1);
-//   }
-// });
+// Run FEBS compile.
+febs.compile();
