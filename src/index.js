@@ -2,9 +2,21 @@ const wp = require('webpack');
 const logger = require('./lib/logger');
 const util = require('./lib/util');
 const merge = require('webpack-merge');
+const fs = require('fs-extra');
+const path = require('path');
 
-// Environmental webpack.conf (dev or prod)
+// Environmental WP conf (dev or prod)
 const getBaseConf = () => require(`./webpack.${process.env.NODE_ENV}.conf`);
+
+// Get local overrides WP conf.
+const getOverridesConf = (conf) => {
+  if (conf) return conf;  // unit testing only.
+
+  const cwd = process.cwd();
+  const overridesConfFile = path.resolve(cwd, './webpack.overrides.conf.js');
+  return fs.pathExistsSync(overridesConfFile) ?
+    require(overridesConfFile) : {};
+};
 
 /**
  * Create's compiler instance with appropriate environmental
@@ -21,14 +33,8 @@ const getBaseConf = () => require(`./webpack.${process.env.NODE_ENV}.conf`);
 const createCompiler = (conf) => {
   const confBase = getBaseConf();
 
-  // Overrides config. Override the environmental config defaults.
-  let confOverrides;
-
-  if (conf.confPath) {
-    confOverrides = require(conf.confPath);
-  } else {
-    confOverrides = conf; // used for unit testing only.
-  }
+  // Overrides config.
+  const confOverrides = getOverridesConf(conf);
 
   // Always replace:
   //   - entry, output
@@ -36,6 +42,8 @@ const createCompiler = (conf) => {
     entry: 'replace',
     output: 'replace',
   })(confBase, confOverrides);
+
+  logger.info('Webpack conf: ', wpConf);
 
   // Create webpack compiler object with merged config objects.
   return wp(wpConf);
