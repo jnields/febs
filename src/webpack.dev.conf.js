@@ -2,16 +2,17 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const cwd = process.cwd();
 
 module.exports = {
 
   entry: {
-    app: path.resolve(__dirname, './entry.js'),
+    app: path.resolve(cwd, './entry.js'),
     // 'main.css': './src/main.css',
   },
 
   output: {
-    path: path.resolve(__dirname, '../dest'),
+    path: path.resolve(cwd, 'dest'),
     filename: '[name].bundle.js',
   },
 
@@ -29,10 +30,18 @@ module.exports = {
       use: {
         loader: 'babel-loader',
         options: {
+          // presets: [
+          //   ['env', {
+          //     targets: {
+          //       browsers: ['last 2 versions', 'ie >= 11', 'safari >= 7'],
+          //     },
+          //   }],
+          // ],
+          // presets: [[]],
           presets: [
-            ['env', {
+            [require('babel-preset-env'), {
               targets: {
-                browsers: ['last 2 versions', 'ie >= 11', 'safari >= 7'],
+                browsers: ['ie >= 10'],
               },
             }],
           ],
