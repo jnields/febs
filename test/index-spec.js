@@ -34,16 +34,22 @@ const compile = conf => new Promise((resolve, reject) => {
       return reject(errors);
     }
 
-    // console.log(Object.keys(entrypoints));
-    // console.log(entrypoints);
-
     // Resolve with compile results.
-    const code = Object.keys(entrypoints).map((key) => {
-      if (entrypoints[key].assets.length === 1) {
-        return fs.readFileSync(path.resolve(__dirname, `../dest/${key}.bundle.js`), 'utf8');
-      }
-      return fs.readFileSync(path.resolve(__dirname, `../dest/${key}.bundle.css`), 'utf8');
+    const code = Object.keys(entrypoints).map((key) => {  // key is entrypoint key (e.g. "app")
+      const res = {};
+      res[key] = [];  // an array of built assets will be under the key
+
+      const assets = entrypoints[key].assets;  // array of assets under that key.
+      assets.forEach((asset) => {
+        const o = {};
+        o.filename = asset;
+        o.content = fs.readFileSync(path.resolve(__dirname, `../dest/${asset}`), 'utf8');
+        res[key].push(o);
+      });
+
+      return res;
     });
+
     return resolve({ err, stats, code });
   });
 });
@@ -51,6 +57,32 @@ const compile = conf => new Promise((resolve, reject) => {
 const absPath = relPath => path.resolve(__dirname, relPath);
 
 describe('FEBS Build', () => {
+  describe('Production mode', function () {
+    beforeEach(function () {
+      process.env.NODE_ENV = 'prod';
+    });
+
+    it('builds ES production bundle - versioned, minified, sourcemaps', async function () {
+      const compiled = await compile({
+        entry: {
+          app: absPath('fixtures/src/main-es2015.js'),
+          app2: absPath('fixtures/src/main-es2015.js'),
+        },
+      }).catch(util.logErrors);
+      assert.equal(compiled.code.length, 2);
+
+      // source and sourcemap.
+      assert.equal(compiled.code[0].app.length, 2); // js and map
+
+      // sourcemap
+      assert(compiled.code[0].app[1].filename.includes('.map'));
+      assert(compiled.code[0].app[1].content.length > 0);
+
+      // minified
+      assert(compiled.code[0].app[0].content.includes('add:function'));
+    });
+  });
+
   describe('Development mode', function () {
     beforeEach(function () {
       process.env.NODE_ENV = 'dev';
@@ -63,7 +95,8 @@ describe('FEBS Build', () => {
             app: absPath('fixtures/src/main-es2015.js'),
           },
         }).catch(util.logErrors);
-        assert(compiled.code[0].includes('add: function add()'));
+        assert.equal(compiled.code[0].app[0].filename, 'app.bundle.js');
+        assert(compiled.code[0].app[0].content.includes('add: function add()'));
       });
 
       it('builds multiple ES bundles', async function () {
@@ -73,8 +106,8 @@ describe('FEBS Build', () => {
             app2: absPath('fixtures/src/main-es2015.js'),
           },
         }).catch(util.logErrors);
-        assert(compiled.code[0].includes('add: function add()'));
-        assert(compiled.code[1].includes('add: function add()'));
+        assert(compiled.code[0].app1[0].content.includes('add: function add()'));
+        assert(compiled.code[1].app2[0].content.includes('add: function add()'));
       });
 
       it('detects ES syntax errors', async function () {
@@ -97,7 +130,7 @@ describe('FEBS Build', () => {
           },
         }).catch(util.logErrors);
 
-        assert(compiled.code[0].includes('coolcomponent'));
+        assert(compiled.code[0].app[0].content.includes('coolcomponent'));
       });
 
       it('detects Riot parse errors', async function () {
@@ -119,7 +152,7 @@ describe('FEBS Build', () => {
             app: absPath('fixtures/src/main-es2015.js'),
           },
         }).catch(util.logErrors);
-        assert(compiled.code[0].includes('sourceURL'));
+        assert(compiled.code[0].app[0].content.includes('sourceURL'));
       });
     });
 
@@ -136,7 +169,7 @@ describe('FEBS Build', () => {
         // that is always generated when LESS compile runs.
         // Currently, need to require less in the js.. Is this how we should be
         // pulling in less in wp?
-        assert(compiled.code[0].includes('border-color'));
+        assert(compiled.code[0].app[1].content.includes('border-color'));
       });
     });
   });

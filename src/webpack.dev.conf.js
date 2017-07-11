@@ -1,7 +1,6 @@
 // Development webpack conf
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const cwd = process.cwd();
 
 module.exports = {
@@ -67,8 +66,8 @@ module.exports = {
   },
 
   devServer: {
-    // contentBase: path.join(__dirname, '../test/harness'),
-    contentBase: path.join(__dirname, '../dest'),
+    // contentBase: path.join(__dirname, '../dest'),
+    contentBase: path.resolve(cwd, 'dest'),
 
     // publicPath: path.join(__dirname, '../asretnha'),
     publicPath: '/dest/',
@@ -83,8 +82,5 @@ module.exports = {
     new ExtractTextPlugin({
       filename: '[name].bundle.css',
     }),
-  //   new UglifyJsPlugin({
-  //     compress: process.env.NODE_ENV === 'prod',
-  //   }),
   ],
 };

@@ -43,7 +43,7 @@ const createCompiler = (conf) => {
     output: 'replace',
   })(confBase, confOverrides);
 
-  logger.info('Webpack conf: ', wpConf);
+  // logger.info('Webpack conf: ', wpConf);
 
   // Create webpack compiler object with merged config objects.
   return wp(wpConf);
