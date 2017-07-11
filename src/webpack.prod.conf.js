@@ -2,6 +2,7 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
 const cwd = process.cwd();
 
 module.exports = {
@@ -51,12 +52,6 @@ module.exports = {
       test: /\.tag$/,
       exclude: /node_modules/,
       loader: 'riot-tag-loader',
-      query: {
-        // set it to true if you are using hmr
-        // add here all the other riot-compiler options riotjs.com/guide/compiler/
-        // template: 'pug' for example
-        hot: false,
-      },
     }, {
       test: /\.less$/,
       use: ExtractTextPlugin.extract({

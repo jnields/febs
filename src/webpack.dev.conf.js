@@ -1,6 +1,7 @@
 // Development webpack conf
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 const cwd = process.cwd();
 
 module.exports = {
