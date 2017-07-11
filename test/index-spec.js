@@ -140,7 +140,28 @@ describe('FEBS Build', () => {
           },
         }).catch((errors) => {
           assert(errors.compile);
-          assert(errors.compile[0].includes('Unexpected'));
+        });
+      });
+    });
+
+    describe('Vue', function () {
+      it('compiles Vue tags', async function () {
+        const compiled = await compile({
+          entry: {
+            app: absPath('fixtures/src/main-vue.js'),
+          },
+        }).catch(util.logErrors);
+
+        assert(compiled.code[0].app[0].content.includes('Vue says'));
+      });
+
+      it('detects Vue parse errors', async function () {
+        await compile({
+          entry: {
+            app: absPath('fixtures/src/main-vue-syntax-error.js'),
+          },
+        }).catch((errors) => {
+          assert(errors.compile);
         });
       });
     });

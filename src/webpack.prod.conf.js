@@ -53,6 +53,10 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'riot-tag-loader',
     }, {
+      test: /\.vue$/,
+      exclude: /node_modules/,
+      loader: 'vue-loader',
+    }, {
       test: /\.less$/,
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',

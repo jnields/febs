@@ -49,6 +49,8 @@ Todo:
 
 [x] Riot
 
+[x] Vue
+
 [x] Sourcemaps (development, inline)
 
 [x] Sourcemaps (production, external)
