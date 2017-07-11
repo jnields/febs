@@ -51,9 +51,9 @@ Todo:
 
 [x] Sourcemaps (development, inline)
 
-[ ] Sourcemaps (production, external)
+[x] Sourcemaps (production, external)
 
-[ ] Production build (asset versioning, minification)
+[x] Production build (asset versioning, minification)
 
 [x] Live reloading
 
