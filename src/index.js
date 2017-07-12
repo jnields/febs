@@ -83,7 +83,7 @@ const run = (conf) => {
     });
 
     cmd.stderr.on('data', (data) => {
-      logger.error(data);
+      logger.error(data.toString());
     });
   }
 
