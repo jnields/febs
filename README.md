@@ -78,3 +78,7 @@ $ febs dev-server
 [x] Unit tests of client code.
 
 [ ] Code coverage of client code.
+
+[ ] HTML snippet generation
+
+[ ] Asset CDN integration
