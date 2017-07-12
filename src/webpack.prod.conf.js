@@ -8,7 +8,7 @@ const cwd = process.cwd();
 module.exports = {
 
   entry: {
-    app: path.resolve(cwd, './entry.js'),
+    app: path.resolve(cwd, 'src/entry.js'),
     // 'main.css': './src/main.css',
   },
 

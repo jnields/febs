@@ -1,5 +1,6 @@
 // Development webpack conf
 const path = require('path');
+const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const cwd = process.cwd();
@@ -7,8 +8,8 @@ const cwd = process.cwd();
 module.exports = {
 
   entry: {
-    app: path.resolve(cwd, './entry.js'),
-    // 'main.css': './src/main.css',
+    app: path.resolve(cwd, 'src/entry.js'),
+    //'main.css': './src/main.css',
   },
 
   output: {
@@ -65,10 +66,7 @@ module.exports = {
   },
 
   devServer: {
-    // contentBase: path.join(__dirname, '../dest'),
     contentBase: path.resolve(cwd, 'dest'),
-
-    // publicPath: path.join(__dirname, '../asretnha'),
     publicPath: '/dest/',
     compress: true,
     port: 9000,
@@ -81,5 +79,11 @@ module.exports = {
     new ExtractTextPlugin({
       filename: '[name].bundle.css',
     }),
+
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor',
+    //   filename: 'vendor.js',
+    //   minChunks: Infinity,
+    // }),
   ],
 };

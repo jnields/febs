@@ -4,6 +4,7 @@ const util = require('./lib/util');
 const merge = require('webpack-merge');
 const fs = require('fs-extra');
 const path = require('path');
+const { exec, spawn } = require('child_process');
 
 // Environmental WP conf (dev or prod)
 const getBaseConf = () => require(`./webpack.${process.env.NODE_ENV}.conf`);
@@ -68,8 +69,51 @@ const compile = conf => createCompiler(conf).run((err, stats) => {
   }));
 });
 
-// febs api
+/**
+ * Main entry point to febs.
+ * conf: task, options
+ */
+const run = (conf) => {
+  // Task: Unit tests.
+  if (conf.task === 'test') {
+    process.env.NODE_ENV = 'dev';
+    const cmd = spawn('mocha', ['--colors']);
+    cmd.stdout.on('data', (data) => {
+      console.log(data.toString());
+    });
+
+    cmd.stderr.on('data', (data) => {
+      logger.error(data);
+    });
+  }
+
+  // Task: Dev build.
+  // Todo: Use webpack-dev-server API instead of spawning.
+  // Note: There were issues with it not refreshing page using the API so, for now, spawning.
+  if (conf.task === 'dev' || conf.task === 'prod') {
+    process.env.NODE_ENV = conf.task;
+    compile();
+  }
+
+  // Task: Dev-server build.
+  // Todo: Use webpack-dev-server API instead of spawning.
+  // Note: There were issues with it not refreshing page using the API so, for now, spawning.
+  if (conf.task === 'dev-server') {
+    process.env.NODE_ENV = 'dev';
+    const cmd = spawn('node', ['../rei-febs/node_modules/webpack-dev-server/bin/webpack-dev-server.js', '--colors', 'true', '--config', '../rei-febs/src/webpack.dev.conf.js']);
+    cmd.stdout.on('data', (data) => {
+      logger.info(data.toString('utf8'));
+    });
+
+    cmd.stderr.on('data', (data) => {
+      logger.error(data.toString());
+    });
+  }
+};
+
+// FEBS public API
 module.exports = {
+  run,
   compile,
   createCompiler,
 };

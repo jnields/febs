@@ -2,6 +2,7 @@
 
 const program = require('commander');
 const febs = require('../src/index.js');
+const logger = require('../src/lib/logger');
 
 program
   .usage('[task] [options]')
@@ -11,7 +12,7 @@ program
   .option('--debug', 'Higher level of verbosity, including debug output');
 
 program
-  .command('build')
+  .command('prod')
   .description('(Default) Builds front-end assets optimized for production\n');
 
 program
@@ -19,10 +20,16 @@ program
   .description('Build/Serves front-end assets optimized for local development\n');
 
 program
+  .command('test')
+  .description('Runs unit tests.\n');
+
+program
   .on('--help', () => {
     process.stdout.write(`  Examples:
         $ febs dev --no-watch
-        $ febs build --verbose
+        $ febs prod --verbose
+        $ febs test
+        $ febs test --coverage (not available yet)
     `);
   });
 
@@ -31,7 +38,16 @@ program.parse(process.argv);
 const options = program.opts();
 delete options.version;
 
-// const task = program.args[0] || 'build';
+// Get febs task name:  febs <task> [--options]
+const tasks = ['dev', 'dev-server', 'prod', 'test'];
+const task = program.args[0];
+if (!tasks.includes(task)) {
+  logger.error(`Unrecognized task, ${task}`);
+  process.exit(1);
+}
 
-// Run FEBS compile.
-febs.compile();
+// Run FEBS.
+febs.run({
+  task,
+  options,
+});
