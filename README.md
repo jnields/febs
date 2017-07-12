@@ -40,24 +40,24 @@ For now, FEBS assumes the following:
 
 ### Commands
 
+#### Help
 ```
-  // Help
-  $ febs --help
-
-  // Run production build
-  $ febs (or febs prod)
-
-  // Run development build
-  $ febs dev
-
-  // Run development with live-reloading
-  $ febs dev-server
-
-  // Run unit tests
-  $ febs test
+$ febs --help
+```
+#### Production Build
+```
+$ febs prod (or febs)
+```
+#### Development Build
+```
+$ febs dev
+```
+#### Dev Server (Live reload)
+```
+$ febs dev-server
 ```
 
-Todo:
+### Todo:
 
 [x] Development build (ES, LESS)
 
