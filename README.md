@@ -6,7 +6,7 @@
 
 - Work in progress and will change as we communicate with teams to determine requirements.
 
-- The driving philosophy is minimal code, delegating essentially all build tasks through to webpack.
+- The driving philosophy is minimal code, delegating essentially all build tasks directly through to webpack.
 
 ## Goals
 - Simple, minimal, reliable, maintainable.
@@ -18,12 +18,12 @@
 ## Features:
 - All build tasks are run through webpack. Why?
   - Take advantage of the very large community that currently rallies around webpack: new development, issue resolution, etc.
-  - Webpack contains functionality that we need either itself or through its loaders and plugins.
-  - Maintainable due to the fact that there is minimal code.
+  - Webpack contains functionality that we need either itself or through its ecosystem of loaders and plugins.
+  - Maintainable due to the fact that there is minimal code and it is well tested.
   - Updateable via webpack's ecosystem and local webpack conf overrides.
 - No gulp. Why?
     - It's just a task runner; we want to keep it simple by utilizing package.json scripts.
-- Development and production modes.
+- Development and production builds.
 - Live reloading for fast prototyping and development.
 - All features unit tested.
 
@@ -32,12 +32,26 @@
 
 ## Usage
 
+### Assumptions
+
+For now, FEBS assumes the following:
+  - Source entry point is `/src/entry.js`
+  - Bundles written to `/dest`.
+
+### Commands
+
 ```
+  // Help
+  $ febs --help
+
   // Run production build
-  $ febs build
+  $ febs (or febs prod)
 
   // Run development build
-  $ febs build dev
+  $ febs dev
+
+  // Run development with live-reloading
+  $ febs dev-server
 
   // Run unit tests
   $ febs test
@@ -61,6 +75,6 @@ Todo:
 
 [ ] Vendor code splitting.
 
-[ ] Unit tests, code coverage of client code.
+[x] Unit tests of client code.
 
-[ ] Stat reporting/publishing.
+[ ] Code coverage of client code.
