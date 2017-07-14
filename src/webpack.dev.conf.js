@@ -9,15 +9,19 @@ module.exports = {
 
   entry: {
     app: path.resolve(cwd, 'src/entry.js'),
+    // app: path.resolve(__dirname, 'client-core.js'),
+    // vendor: ['rei-febs-common']
     //'main.css': './src/main.css',
   },
 
   output: {
     path: path.resolve(cwd, 'dest'),
     filename: '[name].bundle.js',
+//    library: 'reiCommon',
+//    libraryTarget: 'var'
   },
 
-  devtool: 'cheap-eval-source-map', // internal, cheap, fast
+  devtool: 'eval-source-map', // internal, cheap, fast
 
   // Resolve loaders relative to rei-febs (as this will be a dependency of another module.)
   resolveLoader: {
@@ -80,10 +84,10 @@ module.exports = {
       filename: '[name].bundle.css',
     }),
 
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'vendor',
-    //   filename: 'vendor.js',
-    //   minChunks: Infinity,
-    // }),
+     /*new webpack.optimize.CommonsChunkPlugin({
+       name: 'vendor',
+       filename: 'vendor.js',
+       minChunks: Infinity,
+     }),*/
   ],
 };
