@@ -88,9 +88,7 @@ const run = (conf) => {
     });
   }
 
-  // Task: Dev build.
-  // Todo: Use webpack-dev-server API instead of spawning.
-  // Note: There were issues with it not refreshing page using the API so, for now, spawning.
+  // Task: Dev and prod builds.
   if (conf.task === 'dev' || conf.task === 'prod') {
     process.env.NODE_ENV = conf.task;
     compile();
