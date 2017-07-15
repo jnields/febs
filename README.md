@@ -71,7 +71,9 @@ $ febs dev-server
 
 [x] Production build (asset versioning, minification)
 
-[x] Live reloading
+[x] Live reloading (via CLI)
+
+[x] Live reloading (via Node API).
 
 [ ] Vendor code splitting.
 

@@ -1,6 +1,5 @@
 // Development webpack conf
 const path = require('path');
-const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const cwd = process.cwd();
@@ -11,7 +10,7 @@ module.exports = {
     app: path.resolve(cwd, 'src/entry.js'),
     // app: path.resolve(__dirname, 'client-core.js'),
     // vendor: ['rei-febs-common']
-    //'main.css': './src/main.css',
+    // 'main.css': './src/main.css',
   },
 
   output: {
@@ -69,14 +68,15 @@ module.exports = {
     }],
   },
 
-  devServer: {
-    contentBase: path.resolve(cwd, 'dest'),
-    publicPath: '/dest/',
-    compress: true,
-    port: 9000,
-    open: true,
-    openPage: '',
-  },
+  // For CLI only:
+  // devServer: {
+  //   contentBase: path.resolve(cwd, 'dest'),
+  //   publicPath: '/dest/',
+  //   compress: true,
+  //   port: 9000,
+  //   open: true,
+  //   openPage: '',
+  // },
 
   plugins: [
     // if you want to pass in options, you can do so:

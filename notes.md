@@ -18,7 +18,8 @@
 
 - Live reloading
   - Currently, the CLI seems to be more reliable than the API. API not refreshing the page. Investigate. API is preferrable since we can programmatically create the conf needed instead of pulling it from the file system.
-  - Need a way of overriding index.html to add additional assets.
+  - Solution here: https://stackoverflow.com/questions/43747636/live-reloading-in-webpack-dev-server-when-using-node-js-api
+  - ~~Need a way of overriding index.html to add additional assets.~~
   - Must contain an output entry.
 
 - CSS/LESS
@@ -26,3 +27,5 @@
 
 - Sourcemaps
   - external (more expensive) sourcemaps seem to be much better than the eval'd sourcemaps. Eval'd sourcemaps jump around when clicking on the source. There are documented issues with sourcemaps in webpack currently.
+
+- Cleanup of dest directory between builds.

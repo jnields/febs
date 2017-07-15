@@ -4,7 +4,8 @@ const util = require('./lib/util');
 const merge = require('webpack-merge');
 const fs = require('fs-extra');
 const path = require('path');
-const { exec, spawn } = require('child_process');
+const { spawn } = require('child_process');
+const devServer = require('./dev-server');
 
 // Environmental WP conf (dev or prod)
 const getBaseConf = () => require(`./webpack.${process.env.NODE_ENV}.conf`);
@@ -25,7 +26,7 @@ const getOverridesConf = (conf) => {
  *
  * @param {Object} conf Webpack conf merged in with the environmental
  *            conf file. Used for testing. If this is present,
- *            merge into env conf, otherwise, merge
+ *            merge it into env conf, otherwise, merge
  *            the webpack.overrides.js conf into env conf
  *            Return's webpack instance.
  * @return {Object} Webpack compiler instance.
@@ -96,18 +97,20 @@ const run = (conf) => {
   }
 
   // Task: Dev-server build.
-  // Todo: Use webpack-dev-server API instead of spawning.
-  // Note: There were issues with it not refreshing page using the API so, for now, spawning.
   if (conf.task === 'dev-server') {
     process.env.NODE_ENV = 'dev';
-    const cmd = spawn('node', ['../rei-febs/node_modules/webpack-dev-server/bin/webpack-dev-server.js', '--colors', 'true', '--config', '../rei-febs/src/webpack.dev.conf.js']);
-    cmd.stdout.on('data', (data) => {
-      logger.info(data.toString('utf8'));
-    });
 
-    cmd.stderr.on('data', (data) => {
-      logger.error(data.toString());
-    });
+    // Need to update the app entry for webpack-dev-server. This is necessary for
+    // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
+    const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
+    devServer(createCompiler({
+      entry: {
+        app: [
+          pathToWPDSClient,
+          path.resolve(process.cwd(), 'src/entry.js'),
+        ],
+      },
+    }));
   }
 };
 
