@@ -51,11 +51,14 @@ const createCompiler = (conf) => {
   return wp(wpConf);
 };
 
+
 /**
- * Compile function.
+ * Webpack compile function.
  *
- * Runs the webpack compilation.
+ * Creates a compiler with config object, runs, handles the various WP errors.
  *
+ * @param {Object} conf Webpack config object. This conf object will be merged in
+ * with the environmental config object.
  */
 const compile = conf => createCompiler(conf).run((err, stats) => {
   const errors = util.getWebpackErrors(err, stats);
@@ -71,8 +74,8 @@ const compile = conf => createCompiler(conf).run((err, stats) => {
 });
 
 /**
- * Main entry point to febs.
- * conf: task, options
+ * The main entry point to febs.
+ * @param {*} conf Object with tasks and options properties.
  */
 const run = (conf) => {
   // Task: Unit tests.
