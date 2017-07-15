@@ -12,7 +12,7 @@ const getBaseConf = () => require(`./webpack.${process.env.NODE_ENV}.conf`);
 
 // Get local overrides WP conf.
 const getOverridesConf = (conf) => {
-  if (conf) return conf;  // unit testing only.
+  if (conf) return conf;
 
   const cwd = process.cwd();
   const overridesConfFile = path.resolve(cwd, './webpack.overrides.conf.js');
