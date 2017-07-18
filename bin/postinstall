@@ -11,9 +11,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #echo "[febs-node] CWD:       `pwd`"
 #echo "[febs-node] NODE_PATH: $NODE_PATH"
 echo "[rei-febs] post-install.."
-#cp node_modules/rei-febs/index.html .
-pwd
-ls
-ls node_modules/rei-febs
+
+# Copy the index file template for dev-server
+cp index.html ../.
+
 # Proxy arguments to the system node binary
 #node "$@"
