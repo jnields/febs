@@ -1,17 +1,82 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
 
   <title>FEBS Webpack</title>
-  <link rel="stylesheet" href="https://www.rei.com/static/rev/global/head/rei-cedar-b256b011fd.min.css">
 
   <link rel="stylesheet" href="dest/app.bundle.css">
 </head>
 
 <body>
-  <h1>Hello from REI FEBS 2.0!</h1>
+  <img class="svg-logo" src="//satchel.rei.com/media/img/header/rei-co-op-logo-white.svg" alt="Go to REI.com Home Page">
+
+  <section>
+    <h1>
+      Quick Start
+    </h1>
+
+    <h3>Default Entry Points</h3>
+
+    <ul>
+      <li>
+        <pre>js: /src/entry.js</pre>
+      </li>
+      <li>
+        <pre>less: /src/entry.less></pre>
+      </li>
+    </ul>
+
+    <h3>Development bundles</h3>
+
+    <p>
+      Your development bundles are written to
+      <pre>/src/dest/app.bundle.[js|css]</pre>
+    </p>
+
+    <h3>Production bundles</h3>
+    <p>
+      Your production bundles are written to
+      <pre>/src/dest/app.bundle-&lt;hash&gt;.[js|css]</pre>
+    </p>
+
+  </section>
+
+  <section>
+    <h1>
+      Commands
+    </h1>
+
+    <dl>
+      <dt>
+        <pre>$ febs dev</pre>
+      </dt>
+      <dd>Builds development bundles</dd>
+      <dd>Bundles are unversioned and unminified</dd>
+      <dd>Sourcemaps are inline</dd>
+
+      <dt>
+        <pre>$ febs prod</pre>
+      </dt>
+      <dd>Builds production bundles</dd>
+      <dd>Bundles are versioned and minified</dd>
+      <dd>Sourcemaps are external.</dd>
+
+      <dt>
+        <pre>$ febs dev-server</pre>
+      </dt>
+      <dd>Run development server with live reloading of assets.</dd>
+
+      <dt>
+        <pre>$ febs test</pre>
+      </dt>
+      <dd>Run all of your unit tests (in /test)</dd>
+    </dl>
+
+  </section>
   <script src="dest/app.bundle.js"></script>
 </body>
+
 </html>
