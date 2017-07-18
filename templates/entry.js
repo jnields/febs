@@ -1,7 +1,7 @@
 // Your js entry point..go!
 
 // Bring in less
-require('entry.less');
+require('./entry.less');
 
 const body = document.querySelector('body');
 const div = document.createElement('div');
