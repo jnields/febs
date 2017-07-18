@@ -1,0 +1,16 @@
+#! /bin/bash
+
+# febs postinstall script
+
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#export NODE_PATH=$( $DIR/node-get-path )
+
+# Print some debug info
+#echo "[febs-node] CWD:       `pwd`"
+#echo "[febs-node] NODE_PATH: $NODE_PATH"
+echo "postinstall!"
+
+# Proxy arguments to the system node binary
+#node "$@"
