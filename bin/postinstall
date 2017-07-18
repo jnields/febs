@@ -13,7 +13,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "[rei-febs] post-install.."
 
 # Copy the index file template for dev-server
-cp index.html ../.
+# Copying from <client-dir>/node_modules/rei-febs to <client-dir>
+cp index.html ../../.
 
 # Proxy arguments to the system node binary
 #node "$@"
