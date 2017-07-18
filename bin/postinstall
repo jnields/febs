@@ -10,7 +10,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Print some debug info
 #echo "[febs-node] CWD:       `pwd`"
 #echo "[febs-node] NODE_PATH: $NODE_PATH"
-echo "postinstall!"
+echo "[rei-febs] post-install.."
+cp node_modules/rei-febs/index.html .
 
 # Proxy arguments to the system node binary
 #node "$@"
