@@ -14,7 +14,19 @@ echo "[rei-febs] post-install.."
 
 # Copy the index file template for dev-server
 # Copying from <client-dir>/node_modules/rei-febs to <client-dir>
-cp index.html ../../.
+CLIENT_DIR=../..
+
+if [ ! -e "$CLIENT_DIR/index.html" ]; then
+  cp templates/index.html "$CLIENT_DIR/."
+fi
+
+# Create src dir/content if doesn't exist.
+if [ ! -d "$CLIENT_DIR/src" ]; then
+  mkdir "$CLIENT_DIR/src"
+  cp templates/entry.js "$CLIENT_DIR/src/."
+  cp templates/entry.less "$CLIENT_DIR/src/."
+fi
+
 
 # Proxy arguments to the system node binary
 #node "$@"
