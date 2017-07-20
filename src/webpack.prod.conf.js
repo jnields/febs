@@ -2,9 +2,6 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
-
 
 const cwd = process.cwd();
 
@@ -77,9 +74,5 @@ module.exports = {
       sourceMap: true,
       compress: true,
     }),
-    new ManifestPlugin(),
-    // new HtmlWebpackPlugin({
-    //   template: path.resolve(__dirname, '../templates/assets.ejs'),
-    // }),
   ],
 };

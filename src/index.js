@@ -1,11 +1,14 @@
+/* eslint-disable global-require, import/no-dynamic-require */
+
 const wp = require('webpack');
 const logger = require('./lib/logger');
-const util = require('./lib/util');
 const merge = require('webpack-merge');
 const fs = require('fs-extra');
 const path = require('path');
 const { spawn } = require('child_process');
 const devServer = require('./dev-server');
+
+let utils;
 
 // Environmental WP conf (dev or prod)
 const getBaseConf = () => require(`./webpack.${process.env.NODE_ENV}.conf`);
@@ -47,6 +50,9 @@ const createCompiler = (conf) => {
 
   // logger.info('Webpack conf: ', wpConf);
 
+  // Configure utility functions with the final webpack conf.
+  utils = require('./lib/util')(wpConf);
+
   // Create webpack compiler object with merged config objects.
   return wp(wpConf);
 };
@@ -61,10 +67,13 @@ const createCompiler = (conf) => {
  * with the environmental config object.
  */
 const compile = conf => createCompiler(conf).run((err, stats) => {
-  const errors = util.getWebpackErrors(err, stats);
+  const errors = utils.getWebpackErrors(err, stats);
 
   // Log errors to console
-  util.logErrors(errors);
+  utils.logErrors(errors);
+
+  // Write asset tags to fs.
+  utils.writeAssetTags(stats);
 
   // Log results to the console.
   logger.info(stats.toString({

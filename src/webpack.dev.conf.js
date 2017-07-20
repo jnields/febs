@@ -1,8 +1,6 @@
 // Development webpack conf
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
 
 const cwd = process.cwd();
 
@@ -85,12 +83,6 @@ module.exports = {
     new ExtractTextPlugin({
       filename: '[name].bundle.css',
     }),
-
-    new ManifestPlugin(),
-
-    // new HtmlWebpackPlugin({
-    //   template: path.resolve(__dirname, '../templates/foot-assets.ejs'),
-    // }),
 
      /* new webpack.optimize.CommonsChunkPlugin({
        name: 'vendor',

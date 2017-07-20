@@ -4,27 +4,35 @@
 const assert = require('assert');
 const path = require('path');
 const MemoryFS = require('memory-fs');
-const util = require('../src/lib/util');
-
+const utils = require('../src/lib/util');
 // const logger = require('../../lib/logger');
 // const sinon = require('sinon');
-// const touch = require('touch'); // eslint-disable-line import/no-extraneous-dependencies
 
-// Bring in module
+let util;
+
+// febs module
 const mod = require('../src/index');
 
 /**
- * Webpack compile helper. Sets up and runs webpack with in-memory
- * file system.
+ * Webpack compile helper for unit tests.
+ * Sets up and runs webpack with in-memory file system.
+ *
  * @param {Object} conf The override conf object.
  * @return {Promise}  Promise resolving with an object containing
  *                    compiled code and webpack output.
  */
 const compile = conf => new Promise((resolve, reject) => {
+  // configure utils with the wp config
+  util = utils(conf);
+
+  // create compiler instance
   const compiler = mod.createCompiler(conf);
+
+  // Set up in-memory file system for tests.
   const fs = new MemoryFS();
   compiler.outputFileSystem = fs;
 
+  // Run webpack
   compiler.run((err, stats) => {
     const entrypoints = stats.toJson('verbose').entrypoints;
     const errors = util.getWebpackErrors(err, stats);
