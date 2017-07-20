@@ -31,6 +31,7 @@
     "less": "^2.7.2",
     "less-loader": "^4.0.4",
     "mocha": "^3.4.2",
+    "ramda": "^0.24.1",
     "riot": "^3.6.1",
     "riot-tag-loader": "^1.0.0",
     "style-loader": "^0.18.2",
