@@ -28,7 +28,7 @@
 - All features unit tested.
 
 ## Installation
-- `npm install git+https://git.rei.com:7999/fedpack/rei-febs.git`
+- `npm install git+https://git.rei.com:7999/fedpack/febs.git`
 
 ## Usage
 
