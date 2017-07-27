@@ -3,25 +3,28 @@
 const wp = require('webpack');
 const logger = require('./lib/logger');
 const merge = require('webpack-merge');
-const fs = require('fs-extra');
 const path = require('path');
 const { spawn } = require('child_process');
 const devServer = require('./dev-server');
 
 let utils;
 
-// Environmental WP conf (dev or prod)
-const getBaseConf = () => require(`./webpack.${process.env.NODE_ENV}.conf`);
+module.exports = function (conf = {}) {
+  // Allow for in-memory fs for testing.
+  const fs = conf.fs || require('fs-extra');
 
-// Get local overrides WP conf.
-const getOverridesConf = (conf) => {
-  if (conf) return conf;
+  // Environmental WP conf (dev or prod)
+  const getBaseConf = () => require(`./webpack.${process.env.NODE_ENV}.conf`);
 
-  const cwd = process.cwd();
-  const overridesConfFile = path.resolve(cwd, './webpack.overrides.conf.js');
-  return fs.pathExistsSync(overridesConfFile) ?
+  // Get local overrides WP conf.
+  const getOverridesConf = (confOverride) => {
+    if (confOverride) return confOverride;
+
+    const cwd = process.cwd();
+    const overridesConfFile = path.resolve(cwd, './webpack.overrides.conf.js');
+    return fs.pathExistsSync(overridesConfFile) ?
     require(overridesConfFile) : {};
-};
+  };
 
 /**
  * Create's compiler instance with appropriate environmental
@@ -32,30 +35,56 @@ const getOverridesConf = (conf) => {
  *            merge it into env conf, otherwise, merge
  *            the webpack.overrides.js conf into env conf
  *            Return's webpack instance.
- * @return {Object} Webpack compiler instance.
+ * @return {Object}
  *
  */
-const createCompiler = (conf) => {
-  const confBase = getBaseConf();
+  const createCompiler = (confOverride) => {
+    const confBase = getBaseConf();
 
-  // Overrides config.
-  const confOverrides = getOverridesConf(conf);
+    // Overrides config.
+    const confOverrides = getOverridesConf(confOverride);
 
-  // Always replace:
-  //   - entry, output
-  const wpConf = merge.strategy({
-    entry: 'replace',
-    output: 'replace',
-  })(confBase, confOverrides);
+    // Always replace:
+    //   - entry, output
+    const wpConf = merge.strategy({
+      entry: 'replace',
+      output: 'replace',
+    })(confBase, confOverrides);
 
-  // logger.info('Webpack conf: ', wpConf);
+    // Configure utility functions with the final webpack conf.
+    utils = require('./lib/util')({
+      wpConf,
+      fs,
+    });
 
-  // Configure utility functions with the final webpack conf.
-  utils = require('./lib/util')(wpConf);
+    // Create webpack compiler object with merged config objects.
+    return wp(wpConf);
+  };
 
-  // Create webpack compiler object with merged config objects.
-  return wp(wpConf);
-};
+/**
+ * The Webpack run callback.
+ * @param {*} err
+ * @param {*} stats
+ */
+  const webpackCompileDone = (err, stats) => {
+    const errors = utils.getWebpackErrors(err, stats);
+
+    // Log errors to console
+    if (!process.env.FEBS_TEST) {
+      utils.logErrors(errors);
+    }
+
+    // Write asset tags to fs.
+    // utils.writeAssetTags(stats);
+
+    // Log results to the console.
+    if (!process.env.FEBS_TEST) {
+      logger.info(stats.toString({
+        chunks: false,
+        colors: true,
+      }));
+    }
+  };
 
 
 /**
@@ -66,67 +95,56 @@ const createCompiler = (conf) => {
  * @param {Object} conf Webpack config object. This conf object will be merged in
  * with the environmental config object.
  */
-const compile = conf => createCompiler(conf).run((err, stats) => {
-  const errors = utils.getWebpackErrors(err, stats);
-
-  // Log errors to console
-  utils.logErrors(errors);
-
-  // Write asset tags to fs.
-  utils.writeAssetTags(stats);
-
-  // Log results to the console.
-  logger.info(stats.toString({
-    chunks: false,
-    colors: true,
-  }));
-});
+  const compile = confOverride => createCompiler(confOverride).run(webpackCompileDone);
 
 /**
  * The main entry point to febs.
  * @param {*} conf Object with tasks and options properties.
  */
-const run = (conf) => {
-  // Task: Unit tests.
-  if (conf.task === 'test') {
-    process.env.NODE_ENV = 'dev';
-    const cmd = spawn('mocha', ['--colors']);
-    cmd.stdout.on('data', (data) => {
-      console.log(data.toString());
-    });
+  const run = (confApp) => {
+    // Task: Unit tests.
+    if (confApp.task === 'test') {
+    // process.env.NODE_ENV = 'dev';
+      const cmd = spawn('mocha', ['--colors']);
+      cmd.stdout.on('data', (data) => {
+        console.log(data.toString());
+      });
 
-    cmd.stderr.on('data', (data) => {
-      logger.error(data.toString());
-    });
-  }
+      cmd.stderr.on('data', (data) => {
+        logger.error(data.toString());
+      });
+    }
 
   // Task: Dev and prod builds.
-  if (conf.task === 'dev' || conf.task === 'prod') {
-    process.env.NODE_ENV = conf.task;
-    compile();
-  }
+    if (confApp.task === 'dev' || confApp.task === 'prod') {
+      process.env.NODE_ENV = confApp.task;
 
-  // Task: Dev-server build.
-  if (conf.task === 'dev-server') {
-    process.env.NODE_ENV = 'dev';
+    // Initialize with fs.
+      compile();
+    }
 
-    // Need to update the app entry for webpack-dev-server. This is necessary for
-    // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
-    const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
-    devServer(createCompiler({
-      entry: {
-        app: [
-          pathToWPDSClient,
-          path.resolve(process.cwd(), 'src/entry.js'),
-        ],
-      },
-    }));
-  }
-};
+    // Task: Dev-server build.
+    if (confApp.task === 'dev-server') {
+      process.env.NODE_ENV = 'dev';
 
-// FEBS public API
-module.exports = {
-  run,
-  compile,
-  createCompiler,
+      // Need to update the app entry for webpack-dev-server. This is necessary for
+      // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
+      const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
+      devServer(createCompiler({
+        entry: {
+          app: [
+            pathToWPDSClient,
+            path.resolve(process.cwd(), 'src/entry.js'),
+          ],
+        },
+      }));
+    }
+  };
+
+  return {
+    run,
+    compile,
+    createCompiler,
+    webpackCompileDone,
+  };
 };

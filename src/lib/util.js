@@ -1,7 +1,6 @@
 /* eslint-disable global-require, import/no-dynamic-require */
 
 const logger = require('./logger');
-const fs = require('fs-extra');
 const R = require('ramda');
 const path = require('path');
 
@@ -11,7 +10,12 @@ const path = require('path');
  *
  * @param {Object} wpConf The conf passed to Webpack.
  */
-const init = function init(wpConf) {
+const init = function init(conf) {
+  // File system (can be either in-memory or fs)
+  const fs = conf.fs;
+
+  // The WP conf object.
+  const wpConf = conf.wpConf;
   /**
    * Collect the various type of webpack errors
    * @param {*} err
@@ -107,9 +111,22 @@ const init = function init(wpConf) {
     throw new Error(`Unexpected asset name: ${assetName}`);
   };
 
+  /**
+   * Helper to look at intermediate results in compose chain.
+   * E.g., R.compose(func1, log, func2)  <-- Logs results from func2.
+   */
+  // const log = R.tap(console.log);
 
   const isJSorCSS = fileName => path.extname(fileName) === '.js' || path.extname(fileName) === '.css';
-  const getWebpackAssets = stats => stats.toJson().assetsByChunkName.app;
+
+  const getWebpackAssets = (stats) => {
+    const assetKeys = Object.keys(stats.toJson().assetsByChunkName);
+    const ret = [];
+    assetKeys.forEach((assetKey) => {
+      ret.push(R.flatten([stats.toJson().assetsByChunkName[assetKey]]));
+    });
+    return R.flatten(ret);
+  };
   const createJsCSSTags = assets => assets.filter(isJSorCSS).map(createAssetTag);
   const createAssetHTML = R.compose(createJsCSSTags, getWebpackAssets);
 

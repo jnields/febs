@@ -5,13 +5,22 @@ const assert = require('assert');
 const path = require('path');
 const MemoryFS = require('memory-fs');
 const utils = require('../src/lib/util');
+const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
+
 // const logger = require('../../lib/logger');
 // const sinon = require('sinon');
 
 let util;
 
+// Create in-memory file system for tests.
+const fs = new MemoryFS();
+
 // febs module
-const mod = require('../src/index');
+const webpackModule = require('../src/index')({
+  fs,
+});
+
+// initialize WP with in-memory fs.
 
 /**
  * Webpack compile helper for unit tests.
@@ -22,18 +31,23 @@ const mod = require('../src/index');
  *                    compiled code and webpack output.
  */
 const compile = conf => new Promise((resolve, reject) => {
-  // configure utils with the wp config
-  util = utils(conf);
+  // configure utils with the wp config, fs.
+  util = utils({
+    wpConf: conf,
+    fs,
+  });
 
   // create compiler instance
-  const compiler = mod.createCompiler(conf);
+  const compiler = webpackModule.createCompiler(conf);
 
   // Set up in-memory file system for tests.
-  const fs = new MemoryFS();
   compiler.outputFileSystem = fs;
 
   // Run webpack
   compiler.run((err, stats) => {
+    // call the source done callback.
+    webpackModule.webpackCompileDone(err, stats);
+
     const entrypoints = stats.toJson('verbose').entrypoints;
     const errors = util.getWebpackErrors(err, stats);
 
@@ -42,7 +56,7 @@ const compile = conf => new Promise((resolve, reject) => {
       return reject(errors);
     }
 
-    // Resolve with compile results.
+    // Resolve with wp compile results.
     const code = Object.keys(entrypoints).map((key) => {  // key is entrypoint key (e.g. "app")
       const res = {};
       res[key] = [];  // an array of built assets will be under the key
@@ -57,7 +71,6 @@ const compile = conf => new Promise((resolve, reject) => {
 
       return res;
     });
-
     return resolve({ err, stats, code });
   });
 });
@@ -68,32 +81,40 @@ describe('FEBS Build', () => {
   describe('Production mode', function () {
     beforeEach(function () {
       process.env.NODE_ENV = 'prod';
+      process.env.FEBS_TEST = true;
+
+      // Create the destination directory
+      fs.mkdirpSync(absPath('../dest'));
     });
 
     it('builds ES production bundle - versioned, minified, sourcemaps', async function () {
       const compiled = await compile({
         entry: {
-          app: absPath('fixtures/src/main-es2015.js'),
+          app1: absPath('fixtures/src/main-es2015.js'),
           app2: absPath('fixtures/src/main-es2015.js'),
         },
       }).catch(util.logErrors);
       assert.equal(compiled.code.length, 2);
 
       // source and sourcemap.
-      assert.equal(compiled.code[0].app.length, 2); // js and map
+      assert.equal(compiled.code[0].app1.length, 2); // js and map
 
       // sourcemap
-      assert(compiled.code[0].app[1].filename.includes('.map'));
-      assert(compiled.code[0].app[1].content.length > 0);
+      assert(compiled.code[0].app1[1].filename.includes('.map'));
+      assert(compiled.code[0].app1[1].content.length > 0);
 
       // minified
-      assert(compiled.code[0].app[0].content.includes('add:function'));
+      assert(compiled.code[0].app1[0].content.includes('add:function'));
     });
   });
 
   describe('Development mode', function () {
     beforeEach(function () {
       process.env.NODE_ENV = 'dev';
+      process.env.FEBS_TEST = true;
+
+      // Create the destination directory
+      fs.mkdirpSync(absPath('../dest'));
     });
 
     describe('ECMAScript', async function () {
@@ -182,6 +203,17 @@ describe('FEBS Build', () => {
           },
         }).catch(util.logErrors);
         assert(compiled.code[0].app[0].content.includes('sourceURL'));
+      });
+    });
+
+    describe('Asset Fragments', async function () {
+      it('generates js asset fragment', async function () {
+        const compiled = await compile({
+          entry: {
+            app: absPath('fixtures/src/main-es2015.js'),
+          },
+        }).catch(util.logErrors);
+        assert(fs.statSync(path.resolve(process.cwd(), 'dest', 'assets.js.html')).isFile());
       });
     });
 

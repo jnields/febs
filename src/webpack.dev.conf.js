@@ -1,6 +1,7 @@
 // Development webpack conf
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 
 const cwd = process.cwd();
 
@@ -82,6 +83,10 @@ module.exports = {
     // if you want to pass in options, you can do so:
     new ExtractTextPlugin({
       filename: '[name].bundle.css',
+    }),
+
+    new AssetTagPlugin({
+      test: process.env.FEBS_TEST,
     }),
 
      /* new webpack.optimize.CommonsChunkPlugin({

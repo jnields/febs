@@ -2,6 +2,7 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 
 const cwd = process.cwd();
 
@@ -70,6 +71,10 @@ module.exports = {
     new ExtractTextPlugin({
       filename: '[name].bundle-[hash].css',
     }),
+    new AssetTagPlugin({
+      test: process.env.FEBS_TEST,
+    }),
+
     new UglifyJsPlugin({
       sourceMap: true,
       compress: true,
