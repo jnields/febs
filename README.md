@@ -1,3 +1,5 @@
+[![Build Status](http://ci.rei.com/job/fed/job/febs_2.0/badge/icon)](http://ci.rei.com/job/fed/job/febs_2.0/)
+
 # FEBS
 
 ## Description
