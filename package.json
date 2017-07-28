@@ -12,7 +12,8 @@
     "test-watch": "mocha --watch",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "dev": "webpack-dev-server --config src/webpack.dev.conf.js",
-    "dev-server": "NODE_ENV=dev node test/harness/entry-webpack-dev-server.js"
+    "dev-server": "NODE_ENV=dev node test/harness/entry-webpack-dev-server.js",
+    "ci:build": "./node_modules/mocha/bin/_mocha --reporter xunit > results.xml && npm run cover"
   },
   "bin": {
     "febs": "./bin/febs"
