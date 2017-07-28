@@ -10,6 +10,7 @@
     "postinstall": "./bin/postinstall",
     "test": "mocha",
     "test-watch": "mocha --watch",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "dev": "webpack-dev-server --config src/webpack.dev.conf.js",
     "dev-server": "NODE_ENV=dev node test/harness/entry-webpack-dev-server.js"
   },
