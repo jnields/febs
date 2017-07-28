@@ -88,73 +88,15 @@ const init = function init(conf) {
   };
 
   /**
-   * Creates the snippet of html needed for a built asset.
-   * @param {*} assetName The filename of the js/css asset.
-   */
-  const createAssetTag = (assetName) => {
-    const ext = path.extname(assetName);
-    if (ext === '.js') {
-      return {
-        ext,
-        tag: `<script src="${assetName}"></script>`,
-      };
-    }
-
-    if (ext === '.css') {
-      return {
-        ext,
-        tag: `<link rel="stylesheet" type="text/css" href="${assetName}">`,
-      };
-    }
-
-    // Shouldn't get here.
-    throw new Error(`Unexpected asset name: ${assetName}`);
-  };
-
-  /**
    * Helper to look at intermediate results in compose chain.
    * E.g., R.compose(func1, log, func2)  <-- Logs results from func2.
    */
   // const log = R.tap(console.log);
 
-  const isJSorCSS = fileName => path.extname(fileName) === '.js' || path.extname(fileName) === '.css';
-
-  const getWebpackAssets = (stats) => {
-    const assetKeys = Object.keys(stats.toJson().assetsByChunkName);
-    const ret = [];
-    assetKeys.forEach((assetKey) => {
-      ret.push(R.flatten([stats.toJson().assetsByChunkName[assetKey]]));
-    });
-    return R.flatten(ret);
-  };
-  const createJsCSSTags = assets => assets.filter(isJSorCSS).map(createAssetTag);
-  const createAssetHTML = R.compose(createJsCSSTags, getWebpackAssets);
-
-  /**
-   * Write array of html tags to the dest directory.
-   * @param {Array} assetHTMLTags
-   */
-  const writeHtmlTags = (assetHTMLTags) => {
-    assetHTMLTags.forEach((tagMeta) => {
-      if (tagMeta.ext === '.js') {
-        fs.writeFileSync(path.resolve(wpConf.output.path, 'assets-foot.html'), tagMeta.tag);
-      }
-
-      if (tagMeta.ext === '.css') {
-        fs.writeFileSync(path.resolve(wpConf.output.path, 'assets-head.html'), tagMeta.tag);
-      }
-    });
-  };
-
-  const writeAssetTags = R.compose(writeHtmlTags, createAssetHTML);
-
   // Util library API.
   return {
     getWebpackErrors,
     logErrors,
-    createAssetHTML,
-    writeHtmlTags,
-    writeAssetTags,
   };
 };
 
