@@ -1,32 +1,32 @@
 #! /bin/bash
 
 # febs postinstall script
-
 set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-#export NODE_PATH=$( $DIR/node-get-path )
 
-# Print some debug info
-#echo "[febs-node] CWD:       `pwd`"
-#echo "[febs-node] NODE_PATH: $NODE_PATH"
 echo "[rei-febs] post-install.."
 
 # Copy the index file template for dev-server
-# Copying from <client-dir>/node_modules/rei-febs to <client-dir>
+# Copying from <client-dir>/node_modules/febs to <client-dir>
 CLIENT_DIR="../.."
+CLIENT_SRC_DIR=$CLIENT_DIR/src
+CLIENT_DEST_DIR=$CLIENT_DIR/dest
 
 if [ ! -e "$CLIENT_DIR/index.html" ]; then
   cp templates/index.html "$CLIENT_DIR/."
 fi
 
 # Create src dir/content if doesn't exist.
-if [ ! -d "$CLIENT_DIR/src" ]; then
-  mkdir "$CLIENT_DIR/src"
-  cp templates/entry.js "$CLIENT_DIR/src/."
-  cp templates/entry.less "$CLIENT_DIR/src/."
+if [ ! -d "$CLIENT_SRC_DIR" ]; then
+  mkdir "$CLIENT_SRC_DIR"
+  cp templates/entry.js "$CLIENT_SRC_DIR/."
+  cp templates/entry.less "$CLIENT_DEST_DIR/."
 fi
 
-
+# Create default destination directory.
+if [ ! -d "$CLIENT_DEST_DIR" ]; then
+  mkdir "$CLIENT_DEST_DIR"
+fi
 # Proxy arguments to the system node binary
 #node "$@"
