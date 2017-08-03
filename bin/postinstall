@@ -21,7 +21,7 @@ fi
 if [ ! -d "$CLIENT_SRC_DIR" ]; then
   mkdir "$CLIENT_SRC_DIR"
   cp templates/entry.js "$CLIENT_SRC_DIR/."
-  cp templates/entry.less "$CLIENT_DEST_DIR/."
+  cp templates/entry.less "$CLIENT_SRC_DIR/."
 fi
 
 # Create default destination directory.
