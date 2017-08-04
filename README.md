@@ -94,6 +94,6 @@ $ febs dev-server
 
 [ ] Code coverage of client code.
 
-[ ] HTML snippet generation
+[x] HTML snippet generation
 
 [ ] Asset CDN integration
