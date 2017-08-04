@@ -1,4 +1,4 @@
-[![Build Status](http://ci.rei.com/job/fed/job/febs_2.0/badge/icon)](http://ci.rei.com/job/fed/job/febs_2.0/)
+[![Build Status](https://travis-ci.com/rei/febs.svg?token=aB3sLfhn5YbJtayKJo1q&branch=master)](https://travis-ci.com/rei/febs)
 
 # FEBS
 
@@ -47,7 +47,7 @@
 
 ### Assumptions
 
-FEBS assumes the following:
+FEBS assumes and creates the following:
   - Source entry point is `/src/entry.js`
   - Bundles written to `/dest`.
 
@@ -94,6 +94,6 @@ $ febs dev-server
 
 [ ] Code coverage of client code.
 
-[x] HTML snippet generation
+[ ] HTML snippet generation
 
 [ ] Asset CDN integration
