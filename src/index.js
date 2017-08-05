@@ -104,7 +104,6 @@ module.exports = function (conf = {}) {
   const run = (confApp) => {
     // Task: Unit tests.
     if (confApp.task === 'test') {
-    // process.env.NODE_ENV = 'dev';
       const cmd = spawn('mocha', ['--colors']);
       cmd.stdout.on('data', (data) => {
         console.log(data.toString());
@@ -113,14 +112,14 @@ module.exports = function (conf = {}) {
       cmd.stderr.on('data', (data) => {
         logger.error(data.toString());
       });
+      return;
     }
 
-  // Task: Dev and prod builds.
+    // Task: Dev and prod builds.
     if (confApp.task === 'dev' || confApp.task === 'prod') {
       process.env.NODE_ENV = confApp.task;
-
-    // Initialize with fs.
       compile();
+      return;
     }
 
     // Task: Dev-server build.
