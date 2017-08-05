@@ -90,9 +90,15 @@ $ febs dev-server
 
 [ ] Vendor code splitting.
 
-[x] Unit tests of client code.
+[ ] Unit tests of client code.
+    [x] Node
+    [ ] Riot
+    [ ] Vue
 
-[ ] Code coverage of client code.
+[ ] Code coverage of client code:
+    [ ] Node
+    [ ] Riot
+    [ ] Vue
 
 [x] HTML snippet generation
 
