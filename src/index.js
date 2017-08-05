@@ -74,9 +74,6 @@ module.exports = function (conf = {}) {
       utils.logErrors(errors);
     }
 
-    // Write asset tags to fs.
-    // utils.writeAssetTags(stats);
-
     // Log results to the console.
     if (!process.env.FEBS_TEST) {
       logger.info(stats.toString({
@@ -106,7 +103,7 @@ module.exports = function (conf = {}) {
     if (confApp.task === 'test') {
       const cmd = spawn('mocha', ['--colors']);
       cmd.stdout.on('data', (data) => {
-        console.log(data.toString());
+        console.error(data.toString());
       });
 
       cmd.stderr.on('data', (data) => {
