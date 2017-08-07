@@ -32,6 +32,16 @@ program
   });
 
 program
+  .command('dev-server')
+  .description('Starts a local dev server with hot reloading.\n')
+  .action((command) => {
+    febs({
+      env: 'dev',
+      command,
+    }).startDevServer();
+  });
+
+program
   .command('test')
   .description('Runs unit tests.\n')
   .option('-c, --cover', 'Run test coverage')

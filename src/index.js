@@ -120,30 +120,45 @@ module.exports = function init(conf = {}) {
  * The main entry point to febs.
  * @param {*} conf Object with tasks and options properties.
  */
-  const run = (confApp) => {
-    // Task: Dev-server build.
-    if (confApp.task === 'dev-server') {
-      process.env.NODE_ENV = 'dev';
+  // const run = (confApp) => {
+  //   // Task: Dev-server build.
+  //   if (confApp.task === 'dev-server') {
+  //     process.env.NODE_ENV = 'dev';
 
-      // Need to update the app entry for webpack-dev-server. This is necessary for
-      // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
-      const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
-      devServer(createCompiler({
-        entry: {
-          app: [
-            pathToWPDSClient,
-            path.resolve(process.cwd(), 'src/entry.js'),
-          ],
-        },
-      }));
-    }
-  };
+  //     // Need to update the app entry for webpack-dev-server. This is necessary for
+  //     // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
+  //     const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
+  //     devServer(createCompiler({
+  //       entry: {
+  //         app: [
+  //           pathToWPDSClient,
+  //           path.resolve(process.cwd(), 'src/entry.js'),
+  //         ],
+  //       },
+  //     }));
+  //   }
+  // };
+
+  // Task: Dev-server build.
+  function startDevServer() {
+    // Need to update the app entry for webpack-dev-server. This is necessary for
+    // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
+    const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
+    devServer(createCompiler({
+      entry: {
+        app: [
+          pathToWPDSClient,
+          path.resolve(process.cwd(), 'src/entry.js'),
+        ],
+      },
+    }));
+  }
 
   return {
     test,
-    run,
     compile,
     createCompiler,
     webpackCompileDone,
+    startDevServer,
   };
 };
