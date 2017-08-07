@@ -18,14 +18,6 @@ const fs = new MemoryFS();
 // febs module
 const febsModule = require('../src/index');
 
-// const febsModule = require('../src/index')({
-//   env: 'dev',
-// });
-
-// febsModule.setEnv();
-
-// initialize WP with in-memory fs.
-
 /**
  * Webpack compile helper for unit tests.
  * Sets up and runs webpack with in-memory file system.
