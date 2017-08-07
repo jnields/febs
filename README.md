@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/rei/febs.svg?branch=master)](https://travis-ci.org/rei/febs)
+
 # FEBS
 
 ## Description
