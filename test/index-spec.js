@@ -90,7 +90,6 @@ const absPath = relPath => path.resolve(__dirname, relPath);
 describe('FEBS Build', () => {
   describe('Production mode', function () {
     beforeEach(function () {
-      process.env.NODE_ENV = 'prod';
       process.env.FEBS_TEST = true;
 
       // Create the destination directory

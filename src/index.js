@@ -94,12 +94,10 @@ module.exports = function init(conf = {}) {
   const compile = confOverride => createCompiler(confOverride).run(webpackCompileDone);
 
   const test = function test() {
-    let cmd;
+    let cmd = spawn('mocha', ['--colors', `${conf.command.watch ? '--watch' : 'test'}`]);
 
     if (conf.command.cover) {
       cmd = spawn('node_modules/istanbul/lib/cli.js', ['cover', 'node_modules/mocha/bin/_mocha', '--', '--colors', 'test']);
-    } else {
-      cmd = spawn('mocha', ['--colors', `${conf.command.watch ? '--watch' : 'test'}`]);
     }
 
     cmd.stdout.on('data', (data) => {
@@ -115,29 +113,6 @@ module.exports = function init(conf = {}) {
       logger.error(data.toString());
     });
   };
-
-  /**
- * The main entry point to febs.
- * @param {*} conf Object with tasks and options properties.
- */
-  // const run = (confApp) => {
-  //   // Task: Dev-server build.
-  //   if (confApp.task === 'dev-server') {
-  //     process.env.NODE_ENV = 'dev';
-
-  //     // Need to update the app entry for webpack-dev-server. This is necessary for
-  //     // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
-  //     const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
-  //     devServer(createCompiler({
-  //       entry: {
-  //         app: [
-  //           pathToWPDSClient,
-  //           path.resolve(process.cwd(), 'src/entry.js'),
-  //         ],
-  //       },
-  //     }));
-  //   }
-  // };
 
   // Task: Dev-server build.
   function startDevServer() {
