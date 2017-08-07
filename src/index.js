@@ -9,12 +9,12 @@ const devServer = require('./dev-server');
 
 let utils;
 
-module.exports = function (conf = {}) {
+module.exports = function init(conf = {}) {
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs-extra');
 
   // Environmental WP conf (dev or prod)
-  const getBaseConf = () => require(`./webpack.${process.env.NODE_ENV}.conf`);
+  const getBaseConf = () => require(`./webpack.${conf.env}.conf`);
 
   // Get local overrides WP conf.
   const getOverridesConf = (confOverride) => {
@@ -23,10 +23,10 @@ module.exports = function (conf = {}) {
     const cwd = process.cwd();
     const overridesConfFile = path.resolve(cwd, './webpack.overrides.conf.js');
     return fs.pathExistsSync(overridesConfFile) ?
-    require(overridesConfFile) : {};
+      require(overridesConfFile) : {};
   };
 
-/**
+  /**
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
  *
@@ -61,7 +61,7 @@ module.exports = function (conf = {}) {
     return wp(wpConf);
   };
 
-/**
+  /**
  * The Webpack run callback.
  * @param {*} err
  * @param {*} stats
@@ -83,8 +83,7 @@ module.exports = function (conf = {}) {
     }
   };
 
-
-/**
+  /**
  * Webpack compile function.
  *
  * Creates a compiler with config object, runs, handles the various WP errors.
@@ -94,31 +93,34 @@ module.exports = function (conf = {}) {
  */
   const compile = confOverride => createCompiler(confOverride).run(webpackCompileDone);
 
-/**
+  const test = function test() {
+    let cmd;
+
+    if (conf.command.cover) {
+      cmd = spawn('node_modules/istanbul/lib/cli.js', ['cover', 'node_modules/mocha/bin/_mocha', '--', '--colors', 'test']);
+    } else {
+      cmd = spawn('mocha', ['--colors', `${conf.command.watch ? '--watch' : 'test'}`]);
+    }
+
+    cmd.stdout.on('data', (data) => {
+      console.log(data.toString());
+    });
+
+    // It seems istanbul report output goes to stderr.
+    cmd.stderr.on('data', (data) => {
+      if (conf.command.cover) {
+        console.log(data.toString());
+        return;
+      }
+      logger.error(data.toString());
+    });
+  };
+
+  /**
  * The main entry point to febs.
  * @param {*} conf Object with tasks and options properties.
  */
   const run = (confApp) => {
-    // Task: Unit tests.
-    if (confApp.task === 'test') {
-      const cmd = spawn('mocha', ['--colors']);
-      cmd.stdout.on('data', (data) => {
-        console.error(data.toString());
-      });
-
-      cmd.stderr.on('data', (data) => {
-        logger.error(data.toString());
-      });
-      return;
-    }
-
-    // Task: Dev and prod builds.
-    if (confApp.task === 'dev' || confApp.task === 'prod') {
-      process.env.NODE_ENV = confApp.task;
-      compile();
-      return;
-    }
-
     // Task: Dev-server build.
     if (confApp.task === 'dev-server') {
       process.env.NODE_ENV = 'dev';
@@ -138,6 +140,7 @@ module.exports = function (conf = {}) {
   };
 
   return {
+    test,
     run,
     compile,
     createCompiler,

@@ -16,9 +16,13 @@ let util;
 const fs = new MemoryFS();
 
 // febs module
-const webpackModule = require('../src/index')({
-  fs,
-});
+const febsModule = require('../src/index');
+
+// const febsModule = require('../src/index')({
+//   env: 'dev',
+// });
+
+// febsModule.setEnv();
 
 // initialize WP with in-memory fs.
 
@@ -30,7 +34,7 @@ const webpackModule = require('../src/index')({
  * @return {Promise}  Promise resolving with an object containing
  *                    compiled code and webpack output.
  */
-const compile = conf => new Promise((resolve, reject) => {
+const compile = (env, conf) => new Promise((resolve, reject) => {
   // configure utils with the wp config, fs.
   util = utils({
     wpConf: conf,
@@ -38,7 +42,13 @@ const compile = conf => new Promise((resolve, reject) => {
   });
 
   // create compiler instance
-  const compiler = webpackModule.createCompiler(conf);
+  const febs = febsModule({
+    fs,
+    env,
+  });
+
+
+  const compiler = febs.createCompiler(conf);
 
   // Set up in-memory file system for tests.
   compiler.outputFileSystem = fs;
@@ -46,7 +56,7 @@ const compile = conf => new Promise((resolve, reject) => {
   // Run webpack
   compiler.run((err, stats) => {
     // call the source done callback.
-    webpackModule.webpackCompileDone(err, stats);
+    febs.webpackCompileDone(err, stats);
 
     const entrypoints = stats.toJson('verbose').entrypoints;
     const errors = util.getWebpackErrors(err, stats);
@@ -88,7 +98,7 @@ describe('FEBS Build', () => {
     });
 
     it('builds ES production bundle - versioned, minified, sourcemaps', async function () {
-      const compiled = await compile({
+      const compiled = await compile('prod', {
         entry: {
           app1: absPath('fixtures/src/main-es2015.js'),
           app2: absPath('fixtures/src/main-es2015.js'),
@@ -109,8 +119,9 @@ describe('FEBS Build', () => {
   });
 
   describe('Development mode', function () {
+    const env = 'dev';
     beforeEach(function () {
-      process.env.NODE_ENV = 'dev';
+      // process.env.NODE_ENV = 'dev';
       process.env.FEBS_TEST = true;
 
       // Create the destination directory
@@ -119,7 +130,7 @@ describe('FEBS Build', () => {
 
     describe('ECMAScript', async function () {
       it('builds ES bundle', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
@@ -129,7 +140,7 @@ describe('FEBS Build', () => {
       });
 
       it('builds multiple ES bundles', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app1: absPath('fixtures/src/main-es2015.js'),
             app2: absPath('fixtures/src/main-es2015.js'),
@@ -140,7 +151,7 @@ describe('FEBS Build', () => {
       });
 
       it('detects ES syntax errors', async function () {
-        await compile({
+        await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015-syntax-errors.js'),
           },
@@ -153,7 +164,7 @@ describe('FEBS Build', () => {
 
     describe('Riot', function () {
       it('compiles Riot tags', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-riot.js'),
           },
@@ -163,7 +174,7 @@ describe('FEBS Build', () => {
       });
 
       it('detects Riot parse errors', async function () {
-        await compile({
+        await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-riot-syntax-error.js'),
           },
@@ -175,7 +186,7 @@ describe('FEBS Build', () => {
 
     describe('Vue', function () {
       it('compiles Vue tags', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-vue.js'),
           },
@@ -185,7 +196,7 @@ describe('FEBS Build', () => {
       });
 
       it('detects Vue parse errors', async function () {
-        await compile({
+        await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-vue-syntax-error.js'),
           },
@@ -197,7 +208,7 @@ describe('FEBS Build', () => {
 
     describe('Sourcemaps', async function () {
       it('generates inline ES sourcemaps', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
@@ -208,7 +219,7 @@ describe('FEBS Build', () => {
 
     describe('Asset Fragments', async function () {
       it('generates js asset fragment', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
@@ -219,7 +230,7 @@ describe('FEBS Build', () => {
 
     describe('LESS', async function () {
       it('compiles LESS', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             // app: absPath('../../core-css-build/test/fixtures/src/main.less'),
             app: absPath('fixtures/src/main-with-less.js'),
