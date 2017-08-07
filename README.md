@@ -3,7 +3,7 @@
 # FEBS
 
 ## Current Status
-- Work in progress and things will change siginficantly for the initial 2.0 release
+- Work in progress and things will change signficantly for the initial 2.0 release
 
 ## Description
 
