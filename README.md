@@ -2,17 +2,17 @@
 
 # FEBS
 
+## Current Status
+- Work in progress and things will change siginficantly for the initial 2.0 release
+
 ## Description
 
 - Next-gen, webpack-based prototype build system.
-
-- Work in progress and will change as we communicate with teams to determine requirements.
 
 - The driving philosophy is minimal code, delegating essentially all build tasks directly through to webpack.
 
 ## Goals
 - Simple, minimal, reliable, maintainable.
-- Re-usable across all REI microsites.
 - 100% code coverage.
 - npm-based scripts, no gulp.
 - Overridable defaults.
@@ -37,13 +37,9 @@
   - webpack contains functionality that we need either itself or through its ecosystem of loaders and plugins.
   - Maintainable due to the fact that there is minimal code and it is well tested.
   - Updateable via webpack's ecosystem and local webpack conf overrides.
-- No gulp?
-    - It's just a task runner; we use npm scripts.
 
 ## Installation
 - `npm install git+https://github.com/rei/febs.git`
-
-## Usage
 
 ### Assumptions
 
