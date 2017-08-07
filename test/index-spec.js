@@ -1,11 +1,11 @@
-/* eslint-disable prefer-arrow-callback */
+/* eslint-env node, mocha */
+/* eslint-disable prefer-arrow-callback, func-names */
 
 // Dependencies.
 const assert = require('assert');
 const path = require('path');
 const MemoryFS = require('memory-fs');
 const utils = require('../src/lib/util');
-const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 
 // const logger = require('../../lib/logger');
 // const sinon = require('sinon');
@@ -57,11 +57,11 @@ const compile = conf => new Promise((resolve, reject) => {
     }
 
     // Resolve with wp compile results.
-    const code = Object.keys(entrypoints).map((key) => {  // key is entrypoint key (e.g. "app")
+    const code = Object.keys(entrypoints).map((key) => { // key is entrypoint key (e.g. "app")
       const res = {};
-      res[key] = [];  // an array of built assets will be under the key
+      res[key] = []; // an array of built assets will be under the key
 
-      const assets = entrypoints[key].assets;  // array of assets under that key.
+      const assets = entrypoints[key].assets; // array of assets under that key.
       assets.forEach((asset) => {
         const o = {};
         o.filename = asset;
@@ -231,6 +231,18 @@ describe('FEBS Build', () => {
         // Currently, need to require less in the js.. Is this how we should be
         // pulling in less in wp?
         assert(compiled.code[0].app[1].content.includes('border-color'));
+      });
+    });
+
+    describe('Logger', function () {
+      const logger = require('../src/lib/logger');
+      it('should contain setLogLevel function', function () {
+        assert(logger.setLogLevel);
+      });
+
+      it('allow changing log levels', function () {
+        logger.setLogLevel('warn');
+        assert.equal(logger.transports.console.level, 'warn');
       });
     });
   });
