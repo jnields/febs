@@ -256,5 +256,18 @@ describe('FEBS Build', () => {
         assert.equal(logger.transports.console.level, 'warn');
       });
     });
+
+    describe('Dev Server', function () {
+      const devServerFn = require('../src/dev-server');
+      const devServer = devServerFn({}, function () {
+        this.listen = (port, ip, cb) => {
+          cb();
+        };
+      });
+
+      it('should create new server', function () {
+        assert(devServer);
+      });
+    });
   });
 });

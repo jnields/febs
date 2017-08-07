@@ -4,15 +4,12 @@
  * Starts the dev-server at localhost:8080.
  *
  */
-
-const WDS = require('webpack-dev-server');
-
 /**
  * Run the webpack-dev-server.
  *
  * @param {Object} compiler Webpack instance configured with a webpack.conf.js
  */
-const runDevServer = (compiler) => {
+const runDevServer = (compiler, WDS) => {
   const port = 8080;
   const cwd = process.cwd();
   const server = new WDS(compiler, {

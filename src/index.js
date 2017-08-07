@@ -141,6 +141,8 @@ module.exports = function init(conf = {}) {
 
   // Task: Dev-server build.
   function startDevServer() {
+    const WDS = require('webpack-dev-server');
+
     // Need to update the app entry for webpack-dev-server. This is necessary for
     // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
     const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
@@ -151,7 +153,7 @@ module.exports = function init(conf = {}) {
           path.resolve(process.cwd(), 'src/entry.js'),
         ],
       },
-    }));
+    }), WDS);
   }
 
   return {
