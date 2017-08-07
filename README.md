@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.com/rei/febs.svg?token=aB3sLfhn5YbJtayKJo1q&branch=master)](https://travis-ci.com/rei/febs)
+[![Build Status](https://travis-ci.org/rei/febs.svg?branch=master)](https://travis-ci.org/rei/febs)
 
 # FEBS
 
 ## Current Status
-- Work in progress and things will change siginficantly for the initial 2.0 release
+- Work in progress and things will change signficantly for the initial 2.0 release
 
 ## Description
 
