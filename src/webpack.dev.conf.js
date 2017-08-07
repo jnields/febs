@@ -17,8 +17,19 @@ module.exports = {
   output: {
     path: path.resolve(cwd, 'dest'),
     filename: '[name].bundle.js',
-//    library: 'reiCommon',
-//    libraryTarget: 'var'
+    // library: 'reiCommon',
+    // libraryTarget: 'var'
+  },
+
+  resolve: {
+    extensions: [
+      '.js',
+      '.jsx',
+      '.json',
+      '.vue',
+      '.scss',
+      '.css',
+    ],
   },
 
   devtool: 'eval-source-map', // internal, cheap, fast
@@ -30,7 +41,7 @@ module.exports = {
 
   module: {
     rules: [{
-      test: /\.js$/,
+      test: /\.js|\.jsx$/,
       exclude: /(node_modules)/,
       use: {
         loader: 'babel-loader',
