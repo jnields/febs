@@ -23,10 +23,26 @@ module.exports = function init(conf = {}) {
     const cwd = process.cwd();
     const overridesConfFile = path.resolve(cwd, './webpack.overrides.conf.js');
     return fs.pathExistsSync(overridesConfFile) ?
-      require(overridesConfFile) : {};
+    require(overridesConfFile) : {};
   };
 
-  /**
+  const getWebpackConfig = (confOverride) => {
+    const confBase = getBaseConf();
+
+    // Overrides config.
+    const confOverrides = getOverridesConf(confOverride);
+
+    // Always replace:
+    //   - entry, output
+    const wpConf = merge.strategy({
+      entry: 'replace',
+      output: 'replace',
+    })(confBase, confOverrides);
+
+    return wpConf;
+  };
+
+/**
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
  *
@@ -39,17 +55,8 @@ module.exports = function init(conf = {}) {
  *
  */
   const createCompiler = (confOverride) => {
-    const confBase = getBaseConf();
 
-    // Overrides config.
-    const confOverrides = getOverridesConf(confOverride);
-
-    // Always replace:
-    //   - entry, output
-    const wpConf = merge.strategy({
-      entry: 'replace',
-      output: 'replace',
-    })(confBase, confOverrides);
+    const wpConf = getWebpackConfig(confOverride);
 
     // Configure utility functions with the final webpack conf.
     utils = require('./lib/util')({
@@ -112,23 +119,27 @@ module.exports = function init(conf = {}) {
       }
       logger.error(data.toString());
     });
+
   };
 
   // Task: Dev-server build.
   function startDevServer() {
     const WDS = require('webpack-dev-server');
 
+    const wpConf = getWebpackConfig();
+
     // Need to update the app entry for webpack-dev-server. This is necessary for
     // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
     const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
-    devServer(createCompiler({
-      entry: {
-        app: [
-          pathToWPDSClient,
-          path.resolve(process.cwd(), 'src/entry.js'),
-        ],
-      },
-    }), WDS);
+
+    for (let key in wpConf.entry) {
+      wpConf.entry[key] = [
+        pathToWPDSClient,
+        path.resolve(process.cwd(), wpConf.entry[key]),
+      ];
+    }
+
+    devServer(createCompiler(wpConf), WDS);
   }
 
   return {

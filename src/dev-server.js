@@ -4,6 +4,13 @@
  * Starts the dev-server at localhost:8080.
  *
  */
+const WDS = require('webpack-dev-server');
+const expressThymeleaf = require('express-thymeleaf');
+const path = require('path');
+const fs = require('fs');
+const logger = require('./lib/logger');
+const request = require('request');
+
 /**
  * Run the webpack-dev-server.
  *
@@ -11,14 +18,14 @@
  */
 const runDevServer = (compiler, WDS) => {
   const port = 8080;
-  const cwd = process.cwd();
+  const projectPath = process.cwd();
   const server = new WDS(compiler, {
     port,
     stats: {
       colors: true,
       detailed: true,
     },
-    contentBase: cwd,
+    contentBase: projectPath,
     publicPath: '/dest/',
     compress: true,
     clientLogLevel: 'info',
@@ -28,6 +35,57 @@ const runDevServer = (compiler, WDS) => {
     open: true,
     openPage: '',
   });
+
+  const app = server.app;
+
+  const {
+    TemplateEngine,
+    STANDARD_CONFIGURATION,
+  } = require('thymeleaf');
+
+  const templateEngine = new TemplateEngine(STANDARD_CONFIGURATION);
+
+  app.engine('html', expressThymeleaf(templateEngine));
+
+  app.set('views', path.resolve(`${projectPath}/../resources/templates`));
+
+  app.set('view engine', 'html');
+
+  app.get('/favicon.ico', (req, res) => res.send())
+
+  app.get(/^\/satchel\/(.*)/, function(req,res) {
+    //modify the url in any way you want
+    var newUrl = 'https://satchel.rei.com/' + req.params[0];
+    console.log(newUrl);
+    request(newUrl).pipe(res);
+  });
+
+  app.get('/pages/:page', (req, res) => {
+
+    let dataPath;
+    let pageData = {};
+
+    try {
+      dataPath = path.resolve('./test-data', req.query.file || `${req.params.page}.json`);
+      pageData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+    }
+    catch (e) {
+      logger.error('no test-data found for page', dataPath, e)
+    }
+
+    res.render(
+      `${req.params.page}.html`,
+      {
+        pageData: JSON.stringify(Object.assign(
+          { url: req.url },
+          pageData
+        )),
+        staticEnv: true,
+      }
+    );
+  });
+
+
   server.listen(port, '127.0.0.1', () => {
     console.log(`Starting server on http://localhost:${port}`);
   });
