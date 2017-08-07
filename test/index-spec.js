@@ -7,9 +7,6 @@ const path = require('path');
 const MemoryFS = require('memory-fs');
 const utils = require('../src/lib/util');
 
-// const logger = require('../../lib/logger');
-// const sinon = require('sinon');
-
 let util;
 
 // Create in-memory file system for tests.
