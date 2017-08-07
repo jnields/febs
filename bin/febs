@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-
+const febs = require('../src/index.js');
 const program = require('commander');
-const febs = require('../src/index.js')();
-const logger = require('../src/lib/logger');
+// const logger = require('../src/lib/logger');
 
 program
   .usage('[task] [options]')
@@ -13,15 +12,46 @@ program
 
 program
   .command('prod')
-  .description('(Default) Builds front-end assets optimized for production\n');
+  .description('(Default) Builds front-end assets optimized for production\n')
+  .action((command) => {
+    febs({
+      env: 'prod',
+      command,
+    }).compile();
+  });
+
 
 program
   .command('dev')
-  .description('Build/Serves front-end assets optimized for local development\n');
+  .description('Build/Serves front-end assets optimized for local development\n')
+  .action((command) => {
+    febs({
+      env: 'dev',
+      command,
+    }).compile();
+  });
+
+program
+  .command('dev-server')
+  .description('Starts a local dev server with hot reloading.\n')
+  .action((command) => {
+    febs({
+      env: 'dev',
+      command,
+    }).startDevServer();
+  });
 
 program
   .command('test')
-  .description('Runs unit tests.\n');
+  .description('Runs unit tests.\n')
+  .option('-c, --cover', 'Run test coverage')
+  .option('-w, --watch', 'Watch mode')
+  .action((command) => {
+    febs({
+      env: 'dev', // <-- client unit tests, env is a don't care.
+      command,
+    }).test();
+  });
 
 program
   .on('--help', () => {
@@ -29,25 +59,8 @@ program
         $ febs dev --no-watch
         $ febs prod --verbose
         $ febs test
-        $ febs test --coverage (not available yet)
+        $ febs test --coverage
     `);
   });
 
 program.parse(process.argv);
-
-const options = program.opts();
-delete options.version;
-
-// Get febs task name:  febs <task> [--options]
-const tasks = ['dev', 'dev-server', 'prod', 'test'];
-const task = program.args[0];
-if (!tasks.includes(task)) {
-  logger.error(`Unrecognized task, ${task}`);
-  process.exit(1);
-}
-
-// Run FEBS.
-febs.run({
-  task,
-  options,
-});

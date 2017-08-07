@@ -4,7 +4,6 @@
  * Starts the dev-server at localhost:8080.
  *
  */
-
 const WDS = require('webpack-dev-server');
 const expressThymeleaf = require('express-thymeleaf');
 const path = require('path');
@@ -17,7 +16,7 @@ const request = require('request');
  *
  * @param {Object} compiler Webpack instance configured with a webpack.conf.js
  */
-const runDevServer = (compiler) => {
+const runDevServer = (compiler, WDS) => {
   const port = 8080;
   const projectPath = process.cwd();
   const server = new WDS(compiler, {

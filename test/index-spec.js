@@ -1,11 +1,11 @@
-/* eslint-disable prefer-arrow-callback */
+/* eslint-env node, mocha */
+/* eslint-disable prefer-arrow-callback, func-names */
 
 // Dependencies.
 const assert = require('assert');
 const path = require('path');
 const MemoryFS = require('memory-fs');
 const utils = require('../src/lib/util');
-const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 
 // const logger = require('../../lib/logger');
 // const sinon = require('sinon');
@@ -16,9 +16,13 @@ let util;
 const fs = new MemoryFS();
 
 // febs module
-const webpackModule = require('../src/index')({
-  fs,
-});
+const febsModule = require('../src/index');
+
+// const febsModule = require('../src/index')({
+//   env: 'dev',
+// });
+
+// febsModule.setEnv();
 
 // initialize WP with in-memory fs.
 
@@ -30,7 +34,7 @@ const webpackModule = require('../src/index')({
  * @return {Promise}  Promise resolving with an object containing
  *                    compiled code and webpack output.
  */
-const compile = conf => new Promise((resolve, reject) => {
+const compile = (env, conf) => new Promise((resolve, reject) => {
   // configure utils with the wp config, fs.
   util = utils({
     wpConf: conf,
@@ -38,7 +42,12 @@ const compile = conf => new Promise((resolve, reject) => {
   });
 
   // create compiler instance
-  const compiler = webpackModule.createCompiler(conf);
+  const febs = febsModule({
+    fs,
+    env,
+  });
+
+  const compiler = febs.createCompiler(conf);
 
   // Set up in-memory file system for tests.
   compiler.outputFileSystem = fs;
@@ -46,7 +55,7 @@ const compile = conf => new Promise((resolve, reject) => {
   // Run webpack
   compiler.run((err, stats) => {
     // call the source done callback.
-    webpackModule.webpackCompileDone(err, stats);
+    febs.webpackCompileDone(err, stats);
 
     const entrypoints = stats.toJson('verbose').entrypoints;
     const errors = util.getWebpackErrors(err, stats);
@@ -57,11 +66,11 @@ const compile = conf => new Promise((resolve, reject) => {
     }
 
     // Resolve with wp compile results.
-    const code = Object.keys(entrypoints).map((key) => {  // key is entrypoint key (e.g. "app")
+    const code = Object.keys(entrypoints).map((key) => { // key is entrypoint key (e.g. "app")
       const res = {};
-      res[key] = [];  // an array of built assets will be under the key
+      res[key] = []; // an array of built assets will be under the key
 
-      const assets = entrypoints[key].assets;  // array of assets under that key.
+      const assets = entrypoints[key].assets; // array of assets under that key.
       assets.forEach((asset) => {
         const o = {};
         o.filename = asset;
@@ -80,7 +89,6 @@ const absPath = relPath => path.resolve(__dirname, relPath);
 describe('FEBS Build', () => {
   describe('Production mode', function () {
     beforeEach(function () {
-      process.env.NODE_ENV = 'prod';
       process.env.FEBS_TEST = true;
 
       // Create the destination directory
@@ -88,7 +96,7 @@ describe('FEBS Build', () => {
     });
 
     it('builds ES production bundle - versioned, minified, sourcemaps', async function () {
-      const compiled = await compile({
+      const compiled = await compile('prod', {
         entry: {
           app1: absPath('fixtures/src/main-es2015.js'),
           app2: absPath('fixtures/src/main-es2015.js'),
@@ -109,8 +117,9 @@ describe('FEBS Build', () => {
   });
 
   describe('Development mode', function () {
+    const env = 'dev';
     beforeEach(function () {
-      process.env.NODE_ENV = 'dev';
+      // process.env.NODE_ENV = 'dev';
       process.env.FEBS_TEST = true;
 
       // Create the destination directory
@@ -119,7 +128,7 @@ describe('FEBS Build', () => {
 
     describe('ECMAScript', async function () {
       it('builds ES bundle', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
@@ -129,7 +138,7 @@ describe('FEBS Build', () => {
       });
 
       it('builds multiple ES bundles', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app1: absPath('fixtures/src/main-es2015.js'),
             app2: absPath('fixtures/src/main-es2015.js'),
@@ -140,7 +149,7 @@ describe('FEBS Build', () => {
       });
 
       it('detects ES syntax errors', async function () {
-        await compile({
+        await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015-syntax-errors.js'),
           },
@@ -153,7 +162,7 @@ describe('FEBS Build', () => {
 
     describe('Riot', function () {
       it('compiles Riot tags', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-riot.js'),
           },
@@ -163,7 +172,7 @@ describe('FEBS Build', () => {
       });
 
       it('detects Riot parse errors', async function () {
-        await compile({
+        await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-riot-syntax-error.js'),
           },
@@ -175,7 +184,7 @@ describe('FEBS Build', () => {
 
     describe('Vue', function () {
       it('compiles Vue tags', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-vue.js'),
           },
@@ -185,7 +194,7 @@ describe('FEBS Build', () => {
       });
 
       it('detects Vue parse errors', async function () {
-        await compile({
+        await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-vue-syntax-error.js'),
           },
@@ -197,7 +206,7 @@ describe('FEBS Build', () => {
 
     describe('Sourcemaps', async function () {
       it('generates inline ES sourcemaps', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
@@ -206,20 +215,23 @@ describe('FEBS Build', () => {
       });
     });
 
-    describe('Asset Fragments', async function () {
+    xdescribe('Asset Fragments', async function () {
       it('generates js asset fragment', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
         }).catch(util.logErrors);
+
+        console.log(fs);
+
         assert(fs.statSync(path.resolve(process.cwd(), 'dest', 'assets.js.html')).isFile());
       });
     });
 
     describe('LESS', async function () {
       it('compiles LESS', async function () {
-        const compiled = await compile({
+        const compiled = await compile('dev', {
           entry: {
             // app: absPath('../../core-css-build/test/fixtures/src/main.less'),
             app: absPath('fixtures/src/main-with-less.js'),
@@ -231,6 +243,39 @@ describe('FEBS Build', () => {
         // Currently, need to require less in the js.. Is this how we should be
         // pulling in less in wp?
         assert(compiled.code[0].app[1].content.includes('border-color'));
+      });
+    });
+
+    describe('Logger', function () {
+      const logger = require('../src/lib/logger');
+      it('should contain setLogLevel function', function () {
+        assert(logger.setLogLevel);
+      });
+
+      it('allow changing log levels', function () {
+        logger.setLogLevel('warn');
+        assert.equal(logger.transports.console.level, 'warn');
+      });
+    });
+
+    describe('Dev Server', function () {
+      const devServerFn = require('../src/dev-server');
+      const devServer = devServerFn({}, function () {
+
+        this.app = {};
+
+        this.app.use = function () {};
+        this.app.get = function () {};
+        this.app.set = function () {};
+        this.app.engine = function () {};
+
+        this.listen = (port, ip, cb) => {
+          cb();
+        };
+      });
+
+      it('should create new server', function () {
+        assert(devServer);
       });
     });
   });
