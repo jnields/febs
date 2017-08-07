@@ -20,7 +20,7 @@
     "febs": "./bin/febs"
   },
   "keywords": [],
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "asset-tag-frag-webpack-plugin": "git+https://github.com/rei/asset-tag-frag-webpack-plugin.git#v1.0.3",
     "babel-core": "^6.25.0",
