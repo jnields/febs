@@ -256,6 +256,19 @@ describe('FEBS Build', () => {
       });
     });
 
+    describe('getWebpackConfig', function () {
+      it('should not return multiple plugin entries after merging confs', function () {
+        const febs = febsModule({
+          fs,
+          env: 'dev',
+        });
+        const wpDevConf = require('../webpack-config/webpack.base.conf');
+        const expectedLength = wpDevConf.module.rules.length;
+        const wpConfig = febs.getWebpackConfig(wpDevConf);
+        assert.equal(expectedLength, wpConfig.module.rules.length);
+      });
+    });
+
     describe('Dev Server', function () {
       const devServerFn = require('../lib/dev-server');
       const devServer = devServerFn({}, function () {

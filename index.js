@@ -64,7 +64,7 @@ module.exports = function init(conf = {}) {
 
     // Always replace:
     //   - entry, output
-    const wpConf = merge.strategy({
+    const wpConf = merge.smartStrategy({
       entry: 'replace',
       output: 'replace',
     })(configsToMerge);
@@ -175,5 +175,6 @@ module.exports = function init(conf = {}) {
     createCompiler,
     webpackCompileDone,
     startDevServer,
+    getWebpackConfig,
   };
 };
