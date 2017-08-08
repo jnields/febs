@@ -1,21 +1,16 @@
 /* eslint-disable global-require, import/no-dynamic-require */
 
 const logger = require('./logger');
-const R = require('ramda');
-const path = require('path');
 
 /**
  * Initialization function to initialize the utility library
  * with the conf passed to Webpack.
  *
  * @param {Object} wpConf The conf passed to Webpack.
+ * @param conf.fs The file system.
+ * @param conf.wpConf The webpack conf object.
  */
-const init = function init(conf) {
-  // File system (can be either in-memory or fs)
-  const fs = conf.fs;
-
-  // The WP conf object.
-  const wpConf = conf.wpConf;
+const init = function init() {
   /**
    * Collect the various type of webpack errors
    * @param {*} err
