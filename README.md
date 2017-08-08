@@ -6,13 +6,13 @@
 - Work in progress and things will change significantly for the initial 2.0 release
 
 ## Description
-- The job of this package is to provide default webpack configurations that are common for our front-end development community of practice that can be overridden or added to.
-- The driving philosophy of the package its self are minimal code, delegating essentially all build tasks directly through to webpack.
+The job of this package is to provide default webpack configurations that are common for our front-end development community of practice that can be overridden or added to.
 
-## Goals
+## Package Goals
 - Simple, minimal, reliable, maintainable.
 - 100% code coverage.
 - Overridable defaults.
+- Deligate most functionality to webpack ecosystem
 
 ## Features
 - Super simple command-line interface with help
