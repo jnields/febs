@@ -9,6 +9,20 @@ const devServer = require('./dev-server');
 
 let utils;
 
+/**
+ * FEBS entry point. The module is initialized with the
+ * conf entries.
+ *
+ * Passed in at run or test time
+ * @param conf.env The environment (dev or prod)
+ *
+ * Passed in at run-time
+ * @param conf.command The command received from commander.
+ *
+ * passed in at test-time
+ * @param conf.fs The file system (passed in from unit tests.)
+
+ */
 module.exports = function init(conf = {}) {
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
@@ -59,6 +73,7 @@ module.exports = function init(conf = {}) {
 
     // Configure utility functions with the final webpack conf.
     utils = require('./lib/util')({
+      env: conf.env,
       wpConf,
       fs,
     });
@@ -91,13 +106,9 @@ module.exports = function init(conf = {}) {
 
   /**
  * Webpack compile function.
- *
  * Creates a compiler with config object, runs, handles the various WP errors.
- *
- * @param {Object} conf Webpack config object. This conf object will be merged in
- * with the environmental config object.
  */
-  const compile = confOverride => createCompiler(confOverride).run(webpackCompileDone);
+  const compile = () => createCompiler().run(webpackCompileDone);
 
   const test = function test() {
     let cmd = spawn('mocha', ['--colors', `${conf.command.watch ? '--watch' : 'test'}`]);
@@ -120,7 +131,9 @@ module.exports = function init(conf = {}) {
     });
   };
 
-  // Task: Dev-server build.
+  /**
+   * Start the webpack dev server.
+   */
   function startDevServer() {
     const WDS = require('webpack-dev-server');
 
