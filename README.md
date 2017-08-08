@@ -3,7 +3,7 @@
 # FEBS
 
 ## Current Status
-- Work in progress and things will change siginficantly for the initial 2.0 release
+- Work in progress and things will change significantly for the initial 2.0 release
 
 ## Description
 
@@ -68,21 +68,7 @@ $ febs dev-server
 
 ### Todo:
 
-[x] Development build (ES, LESS)
-
-[x] Riot
-
-[x] Vue
-
-[x] Sourcemaps (development, inline)
-
-[x] Sourcemaps (production, external)
-
-[x] Production build (asset versioning, minification)
-
-[x] Live reloading (via CLI)
-
-[x] Live reloading (via Node API).
+[ ] rename package from febs to rei-febs or scope package to @rei/febs
 
 [ ] Vendor code splitting.
 
