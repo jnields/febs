@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-const febs = require('../src/index.js');
+const febs = require('../index.js');
 const program = require('commander');
-// const logger = require('../src/lib/logger');
 
 program
   .usage('[task] [options]')
@@ -11,53 +10,62 @@ program
   .option('--debug', 'Higher level of verbosity, including debug output');
 
 program
-  .command('prod')
+  .command('build')
   .description('(Default) Builds front-end assets optimized for production\n')
   .action((command) => {
+
     febs({
       env: 'prod',
       command,
+      logLevel: command.parent.verbose ? 'verbose' : 'info',
     }).compile();
   });
-
 
 program
   .command('dev')
   .description('Build/Serves front-end assets optimized for local development\n')
+  .option('--no-dev-server')
   .action((command) => {
-    febs({
-      env: 'dev',
-      command,
-    }).compile();
-  });
 
-program
-  .command('dev-server')
-  .description('Starts a local dev server with hot reloading.\n')
-  .action((command) => {
-    febs({
-      env: 'dev',
-      command,
-    }).startDevServer();
+    let verbose = command.parent.verbose;
+
+    if (command.devServer) {
+      febs({
+        env: 'dev',
+        command,
+        logLevel: command.parent.verbose ? 'verbose' : 'info',
+      }).startDevServer();
+    }
+    else {
+      febs({
+        env: 'dev',
+        command,
+        logLevel: command.parent.verbose ? 'verbose' : 'info',
+      }).compile();
+    }
+
   });
 
 program
   .command('test')
   .description('Runs unit tests.\n')
   .option('-c, --cover', 'Run test coverage')
-  .option('-w, --watch', 'Watch mode')
   .action((command) => {
+
+    let verbose = command.parent.verbose;
+
     febs({
       env: 'dev', // <-- client unit tests, env is a don't care.
       command,
+      logLevel: verbose ? 'verbose' : 'info',
     }).test();
   });
 
 program
   .on('--help', () => {
     process.stdout.write(`  Examples:
-        $ febs dev --no-watch
-        $ febs prod --verbose
+        $ febs dev --no-dev-server
+        $ febs build --verbose
         $ febs test
         $ febs test --coverage
     `);

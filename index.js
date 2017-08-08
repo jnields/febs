@@ -5,7 +5,10 @@ const logger = require('./lib/logger');
 const merge = require('webpack-merge');
 const path = require('path');
 const { spawn } = require('child_process');
-const devServer = require('./dev-server');
+const devServer = require('./lib/dev-server');
+const webpackConfigBase = require('./webpack-config/webpack.base.conf');
+
+const projectPath = process.cwd();
 
 let utils;
 
@@ -27,31 +30,44 @@ module.exports = function init(conf = {}) {
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
 
-  // Environmental WP conf (dev or prod)
-  const getBaseConf = () => require(`./webpack.${conf.env}.conf`);
+  logger.setLogLevel(conf.logLevel);
 
   // Get local overrides WP conf.
   const getOverridesConf = (confOverride) => {
     if (confOverride) return confOverride;
 
-    const cwd = process.cwd();
-    const overridesConfFile = path.resolve(cwd, './webpack.overrides.conf.js');
-    return fs.existsSync(overridesConfFile) ?
-      require(overridesConfFile) : {};
+    const overridesConfFile = path.resolve(projectPath, './webpack.overrides.conf.js');
+    try {
+      fs.existsSync(overridesConfFile);
+    } catch (e) {
+      return {};
+    }
+
+    return require(overridesConfFile);
   };
 
   const getWebpackConfig = (confOverride) => {
-    const confBase = getBaseConf();
+    const configsToMerge = [webpackConfigBase];
+
+    // Add development config, if we are in dev
+    if (conf.env === 'dev') {
+      configsToMerge.push(require('./webpack-config/webpack.dev.conf'));
+    }
+
+    // Add production config, if we are building for production
+    if (conf.env === 'prod') {
+      configsToMerge.push(require('./webpack-config/webpack.prod.conf'));
+    }
 
     // Overrides config.
-    const confOverrides = getOverridesConf(confOverride);
+    configsToMerge.push(getOverridesConf(confOverride));
 
     // Always replace:
     //   - entry, output
     const wpConf = merge.strategy({
       entry: 'replace',
       output: 'replace',
-    })(confBase, confOverrides);
+    })(configsToMerge);
 
     return wpConf;
   };
@@ -118,13 +134,13 @@ module.exports = function init(conf = {}) {
     }
 
     cmd.stdout.on('data', (data) => {
-      console.log(data.toString());
+      logger.info(data.toString());
     });
 
     // It seems istanbul report output goes to stderr.
     cmd.stderr.on('data', (data) => {
       if (conf.command.cover) {
-        console.log(data.toString());
+        logger.info(data.toString());
         return;
       }
       logger.error(data.toString());
@@ -141,14 +157,14 @@ module.exports = function init(conf = {}) {
 
     // Need to update the app entry for webpack-dev-server. This is necessary for
     // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
-    const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
+    const pathToWPDSClient = `${path.resolve(__dirname, 'node_modules/webpack-dev-server/client')}?http://localhost:8080`;
 
-    for (const key in wpConf.entry) {
+    Object.keys(wpConf.entry).forEach((key) => {
       wpConf.entry[key] = [
         pathToWPDSClient,
-        path.resolve(process.cwd(), wpConf.entry[key]),
+        path.resolve(projectPath, wpConf.entry[key]),
       ];
-    }
+    });
 
     devServer(createCompiler(wpConf), WDS);
   }
