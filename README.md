@@ -39,7 +39,7 @@
   - Updateable via webpack's ecosystem and local webpack conf overrides.
 
 ## Installation
-- `npm install git+https://github.com/rei/febs.git`
+- `npm install --global --save-dev git+https://github.com/rei/febs.git`
 
 ### Assumptions
 
