@@ -15,7 +15,7 @@ The job of this package is to provide default webpack configurations that are co
 - Deligate most functionality to webpack ecosystem
 
 ## Features
-- Super simple command-line interface with help
+- Command-line interface
 - Supports building:
   - Vue
   - Riot
