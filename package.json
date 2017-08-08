@@ -7,12 +7,12 @@
     "test": "test"
   },
   "scripts": {
-    "postinstall": "./bin/postinstall",
+    "init": "./bin/init",
     "test": "mocha",
     "test-watch": "mocha --watch",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",
+    "build": "febs build",
     "dev": "webpack-dev-server --config src/webpack.dev.conf.js",
-    "dev-server": "NODE_ENV=dev node test/harness/entry-webpack-dev-server.js",
     "ci:build": "./node_modules/mocha/bin/_mocha --reporter xunit > results.xml && npm run cover",
     "lint": "./node_modules/.bin/eslint src"
   },
