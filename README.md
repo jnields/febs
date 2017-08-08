@@ -6,15 +6,12 @@
 - Work in progress and things will change significantly for the initial 2.0 release
 
 ## Description
-
-- Next-gen, webpack-based prototype build system.
-
-- The driving philosophy is minimal code, delegating essentially all build tasks directly through to webpack.
+- The job of this package is to provide default webpack configurations that are common for our front-end development community of practice that can be overridden or added to.
+- The driving philosophy of the package its self are minimal code, delegating essentially all build tasks directly through to webpack.
 
 ## Goals
 - Simple, minimal, reliable, maintainable.
 - 100% code coverage.
-- npm-based scripts, no gulp.
 - Overridable defaults.
 
 ## Features
@@ -32,7 +29,7 @@
   - code coverage
 
 ## Decisions:
-- webpack?
+- Why webpack
   - Take advantage of the very large open-source community that currently rallies around webpack: new development, issue resolution, etc.
   - webpack contains functionality that we need either itself or through its ecosystem of loaders and plugins.
   - Maintainable due to the fact that there is minimal code and it is well tested.
@@ -41,17 +38,21 @@
 ## Installation
 - `npm install --global --save-dev git+https://github.com/rei/febs.git`
 
-### Assumptions
+### Defaults
 
-FEBS assumes and creates the following:
-  - Source entry point is `/src/entry.js`
-  - Bundles written to `/dest`.
+By default febs is configured for:
+  - Source entry point: `/src/entry.js`
+  - Bundles written to: `/dest`.
 
 ### Commands
 
 #### Help
 ```
 $ febs --help
+```
+#### Start a new febs project
+```
+$ febs init
 ```
 #### Production Build
 ```
