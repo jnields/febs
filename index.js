@@ -7,6 +7,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const devServer = require('./lib/dev-server');
 const webpackConfigBase = require('./webpack-config/webpack.base.conf');
+
 const projectPath = process.cwd();
 
 let utils;
@@ -23,26 +24,24 @@ module.exports = function init(conf = {}) {
 
     const overridesConfFile = path.resolve(projectPath, './webpack.overrides.conf.js');
     try {
-      fs.existsSync(overridesConfFile)
-    }
-    catch (e) {
+      fs.existsSync(overridesConfFile);
+    } catch (e) {
       return {};
     }
 
-    return require(overridesConfFile)
+    return require(overridesConfFile);
   };
 
   const getWebpackConfig = (confOverride) => {
-
-    let configsToMerge = [webpackConfigBase];
+    const configsToMerge = [webpackConfigBase];
 
     // Add development config, if we are in dev
-    if (conf.env == 'dev') {
+    if (conf.env === 'dev') {
       configsToMerge.push(require('./webpack-config/webpack.dev.conf'));
     }
 
     // Add production config, if we are building for production
-    if (conf.env == 'prod') {
+    if (conf.env === 'prod') {
       configsToMerge.push(require('./webpack-config/webpack.prod.conf'));
     }
 
@@ -124,13 +123,13 @@ module.exports = function init(conf = {}) {
     }
 
     cmd.stdout.on('data', (data) => {
-      console.log(data.toString());
+      logger.info(data.toString());
     });
 
     // It seems istanbul report output goes to stderr.
     cmd.stderr.on('data', (data) => {
       if (conf.command.cover) {
-        console.log(data.toString());
+        logger.info(data.toString());
         return;
       }
       logger.error(data.toString());
@@ -147,12 +146,12 @@ module.exports = function init(conf = {}) {
     // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
     const pathToWPDSClient = `${path.resolve(__dirname, 'node_modules/webpack-dev-server/client')}?http://localhost:8080`;
 
-    for (const key in wpConf.entry) {
+    Object.keys(wpConf.entry).forEach((key) => {
       wpConf.entry[key] = [
         pathToWPDSClient,
         path.resolve(projectPath, wpConf.entry[key]),
       ];
-    }
+    });
 
     devServer(createCompiler(wpConf), WDS);
   }
