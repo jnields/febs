@@ -11,7 +11,7 @@ let utils;
 
 module.exports = function init(conf = {}) {
   // Allow for in-memory fs for testing.
-  const fs = conf.fs || require('fs-extra');
+  const fs = conf.fs || require('fs');
 
   // Environmental WP conf (dev or prod)
   const getBaseConf = () => require(`./webpack.${conf.env}.conf`);
