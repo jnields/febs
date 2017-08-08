@@ -2,7 +2,7 @@
 
 - resolve default conf file when client is not overriding anything.  use a function for entry/output.
 
-- Why are promises not being polyfilled by babel-preset-env. Test out in rei-febs, not rei-febs-client.
+- Why are promises not being polyfilled by babel-preset-env.
 
 - webpack.overides.conf.js.
   - Allow overriding of entry.
