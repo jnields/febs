@@ -13,7 +13,6 @@ program
   .command('build')
   .description('(Default) Builds front-end assets optimized for production\n')
   .action((command) => {
-
     febs({
       env: 'prod',
       command,
@@ -26,8 +25,7 @@ program
   .description('Build/Serves front-end assets optimized for local development\n')
   .option('--no-dev-server')
   .action((command) => {
-
-    let verbose = command.parent.verbose;
+    const verbose = command.parent.verbose;
 
     if (command.devServer) {
       febs({
@@ -35,15 +33,13 @@ program
         command,
         logLevel: command.parent.verbose ? 'verbose' : 'info',
       }).startDevServer();
-    }
-    else {
+    } else {
       febs({
         env: 'dev',
         command,
         logLevel: command.parent.verbose ? 'verbose' : 'info',
       }).compile();
     }
-
   });
 
 program
@@ -51,8 +47,7 @@ program
   .description('Runs unit tests.\n')
   .option('-c, --cover', 'Run test coverage')
   .action((command) => {
-
-    let verbose = command.parent.verbose;
+    const verbose = command.parent.verbose;
 
     febs({
       env: 'dev', // <-- client unit tests, env is a don't care.

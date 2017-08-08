@@ -24,7 +24,6 @@ const febsModule = require('../index');
  *                    compiled code and webpack output.
  */
 const compile = (env, conf) => new Promise((resolve, reject) => {
-
   // configure utils with the wp config, fs.
   util = utils({
     wpConf: conf,
@@ -148,7 +147,6 @@ describe('FEBS Build', () => {
             app: absPath('fixtures/src/main-es2015-syntax-errors.js'),
           },
         }).catch((errors) => {
-
           let hasSyntaxError = false;
           errors.compile.forEach(function (error) {
             if (error.includes('SyntaxError')) {
