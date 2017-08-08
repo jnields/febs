@@ -22,7 +22,7 @@ module.exports = function init(conf = {}) {
 
     const cwd = process.cwd();
     const overridesConfFile = path.resolve(cwd, './webpack.overrides.conf.js');
-    return fs.pathExistsSync(overridesConfFile) ?
+    return fs.existsSync(overridesConfFile) ?
       require(overridesConfFile) : {};
   };
 
