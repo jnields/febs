@@ -204,15 +204,13 @@ describe('FEBS Build', () => {
       });
     });
 
-    xdescribe('Asset Fragments', async function () {
+    describe('Asset Fragments', async function () {
       it('generates js asset fragment', async function () {
         const compiled = await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
         }).catch(util.logErrors);
-
-        console.log(fs);
 
         assert(fs.statSync(path.resolve(process.cwd(), 'dest', 'assets.js.html')).isFile());
       });
@@ -250,7 +248,6 @@ describe('FEBS Build', () => {
     describe('Dev Server', function () {
       const devServerFn = require('../src/dev-server');
       const devServer = devServerFn({}, function () {
-
         this.app = {};
 
         this.app.use = function () {};
