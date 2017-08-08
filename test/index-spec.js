@@ -206,7 +206,7 @@ describe('FEBS Build', () => {
 
     describe('Asset Fragments', async function () {
       it('generates js asset fragment', async function () {
-        const compiled = await compile('dev', {
+        await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
