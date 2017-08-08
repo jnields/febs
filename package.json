@@ -8,9 +8,9 @@
   },
   "scripts": {
     "postinstall": "./bin/postinstall",
-    "test": "mocha",
+    "test": "mocha -t 8000",
     "test-watch": "mocha --watch",
-    "cover": "istanbul cover node_modules/mocha/bin/_mocha",
+    "cover": "istanbul cover node_modules/.bin/_mocha -- -t 8000",
     "dev": "webpack-dev-server --config src/webpack.dev.conf.js",
     "dev-server": "NODE_ENV=dev node test/harness/entry-webpack-dev-server.js",
     "ci:build": "./node_modules/mocha/bin/_mocha --reporter xunit > results.xml && npm run cover",

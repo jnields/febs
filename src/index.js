@@ -23,7 +23,7 @@ module.exports = function init(conf = {}) {
     const cwd = process.cwd();
     const overridesConfFile = path.resolve(cwd, './webpack.overrides.conf.js');
     return fs.pathExistsSync(overridesConfFile) ?
-    require(overridesConfFile) : {};
+      require(overridesConfFile) : {};
   };
 
   const getWebpackConfig = (confOverride) => {
@@ -42,7 +42,7 @@ module.exports = function init(conf = {}) {
     return wpConf;
   };
 
-/**
+  /**
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
  *
@@ -55,7 +55,6 @@ module.exports = function init(conf = {}) {
  *
  */
   const createCompiler = (confOverride) => {
-
     const wpConf = getWebpackConfig(confOverride);
 
     // Configure utility functions with the final webpack conf.
@@ -119,7 +118,6 @@ module.exports = function init(conf = {}) {
       }
       logger.error(data.toString());
     });
-
   };
 
   // Task: Dev-server build.
@@ -132,7 +130,7 @@ module.exports = function init(conf = {}) {
     // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
     const pathToWPDSClient = `${path.resolve(__dirname, '../node_modules/webpack-dev-server/client')}?http://localhost:8080`;
 
-    for (let key in wpConf.entry) {
+    for (const key in wpConf.entry) {
       wpConf.entry[key] = [
         pathToWPDSClient,
         path.resolve(process.cwd(), wpConf.entry[key]),
