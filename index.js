@@ -13,7 +13,7 @@ let utils;
 
 module.exports = function init(conf = {}) {
   // Allow for in-memory fs for testing.
-  const fs = conf.fs || require('fs-extra');
+  const fs = conf.fs || require('fs');
 
   logger.setLogLevel(conf.logLevel);
 
@@ -59,7 +59,7 @@ module.exports = function init(conf = {}) {
     return wpConf;
   };
 
-/**
+  /**
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
  *
@@ -72,7 +72,6 @@ module.exports = function init(conf = {}) {
  *
  */
   const createCompiler = (confOverride) => {
-
     const wpConf = getWebpackConfig(confOverride);
 
     // Configure utility functions with the final webpack conf.
@@ -136,7 +135,6 @@ module.exports = function init(conf = {}) {
       }
       logger.error(data.toString());
     });
-
   };
 
   // Task: Dev-server build.
@@ -149,7 +147,7 @@ module.exports = function init(conf = {}) {
     // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
     const pathToWPDSClient = `${path.resolve(__dirname, 'node_modules/webpack-dev-server/client')}?http://localhost:8080`;
 
-    for (let key in wpConf.entry) {
+    for (const key in wpConf.entry) {
       wpConf.entry[key] = [
         pathToWPDSClient,
         path.resolve(projectPath, wpConf.entry[key]),

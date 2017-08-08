@@ -7,9 +7,6 @@ const path = require('path');
 const MemoryFS = require('memory-fs');
 const utils = require('../lib/util');
 
-// const logger = require('../../lib/logger');
-// const sinon = require('sinon');
-
 let util;
 
 // Create in-memory file system for tests.
@@ -221,7 +218,7 @@ describe('FEBS Build', () => {
 
     xdescribe('Asset Fragments', async function () {
       it('generates js asset fragment', async function () {
-        const compiled = await compile('dev', {
+        await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
             dest: path.resolve(process.cwd(), 'dest'),
@@ -264,7 +261,6 @@ describe('FEBS Build', () => {
     describe('Dev Server', function () {
       const devServerFn = require('../lib/dev-server');
       const devServer = devServerFn({}, function () {
-
         this.app = {};
 
         this.app.use = function () {};
