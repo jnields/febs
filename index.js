@@ -30,8 +30,6 @@ module.exports = function init(conf = {}) {
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
 
-  logger.setLogLevel(conf.logLevel);
-
   // Get local overrides WP conf.
   const getOverridesConf = (confOverride) => {
     if (confOverride) return confOverride;

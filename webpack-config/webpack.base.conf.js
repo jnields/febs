@@ -47,12 +47,12 @@ module.exports = {
               [require('babel-preset-env'), {
                 targets: {
                   browsers: [
-                    "Chrome > 45",
-                    "Firefox > 45",
-                    "iOS > 7",
-                    "Safari > 7",
-                    "Explorer > 10",
-                    "Edge > 11"
+                    'Chrome > 45',
+                    'Firefox > 45',
+                    'iOS > 7',
+                    'Safari > 7',
+                    'Explorer > 10',
+                    'Edge > 11',
                   ],
                 },
               }],
@@ -133,7 +133,7 @@ module.exports = {
           emitFile: false,
         },
       },
-    ]
+    ],
   },
 
   plugins: [
