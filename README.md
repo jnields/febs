@@ -42,7 +42,7 @@ The job of this package is to provide default webpack configurations that are co
 
 By default febs is configured for:
   - Source entry point: `/src/entry.js`
-  - Bundles written to: `/dest`.
+  - Bundles written to: `/dist`.
 
 ### Commands
 

@@ -11,7 +11,7 @@ echo "[rei-febs] post-install.."
 # Copying from <client-dir>/node_modules/febs to <client-dir>
 CLIENT_DIR="../.."
 CLIENT_SRC_DIR=$CLIENT_DIR/src
-CLIENT_DEST_DIR=$CLIENT_DIR/dest
+CLIENT_DEST_DIR=$CLIENT_DIR/dist
 
 if [ ! -e "$CLIENT_DIR/index.html" ]; then
   cp templates/index.html "$CLIENT_DIR/."

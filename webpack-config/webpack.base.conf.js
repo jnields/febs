@@ -9,10 +9,11 @@ module.exports = {
 
   entry: {
     app: path.resolve(projectPath, 'src/entry.js'),
+    publicPath: '/dist/',
   },
 
   output: {
-    path: path.resolve(projectPath, 'dest'),
+    path: path.resolve(projectPath, 'dist'),
     filename: '[name].bundle.js',
   },
 
@@ -68,18 +69,13 @@ module.exports = {
           loader: 'eslint-loader',
           options: {
             // cache: true,
-            fix: true,
+            fix: false,
             failOnWarning: false,
             failOnError: false,
             emitError: false,
             emitWarning: false,
           },
         },
-      },
-      {
-        test: /\.css$/,
-        include: path.resolve('./node_modules/rei-cedar'),
-        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(s[ac]|c)ss$/,

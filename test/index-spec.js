@@ -63,7 +63,7 @@ const compile = (env, conf) => new Promise((resolve, reject) => {
       assets.forEach((asset) => {
         const o = {};
         o.filename = asset;
-        o.content = fs.readFileSync(path.resolve(__dirname, `../dest/${asset}`), 'utf8');
+        o.content = fs.readFileSync(path.resolve(__dirname, `../dist/${asset}`), 'utf8');
         res[key].push(o);
       });
 
@@ -83,7 +83,7 @@ describe('FEBS Build', () => {
       process.env.FEBS_TEST = true;
 
       // Create the destination directory
-      fs.mkdirpSync(absPath('../dest'));
+      fs.mkdirpSync(absPath('../dist'));
     });
 
     it('builds ES production bundle - versioned, minified, sourcemaps', async function () {
@@ -114,7 +114,7 @@ describe('FEBS Build', () => {
       process.env.FEBS_TEST = true;
 
       // Create the destination directory
-      fs.mkdirpSync(absPath('../dest'));
+      fs.mkdirpSync(absPath('../dist'));
     });
 
     describe('ECMAScript', async function () {
@@ -219,11 +219,11 @@ describe('FEBS Build', () => {
         await compile('dev', {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
-            dest: path.resolve(process.cwd(), 'dest'),
+            dest: path.resolve(process.cwd(), 'dist'),
           },
         }).catch(util.logErrors);
 
-        assert(fs.statSync(path.resolve(process.cwd(), 'dest', 'assets.js.html')).isFile());
+        assert(fs.statSync(path.resolve(process.cwd(), 'dist', 'assets.js.html')).isFile());
       });
     });
 
