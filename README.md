@@ -16,7 +16,7 @@ FEBS is an extensible front-end build system with a simple, command-line interfa
 - provides a live reload development server that updates as you code.
 
 ## Features
-- Command-line interface (see Usage)
+- Command-line interface (see [Usage](#usage))
 - Supports building:
   - Vue
   - Riot
@@ -45,7 +45,7 @@ By default febs is configured for:
   - Source entry point: `/src/entry.js`
   - Bundles written to: `/dist`.
 
-### Commands
+### <a name="usage"></a>Usage
 
 #### Help
 ```
