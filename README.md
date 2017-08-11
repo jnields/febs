@@ -3,19 +3,20 @@
 # FEBS
 
 ## Current Status
-- Work in progress and things will change significantly for the initial 2.0 release
+- This is a work in progress and things will likely change for the initial 2.0 release
 
 ## Description
-The job of this package is to provide default webpack configurations that are common for our front-end development community of practice that can be overridden or added to.
 
-## Package Goals
-- Simple, minimal, reliable, maintainable.
-- 100% code coverage.
-- Overridable defaults.
-- Deligate most functionality to webpack ecosystem
+FEBS is an extensible front-end build system with a simple, command-line interface that:
+- builds of all of your front-end production and development assets.
+- allows extension via webpack overrides of our defaults.
+- runs your JavaScript unit tests.
+- runs code coverage of your JavaScript.
+- performs quality checks using Airbnb's style guide and ESLint rules.
+- provides a live reload development server that updates as you code.
 
 ## Features
-- Command-line interface
+- Command-line interface (see Usage)
 - Supports building:
   - Vue
   - Riot
