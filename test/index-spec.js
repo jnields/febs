@@ -24,7 +24,7 @@ const createFS = function () {
 /**
  * Utility to create webpack conf override fragment.
  * @param {*} obj Object to add to override fragment, typically
- * the entry. 
+ * the entry.
  */
 const createConf = obj => Object.assign({}, obj, {
   output: {
@@ -57,8 +57,8 @@ const createCompileFn = R.curry(function (fs, env, conf) {
     compiler.outputFileSystem = fs;
 
     // Set asset-tag-frag plugin to test mode.
-    const assetTagPlugin = compiler.options.plugins.filter(plugin => plugin.constructor.name === 'AssetTagPlugin');
-    assetTagPlugin[0].options.test = true;
+    // const assetTagPlugin = compiler.options.plugins.filter(plugin => plugin.constructor.name === 'AssetTagPlugin');
+    // assetTagPlugin[0].options.test = true;
 
     // Run webpack
     compiler.run((err, stats) => {
@@ -236,15 +236,15 @@ describe('FEBS Build', function () {
     });
 
     describe('Asset Fragments', async function () {
-      it('generates js asset fragment', async function () {
+      it.only('generates js asset fragment', async function () {
         await compile('dev', createConf({
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
-          output: { path: '/dest' },
+          output: { path: destDir },
         })).catch(util.logErrors);
 
-        assert(fs.statSync(path.resolve('/dist', 'assets.js.html')).isFile());
+        assert(fs.statSync(path.resolve(destDir, 'assets.js.html')).isFile());
       });
     });
 
