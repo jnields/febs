@@ -56,10 +56,6 @@ const createCompileFn = R.curry(function (fs, env, conf) {
     // Set up in-memory file system for tests.
     compiler.outputFileSystem = fs;
 
-    // Set asset-tag-frag plugin to test mode.
-    // const assetTagPlugin = compiler.options.plugins.filter(plugin => plugin.constructor.name === 'AssetTagPlugin');
-    // assetTagPlugin[0].options.test = true;
-
     // Run webpack
     compiler.run((err, stats) => {
       // call the source done callback.
@@ -236,7 +232,7 @@ describe('FEBS Build', function () {
     });
 
     describe('Asset Fragments', async function () {
-      it.only('generates js asset fragment', async function () {
+      it('generates js asset fragment', async function () {
         await compile('dev', createConf({
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
