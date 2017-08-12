@@ -1,6 +1,6 @@
 {
   "name": "febs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "REI's next-gen JavaScript build system re-designed from the ground up. - It is a work in progress and will change as we communicate with teams to determine requirements.",
   "main": "index.js",
   "directories": {

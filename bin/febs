@@ -2,6 +2,9 @@
 const febs = require('../index.js');
 const program = require('commander');
 
+// Set default command to 'build' (commander {isDefault: true} not working..)
+process.argv[2] = process.argv[2] ? process.argv[2] : 'build';
+
 program
   .usage('[task] [options]')
   .description('Builds and bundles front-end assets with minimal configuration\n')
@@ -11,6 +14,7 @@ program
 
 program
   .command('build')
+  .alias(null)
   .description('(Default) Builds front-end assets optimized for production\n')
   .action((command) => {
     febs({
