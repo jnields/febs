@@ -14,7 +14,6 @@ program
 
 program
   .command('build')
-  .alias(null)
   .description('(Default) Builds front-end assets optimized for production\n')
   .action((command) => {
     febs({
