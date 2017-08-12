@@ -7,13 +7,13 @@
 
 ## Description
 
-FEBS is an extensible front-end build system with a simple, command-line interface that:
-- builds of all of your front-end production and development assets.
+`FEBS` is an extensible front-end build system with a simple, command-line interface that:
+- builds all of your front-end production and development assets.
 - allows extension via webpack overrides of our defaults.
-- runs your JavaScript unit tests.
-- runs code coverage of your JavaScript.
+- runs JavaScript unit tests.
+- runs JavaScript code coverage.
 - performs quality checks using Airbnb's style guide and ESLint rules.
-- provides a live reload development server that updates as you code.
+- provides you with a live-reload development server.
 
 ## Features
 - Command-line interface (see [Usage](#usage))
@@ -66,6 +66,31 @@ $ febs dev
 #### Dev Server (Live reload)
 ```
 $ febs dev-server
+```
+
+### Overrides
+
+`FEBS` uses webpack under the hood, so we provide a mechanism for you to customize your build simply by creating a local `webpack.overrides.conf.js` file. Anything that webpack understands is fair game for the overrides file. Want to add a loader or a plugin?
+
+```js
+// webpack.overrides.conf.js
+module.exports = {
+  .
+  .
+  module: {
+    rules: [{
+      test: '/\.js$/'
+      use: {
+        loader: 'cool-js-loader'
+      }
+    }]
+  },
+  .
+  .
+  plugins: [
+    new CoolPlugin() 
+  ]
+};
 ```
 
 ### Todo:
