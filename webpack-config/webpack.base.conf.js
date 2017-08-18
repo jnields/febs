@@ -139,7 +139,6 @@ module.exports = {
   },
 
   plugins: [
-    // if you want to pass in options, you can do so:
     new ExtractTextPlugin({
       filename: '[name].bundle.css',
     }),
