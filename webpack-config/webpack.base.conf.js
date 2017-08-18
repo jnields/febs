@@ -32,7 +32,10 @@ module.exports = {
 
   // Resolve loaders relative to rei-febs (as this will be a dependency of another module.)
   resolveLoader: {
-    modules: [path.resolve(__dirname, '../node_modules')],
+    modules: [
+      path.resolve(projectPath, 'node_modules'),
+      'node_modules',
+    ],
   },
 
   module: {
