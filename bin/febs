@@ -24,8 +24,20 @@ program
   });
 
 program
+  .command('prod')
+  .description('Builds front-end assets optimized for production\n')
+  .action((command) => {
+    const verbose = command.parent.verbose;
+    febs({
+      env: 'prod',
+      command,
+      logLevel: command.parent.verbose ? 'verbose' : 'info',
+    }).compile();
+  });
+
+program
   .command('dev')
-  .description('Build/Serves front-end assets optimized for local development\n')
+  .description('Builds/Serves front-end assets optimized for local development\n')
   .option('--no-dev-server')
   .action((command) => {
     const verbose = command.parent.verbose;
