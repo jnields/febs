@@ -48,18 +48,21 @@ module.exports = {
           options: {
             cacheDirectory: path.resolve('./.babelcache'),
             presets: [
-              [require('babel-preset-env'), {
-                targets: {
-                  browsers: [
-                    'Chrome > 45',
-                    'Firefox > 45',
-                    'iOS > 7',
-                    'Safari > 7',
-                    'Explorer > 10',
-                    'Edge > 11',
-                  ],
+              [
+                require('babel-preset-env'), {
+                  targets: {
+                    browsers: [
+                      'Chrome > 45',
+                      'Firefox > 45',
+                      'iOS > 7',
+                      'Safari > 7',
+                      'Explorer > 10',
+                      'Edge > 11',
+                    ],
+                  },
                 },
-              }],
+              ],
+              require('babel-preset-es2015-riot'),
             ],
           },
         },
