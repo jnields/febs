@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const febs = require('../index.js');
+const febsInit = require('../febs-init.js');
 const program = require('commander');
 
 // Set default command to 'build' (commander {isDefault: true} not working..)
@@ -58,6 +59,15 @@ program
       logLevel: verbose ? 'verbose' : 'info',
     }).test();
   });
+
+program
+  .command('init')
+  .description('Creates basic scaffolding for a new front-end build\n')
+  .action((command) => {
+    const verbose = command.parent.verbose;
+    febsInit();
+  });
+
 
 program
   .on('--help', () => {

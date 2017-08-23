@@ -30,18 +30,22 @@ module.exports = function init(conf = {}) {
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
 
+  if (conf.logLevel) logger.setLogLevel(conf.logLevel);
+
   // Get local overrides WP conf.
   const getOverridesConf = (confOverride) => {
     if (confOverride) return confOverride;
 
     const overridesConfFile = path.resolve(projectPath, './webpack.overrides.conf.js');
-    try {
-      fs.existsSync(overridesConfFile);
-    } catch (e) {
+
+    if (fs.existsSync(overridesConfFile)) {
+      logger.info('using overridesConfFile: ', overridesConfFile);
+      return require(overridesConfFile);
+    }
+    else {
       return {};
     }
 
-    return require(overridesConfFile);
   };
 
   const getWebpackConfig = (confOverride) => {
@@ -64,8 +68,10 @@ module.exports = function init(conf = {}) {
     //   - entry, output
     const wpConf = merge.smartStrategy({
       entry: 'replace',
-      output: 'replace',
     })(configsToMerge);
+
+
+    logger.verbose(wpConf);
 
     return wpConf;
   };
