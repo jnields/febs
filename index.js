@@ -70,7 +70,7 @@ module.exports = function init(conf = {}) {
     return wpConf;
   };
 
-  /**
+ /**
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
  *
