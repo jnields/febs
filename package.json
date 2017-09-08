@@ -1,7 +1,7 @@
 {
   "name": "febs",
-  "version": "0.2.0",
-  "description": "REI's next-gen JavaScript build system re-designed from the ground up. - It is a work in progress and will change as we communicate with teams to determine requirements.",
+  "version": "0.4.0",
+  "description": "REI's next-gen front-end build system.",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -33,6 +33,7 @@
     "babel-plugin-transform-vue-jsx": "^3.5.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2015-riot": "^1.1.0",
     "commander": "^2.11.0",
     "css-loader": "^0.28.4",
     "eslint": "^3.19.0",
@@ -63,7 +64,7 @@
     "vue": "~2.4.2",
     "vue-loader": "^13.0.4",
     "vue-template-compiler": "~2.4.2",
-    "webpack": "~3.4.1",
+    "webpack": "^3.5.5",
     "webpack-dev-server": "~2.6.1",
     "webpack-merge": "^4.1.0",
     "winston": "^2.3.1"
