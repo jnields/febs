@@ -42,10 +42,8 @@ module.exports = function init(conf = {}) {
       logger.info('using overridesConfFile: ', overridesConfFile);
       return require(overridesConfFile);
     }
-    else {
-      return {};
-    }
 
+    return {};
   };
 
   const getWebpackConfig = (confOverride) => {
