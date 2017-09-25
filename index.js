@@ -63,11 +63,13 @@ module.exports = function init(conf = {}) {
     configsToMerge.push(getOverridesConf(confOverride));
 
     // Always replace:
-    //   - entry, output
+    //   - entry
     const wpConf = merge.smartStrategy({
       entry: 'replace',
     })(configsToMerge);
 
+    // Force output path to always be the same
+    wpConf.output.path = webpackConfigBase.output.path;
 
     logger.verbose(wpConf);
 

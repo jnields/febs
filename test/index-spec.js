@@ -11,13 +11,9 @@ const R = require('ramda');
 // febs module
 const febsModule = require('../index');
 
-// Create the destination directory.
-const destDir = '/dest';
-
 // Set up an in-memory file system for tests.
 const createFS = function () {
   const fs = new MemoryFS();
-  fs.mkdirSync(destDir);
   return fs;
 };
 
@@ -27,10 +23,6 @@ const createFS = function () {
  * the entry.
  */
 const createConf = obj => Object.assign({}, obj, {
-  output: {
-    filename: '[name].bundle.js',
-    path: destDir,
-  },
 });
 
 /**
@@ -78,14 +70,14 @@ const createCompileFn = R.curry(function (fs, env, conf) {
         assets.forEach((asset) => {
           const o = {};
           o.filename = asset;
-          o.content = fs.readFileSync(path.resolve(`${conf.output.path}/${asset}`), 'utf8');
+          o.content = fs.readFileSync(path.resolve(`${compiler.outputPath}/${asset}`), 'utf8');
           res[key].push(o);
         });
 
         return res;
       });
 
-      return resolve({ err, stats, code });
+      return resolve({ err, stats, code, options: compiler.options });
     });
   });
 });
@@ -225,7 +217,6 @@ describe('FEBS Build', function () {
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
-          output: { path: '/dest' },
         })).catch(util.logErrors);
         assert(compiled.code[0].app[0].content.includes('sourceURL'));
       });
@@ -233,14 +224,28 @@ describe('FEBS Build', function () {
 
     describe('Asset Fragments', async function () {
       it('generates js asset fragment', async function () {
-        await compile('dev', createConf({
+        const compiled = await compile('dev', createConf({
           entry: {
             app: absPath('fixtures/src/main-es2015.js'),
           },
-          output: { path: destDir },
         })).catch(util.logErrors);
 
-        assert(fs.statSync(path.resolve(destDir, 'assets.js.html')).isFile());
+        assert(fs.statSync(path.resolve(compiled.options.output.path, 'assets.js.html')).isFile());
+      });
+    });
+
+    describe('Webpack config', async function () {
+      it('Output path cannot be modified', async function () {
+        const compiled = await compile('dev', createConf({
+          entry: {
+            app: absPath('fixtures/src/main-es2015.js'),
+          },
+          output: {
+            path: absPath('build/modified-output-path'),
+          },
+        })).catch(util.logErrors);
+
+        assert(!compiled.options.output.path.includes('build/modified-output-path'));
       });
     });
 

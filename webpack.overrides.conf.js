@@ -1,6 +1,10 @@
 // Local webpack overrides.
 const path = require('path');
 
+const projectPath = process.cwd();
+
+const packageName = require(path.join(projectPath, '/package.json')).name
+
 module.exports = {
 
   // entry point
@@ -11,7 +15,7 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(projectPath, 'dist', packageName),
     filename: '[name].bundle.js',
   },
 };

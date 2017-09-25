@@ -4,6 +4,11 @@ const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 
 const projectPath = process.cwd();
+const babelPresetEnv = require('babel-preset-env');
+const babelPresetES2015Riot = require('babel-preset-es2015-riot');
+
+// eslint-disable-next-line import/no-dynamic-require
+const packageName = require(path.join(projectPath, '/package.json')).name;
 
 module.exports = {
 
@@ -13,7 +18,7 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve(projectPath, 'dist'),
+    path: path.resolve(projectPath, 'dist', packageName),
     filename: '[name].bundle.js',
   },
 
@@ -49,7 +54,7 @@ module.exports = {
             cacheDirectory: path.resolve('./.babelcache'),
             presets: [
               [
-                require('babel-preset-env'), {
+                babelPresetEnv, {
                   targets: {
                     browsers: [
                       'Chrome > 45',
@@ -62,7 +67,7 @@ module.exports = {
                   },
                 },
               ],
-              require('babel-preset-es2015-riot'),
+              babelPresetES2015Riot,
             ],
           },
         },

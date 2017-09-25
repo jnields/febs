@@ -10,11 +10,12 @@
     "init": "./bin/init",
     "test": "mocha -t 8000",
     "test-watch": "mocha --watch",
+    "test-inspect": "mocha --inspect-brk -t 8000",
     "cover": "istanbul cover node_modules/.bin/_mocha -- -t 8000",
     "build": "febs build",
     "dev": "webpack-dev-server --config src/webpack.dev.conf.js",
     "ci:build": "./node_modules/mocha/bin/_mocha --reporter xunit > results.xml && npm run cover",
-    "lint": "./node_modules/.bin/eslint lib ./index.js"
+    "lint": "./node_modules/.bin/eslint webpack-config lib ./index.js"
   },
   "bin": {
     "febs": "./bin/febs"
@@ -24,6 +25,7 @@
   "repository": "https://github.com/rei/febs",
   "dependencies": {
     "asset-tag-frag-webpack-plugin": "git+https://github.com/rei/asset-tag-frag-webpack-plugin.git#v2.1.0",
+    "autoprefixer": "^7.1.4",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-helper-vue-jsx-merge-props": "^2.0.2",
@@ -36,6 +38,7 @@
     "babel-preset-es2015-riot": "^1.1.0",
     "commander": "^2.11.0",
     "css-loader": "^0.28.4",
+    "cssnano": "^3.10.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-loader": "^1.8.0",

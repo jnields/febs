@@ -6,10 +6,13 @@ const path = require('path');
 
 const projectPath = process.cwd();
 
+// eslint-disable-next-line import/no-dynamic-require
+const packageName = require(path.join(projectPath, '/package.json')).name;
+
 module.exports = {
 
   output: {
-    path: path.resolve(projectPath, 'dist'),
+    path: path.resolve(projectPath, 'dist', packageName),
     filename: '[name].bundle-[hash].js',
   },
 
