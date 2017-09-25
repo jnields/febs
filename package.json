@@ -1,6 +1,6 @@
 {
   "name": "febs",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "REI's next-gen front-end build system.",
   "main": "index.js",
   "directories": {
@@ -23,7 +23,7 @@
   "license": "MIT",
   "repository": "https://github.com/rei/febs",
   "dependencies": {
-    "asset-tag-frag-webpack-plugin": "git+https://github.com/rei/asset-tag-frag-webpack-plugin.git#v2.0.0",
+    "asset-tag-frag-webpack-plugin": "git+https://github.com/rei/asset-tag-frag-webpack-plugin.git#v2.1.0",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-helper-vue-jsx-merge-props": "^2.0.2",
