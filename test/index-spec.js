@@ -245,7 +245,7 @@ describe('FEBS Build', function () {
       });
     });
 
-    describe.only('Manifest', async function () {
+    describe('Manifest', async function () {
       it('generates a manifest json file for versioned asset mappings', async function () {
         const compiled = await compile('dev', createConf({
           entry: {
