@@ -1,6 +1,7 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const autoprefixer = require('autoprefixer');
 
 const projectPath = process.cwd();
@@ -151,5 +152,7 @@ module.exports = {
     new AssetTagPlugin({
       test: process.env.FEBS_TEST,
     }),
+
+    new ManifestPlugin(),
   ],
 };
