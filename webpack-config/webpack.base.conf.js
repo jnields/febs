@@ -14,12 +14,12 @@ module.exports = {
 
   entry: {
     app: path.resolve(projectPath, 'src/entry.js'),
-    publicPath: '/dist/',
   },
 
   output: {
     path: path.resolve(projectPath, 'dist', packageName),
     filename: '[name].bundle.js',
+    publicPath: '/dist/',
   },
 
   resolve: {
