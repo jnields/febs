@@ -125,6 +125,17 @@ describe('FEBS Build', function () {
       compile = createCompileFn(fs);
     });
 
+    /**
+     * Helper to return json object from a file of json content.
+     * filePath -> Object
+     * @param String The path to file.
+     * @returns Object The json object.
+     */
+    const getJsonFromFile = R.compose(
+      JSON.parse,
+      file => fs.readFileSync(file, 'utf8')
+    );
+
     describe('ECMAScript', async function () {
       it('builds ES bundle', async function () {
         const compiled = await compile('dev', createConf({
@@ -231,6 +242,22 @@ describe('FEBS Build', function () {
         })).catch(util.logErrors);
 
         assert(fs.statSync(path.resolve(compiled.options.output.path, 'assets.js.html')).isFile());
+      });
+    });
+
+    describe('Manifest', async function () {
+      it('generates a manifest json file for versioned asset mappings', async function () {
+        const compiled = await compile('dev', createConf({
+          entry: {
+            app: absPath('fixtures/src/main-es2015.js'),
+          },
+        })).catch(util.logErrors);
+
+        const manifestFile = path.resolve(compiled.options.output.path, 'manifest.json');
+        assert(fs.statSync(manifestFile).isFile());
+
+        const manifestJson = getJsonFromFile(manifestFile);
+        assert.equal(manifestJson['app.js'], 'app.bundle.js');
       });
     });
 
