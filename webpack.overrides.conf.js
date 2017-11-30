@@ -3,7 +3,7 @@ const path = require('path');
 
 const projectPath = process.cwd();
 
-const packageName = require(path.join(projectPath, '/package.json')).name
+const packageName = require(path.join(projectPath, '/package.json')).name;
 
 module.exports = {
 
