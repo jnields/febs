@@ -22,7 +22,9 @@ module.exports = {
 
     new UglifyJsPlugin({
       sourceMap: true,
-      compress: true,
+      compress: {
+        warnings: false
+      }
     }),
 
     new OptimizeCssAssetsPlugin({
