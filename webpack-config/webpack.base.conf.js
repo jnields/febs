@@ -128,6 +128,10 @@ module.exports = {
         loader: 'vue-loader',
       },
       {
+        test: /\.(nunj)$/,
+        loader: 'nunjucks-loader',
+      },
+      {
         test: /\.less$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
