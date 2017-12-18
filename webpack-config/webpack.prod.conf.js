@@ -19,12 +19,11 @@ module.exports = {
   devtool: 'source-map', // external
 
   plugins: [
-
     new UglifyJsPlugin({
       sourceMap: true,
-      compress: {
-        warnings: false
-      }
+      uglifyOptions: {
+        compress: true,
+      },
     }),
 
     new OptimizeCssAssetsPlugin({
@@ -33,6 +32,5 @@ module.exports = {
       cssProcessorOptions: { discardComments: { removeAll: true } },
       canPrint: true,
     }),
-
   ],
 };
