@@ -130,7 +130,7 @@ module.exports = function init(conf = {}) {
    * @param dir The directory to clean.
    */
   const cleanDir = (dir = getWebpackConfig().output.path) => {
-    if (dir) {
+    if (dir && fs.existsSync(dir)) {
       const files = fs.readdirSync(dir);
       files.forEach(file => fs.unlinkSync(path.join(dir, file)));
     }
