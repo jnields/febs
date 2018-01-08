@@ -4,6 +4,8 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssProcessor = require('cssnano');
 const path = require('path');
 
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 const projectPath = process.cwd();
 
 // eslint-disable-next-line import/no-dynamic-require
@@ -19,6 +21,9 @@ module.exports = {
   devtool: 'source-map', // external
 
   plugins: [
+    new ExtractTextPlugin({
+      filename: '[name].bundle-[hash].css',
+    }),
     new UglifyJsPlugin({
       sourceMap: true,
       uglifyOptions: {

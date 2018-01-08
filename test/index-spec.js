@@ -93,7 +93,7 @@ describe('FEBS Build', function () {
       compile = createCompileFn(createFS());
     });
 
-    it('builds ES production bundle - versioned, minified, sourcemaps', async function () {
+    it('js is minified', async function () {
       const compiled = await compile('prod', createConf({
         entry: {
           app1: absPath('fixtures/src/main-es2015.js'),
@@ -101,17 +101,49 @@ describe('FEBS Build', function () {
         },
       })
       ).catch(util.logErrors);
-      assert.equal(compiled.code.length, 2);
+
+      assert(compiled.code[0].app1[0].content.includes('add:function'));
+    });
+
+    it('js contains sourcemap', async function () {
+      const compiled = await compile('prod', createConf({
+        entry: {
+          app1: absPath('fixtures/src/main-es2015.js'),
+          app2: absPath('fixtures/src/main-es2015.js'),
+        },
+      })
+      ).catch(util.logErrors);
 
       // source and sourcemap.
-      assert.equal(compiled.code[0].app1.length, 2); // js and map
+      assert.equal(compiled.code[0].app1.length, 4); // js and map
 
       // sourcemap
-      assert(compiled.code[0].app1[1].filename.includes('.map'));
-      assert(compiled.code[0].app1[1].content.length > 0);
+      assert(compiled.code[0].app1[2].filename.includes('.map'));
+      assert(compiled.code[0].app1[0].content.length > 0);
+    });
 
-      // minified
-      assert(compiled.code[0].app1[0].content.includes('add:function'));
+    it('js is versioned', async function () {
+      const compiled = await compile('prod', createConf({
+        entry: {
+          app1: absPath('fixtures/src/main-es2015.js'),
+          app2: absPath('fixtures/src/main-es2015.js'),
+        },
+      })
+      ).catch(util.logErrors);
+
+      assert(compiled.code[0].app1[0].filename.match(/-[a-z0-9]{20}\.js$/));
+    });
+
+    it('css is versioned', async function () {
+      const compiled = await compile('prod', createConf({
+        entry: {
+          app1: absPath('fixtures/src/main-es2015.js'),
+          app2: absPath('fixtures/src/main-es2015.js'),
+        },
+      })
+      ).catch(util.logErrors);
+
+      assert(compiled.code[0].app1[1].filename.match(/-[a-z0-9]{20}\.css$/));
     });
   });
 
