@@ -50,32 +50,18 @@ module.exports = function init(conf = {}) {
   const getWebpackConfig = (confOverride) => {
     const configsToMerge = [webpackConfigBase];
 
-    // Add development config, if we are in dev
-    if (conf.env === 'dev') {
-      configsToMerge.push(require('./webpack-config/webpack.dev.conf'));
-    }
-
-    // Add production config, if we are building for production
-    if (conf.env === 'prod') {
-      configsToMerge.push(require('./webpack-config/webpack.prod.conf'));
-    }
-
     // Overrides config.
     configsToMerge.push(getOverridesConf(confOverride));
 
     // Always replace:
     //  - entry
-    //  - plugins
     const wpConf = merge.smartStrategy({
       entry: 'replace',
-      plugins: 'replace',
     })(configsToMerge);
 
     // Force output path to always be the same
     wpConf.output.path = webpackConfigBase.output.path;
-
     logger.verbose(wpConf);
-
     return wpConf;
   };
 
