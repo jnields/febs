@@ -8,7 +8,9 @@
   },
   "scripts": {
     "init": "./bin/init",
-    "test": "mocha -t 8000",
+    "test:dev": "NODE_ENV=dev mocha -t 8000 test/index-dev-spec.js",
+    "test:prod": "NODE_ENV=prod mocha -t 8000 test/index-prod-spec.js",
+    "test": "npm run test:dev && npm run test:prod",
     "test-watch": "mocha --watch",
     "test-inspect": "mocha --inspect-brk -t 8000",
     "cover": "istanbul cover node_modules/.bin/_mocha -- -t 8000",
