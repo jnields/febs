@@ -38,10 +38,9 @@ module.exports = {
     ],
   },
 
-  devtool: env === 'dev' ? 'eval-source-map' /* internal,
-   cheap, fast
-   */ :
-   'source-map' /* external */,
+  devtool: env === 'dev' ?
+             'eval-source-map' :  /* internal, cheap, fast */
+             'source-map'         /* external */,
 
   // Resolve loaders relative to rei-febs (as this will be a dependency of another module.)
   resolveLoader: {
