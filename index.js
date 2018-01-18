@@ -7,6 +7,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const devServer = require('./lib/dev-server');
 const webpackConfigBase = require('./webpack-config/webpack.base.conf');
+const R = require('ramda');
 
 const projectPath = process.cwd();
 
@@ -14,7 +15,7 @@ let utils;
 
 /**
  * FEBS entry point. The module is initialized with the
- * conf entries.
+ * conf entries from bin/febs.
  *
  * Passed in at run or test time
  * @param conf.env The environment (dev or prod)
@@ -49,30 +50,18 @@ module.exports = function init(conf = {}) {
   const getWebpackConfig = (confOverride) => {
     const configsToMerge = [webpackConfigBase];
 
-    // Add development config, if we are in dev
-    if (conf.env === 'dev') {
-      configsToMerge.push(require('./webpack-config/webpack.dev.conf'));
-    }
-
-    // Add production config, if we are building for production
-    if (conf.env === 'prod') {
-      configsToMerge.push(require('./webpack-config/webpack.prod.conf'));
-    }
-
     // Overrides config.
     configsToMerge.push(getOverridesConf(confOverride));
 
     // Always replace:
-    //   - entry
+    //  - entry
     const wpConf = merge.smartStrategy({
       entry: 'replace',
     })(configsToMerge);
 
     // Force output path to always be the same
     wpConf.output.path = webpackConfigBase.output.path;
-
     logger.verbose(wpConf);
-
     return wpConf;
   };
 
@@ -80,7 +69,7 @@ module.exports = function init(conf = {}) {
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
  *
- * @param {Object} conf Webpack conf merged in with the environmental
+ * @param {Object} confOverride Webpack conf merged in with the environmental
  *            conf file. Used for testing. If this is present,
  *            merge it into env conf, otherwise, merge
  *            the webpack.overrides.js conf into env conf
@@ -125,10 +114,29 @@ module.exports = function init(conf = {}) {
   };
 
   /**
- * Webpack compile function.
- * Creates a compiler with config object, runs, handles the various WP errors.
- */
-  const compile = () => createCompiler().run(webpackCompileDone);
+   * Simple directory clean. Assumes 1 level of files only.
+   * @param dir The directory to clean.
+   */
+  const cleanDir = (dir = getWebpackConfig().output.path) => {
+    if (dir && fs.existsSync(dir)) {
+      const files = fs.readdirSync(dir);
+      files.forEach(file => fs.unlinkSync(path.join(dir, file)));
+    }
+  };
+
+  /**
+   * Webpack compile function.
+   *
+   * - Cleans the /dist directory
+   * - Creates a compiler with config object, runs, handles the various WP
+   * errors.
+   *
+   * @type {Function}
+   */
+  const compile = R.compose(
+    () => createCompiler().run(webpackCompileDone),
+    cleanDir
+  );
 
   const test = function test() {
     let cmd = spawn('mocha', ['--colors', `${conf.command.watch ? '--watch' : 'test'}`]);

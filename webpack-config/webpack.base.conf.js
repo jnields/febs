@@ -2,6 +2,7 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 
 const projectPath = process.cwd();
@@ -11,6 +12,9 @@ const babelPresetES2015Riot = require('babel-preset-es2015-riot');
 // eslint-disable-next-line import/no-dynamic-require
 const packageName = require(path.join(projectPath, '/package.json')).name;
 
+// Get appropriate environment.
+const env = !process.env.NODE_ENV ? 'prod' : process.env.NODE_ENV;
+
 module.exports = {
 
   entry: {
@@ -19,7 +23,7 @@ module.exports = {
 
   output: {
     path: path.resolve(projectPath, 'dist', packageName),
-    filename: '[name].bundle.js',
+    filename: env === 'prod' ? '[name].bundle-[hash].js' : '[name].bundle.js',
     publicPath: '/dist/',
   },
 
@@ -34,7 +38,9 @@ module.exports = {
     ],
   },
 
-  devtool: 'eval-source-map', // internal, cheap, fast
+  devtool: env === 'dev' ?
+             'eval-source-map' :  /* internal, cheap, fast */
+             'source-map'         /* external */,
 
   // Resolve loaders relative to rei-febs (as this will be a dependency of another module.)
   resolveLoader: {
@@ -62,7 +68,7 @@ module.exports = {
                       'Firefox > 45',
                       'iOS > 7',
                       'Safari > 7',
-                      'Explorer > 10',
+                      'Explorer > 11',
                       'Edge > 11',
                     ],
                   },
@@ -128,10 +134,27 @@ module.exports = {
         loader: 'vue-loader',
       },
       {
+        test: /\.(nunj)$/,
+        loader: 'nunjucks-loader',
+      },
+      {
         test: /\.less$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'less-loader'],
+
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: env === 'prod',
+                sourceMap: env !== 'prod',
+              },
+            },
+            {
+              loader: 'less-loader',
+              options: {},
+            },
+          ],
         }),
       },
       {
@@ -146,7 +169,7 @@ module.exports = {
 
   plugins: [
     new ExtractTextPlugin({
-      filename: '[name].bundle.css',
+      filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
     }),
 
     new AssetTagPlugin({
@@ -154,5 +177,12 @@ module.exports = {
     }),
 
     new ManifestPlugin(),
+
+    new UglifyJsPlugin({
+      sourceMap: env === 'prod',
+      uglifyOptions: {
+        compress: env === 'prod',
+      },
+    }),
   ],
 };

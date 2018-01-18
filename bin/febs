@@ -18,7 +18,6 @@ program
   .description('(Default) Builds front-end assets optimized for production\n')
   .action((command) => {
     febs({
-      env: 'prod',
       command,
       logLevel: command.parent.verbose ? 'verbose' : 'info',
     }).compile();
@@ -30,7 +29,6 @@ program
   .action((command) => {
     const verbose = command.parent.verbose;
     febs({
-      env: 'prod',
       command,
       logLevel: command.parent.verbose ? 'verbose' : 'info',
     }).compile();
@@ -45,13 +43,11 @@ program
 
     if (command.devServer) {
       febs({
-        env: 'dev',
         command,
         logLevel: command.parent.verbose ? 'verbose' : 'info',
       }).startDevServer();
     } else {
       febs({
-        env: 'dev',
         command,
         logLevel: command.parent.verbose ? 'verbose' : 'info',
       }).compile();
@@ -66,7 +62,6 @@ program
     const verbose = command.parent.verbose;
 
     febs({
-      env: 'dev', // <-- client unit tests, env is a don't care.
       command,
       logLevel: verbose ? 'verbose' : 'info',
     }).test();
