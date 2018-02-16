@@ -52,6 +52,7 @@ By default febs is configured for:
 $ febs --help
 ```
 #### Start a new febs project
+Requires a package.json file in the same dir where you run the command
 ```
 $ febs init
 ```
