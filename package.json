@@ -1,6 +1,6 @@
 {
   "name": "febs",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "REI's next-gen front-end build system.",
   "main": "index.js",
   "directories": {
@@ -64,7 +64,7 @@
     "postcss-loader": "^2.0.6",
     "ramda": "^0.25.0",
     "request": "^2.81.0",
-    "riot": "^3.6.1",
+    "riot": "~2.4.1",
     "riot-tag-loader": "^1.0.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",

@@ -28,6 +28,8 @@ let utils;
 
  */
 module.exports = function init(conf = {}) {
+  const command = conf.command;
+
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
 
@@ -69,27 +71,26 @@ module.exports = function init(conf = {}) {
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
  *
- * @param {Object} confOverride Webpack conf merged in with the environmental
- *            conf file. Used for testing. If this is present,
- *            merge it into env conf, otherwise, merge
- *            the webpack.overrides.js conf into env conf
- *            Return's webpack instance.
- * @return {Object}
- *
+ * @param {Object} wpConf The final webpack conf object.
+ * @return {Object} The webpack compiler.
  */
-  const createCompiler = (confOverride) => {
-    const wpConf = getWebpackConfig(confOverride);
+  const createWebpackCompiler = wpConf => wp(wpConf);
 
-    // Configure utility functions with the final webpack conf.
+  // Configure utility functions with the final webpack conf.
+  const configureUtils = (wpConf) => {
     utils = require('./lib/util')({
       env: conf.env,
       wpConf,
       fs,
     });
-
-    // Create webpack compiler object with merged config objects.
-    return wp(wpConf);
+    return wpConf;
   };
+
+  const createCompiler = R.compose(
+    createWebpackCompiler,
+    configureUtils,
+    getWebpackConfig,
+  );
 
   /**
  * The Webpack run callback.
@@ -125,23 +126,39 @@ module.exports = function init(conf = {}) {
   };
 
   /**
-   * Webpack compile function.
+   * Runs the webpack compile either via 'run' or 'watch'.
+   * @returns {*} The webpack compiler instance.
+   */
+  const runCompile = () => {
+    const compilerFn = command.watch ? 'watch' : 'run';
+    const compiler = createCompiler();
+    if (compilerFn === 'run') {
+      compiler[compilerFn](webpackCompileDone);
+    } else {
+      compiler[compilerFn]({/* watch options */}, webpackCompileDone);
+    }
+    return compiler;
+  };
+
+  /**
+   * Compile function.
    *
    * - Cleans the /dist directory
-   * - Creates a compiler with config object, runs, handles the various WP
-   * errors.
+   * - Creates compiler with config object
+   * - Runs via webpack run/watch methods
+   * - Handles the various WP errors.
    *
-   * @type {Function}
+   * @returns {Object} Webpack compiler instance.
    */
   const compile = R.compose(
-    () => createCompiler().run(webpackCompileDone),
+    runCompile,
     cleanDir
   );
 
   const test = function test() {
-    let cmd = spawn('mocha', ['--colors', `${conf.command.watch ? '--watch' : 'test'}`]);
+    let cmd = spawn('mocha', ['--colors', `${command.watch ? '--watch' : 'test'}`]);
 
-    if (conf.command.cover) {
+    if (command.cover) {
       cmd = spawn('node_modules/istanbul/lib/cli.js', ['cover', 'node_modules/mocha/bin/_mocha', '--', '--colors', 'test']);
     }
 
@@ -151,7 +168,7 @@ module.exports = function init(conf = {}) {
 
     // It seems istanbul report output goes to stderr.
     cmd.stderr.on('data', (data) => {
-      if (conf.command.cover) {
+      if (command.cover) {
         logger.info(data.toString());
         return;
       }
