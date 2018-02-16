@@ -27,7 +27,6 @@ program
   .command('prod')
   .description('Builds front-end assets optimized for production\n')
   .action((command) => {
-    const verbose = command.parent.verbose;
     febs({
       command,
       logLevel: command.parent.verbose ? 'verbose' : 'info',
@@ -37,10 +36,9 @@ program
 program
   .command('dev')
   .description('Builds/Serves front-end assets optimized for local development\n')
-  .option('--no-dev-server')
+  .option('--no-dev-server', 'Run dev build with no development server.')
+  .option('--watch', 'Run dev build in watch mode.')
   .action((command) => {
-    const verbose = command.parent.verbose;
-
     if (command.devServer) {
       febs({
         command,
@@ -70,8 +68,7 @@ program
 program
   .command('init')
   .description('Creates basic scaffolding for a new front-end build\n')
-  .action((command) => {
-    const verbose = command.parent.verbose;
+  .action(() => {
     febsInit();
   });
 
@@ -80,6 +77,7 @@ program
   .on('--help', () => {
     process.stdout.write(`  Examples:
         $ febs dev --no-dev-server
+        $ febs dev --watch
         $ febs build --verbose
         $ febs test
         $ febs test --coverage
