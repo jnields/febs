@@ -56,7 +56,7 @@
     "istanbul": "~0.4.5",
     "less": "^2.7.2",
     "less-loader": "~4.0.5",
-    "mocha": "^3.5.0",
+    "mocha": "^5.0.0",
     "node-sass": "^4.5.3",
     "nunjucks": "git+https://github.com/rei/nunjucks.git#v1.3.4-no-watch",
     "nunjucks-loader": "^1.0.7",
