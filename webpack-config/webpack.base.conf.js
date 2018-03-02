@@ -4,6 +4,7 @@ const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const supportedBrowsers = require('../supported-browsers');
 
 const projectPath = process.cwd();
 const babelPresetEnv = require('babel-preset-env');
@@ -63,14 +64,7 @@ module.exports = {
               [
                 babelPresetEnv, {
                   targets: {
-                    browsers: [
-                      'Chrome > 45',
-                      'Firefox > 45',
-                      'iOS > 7',
-                      'Safari > 7',
-                      'Explorer >= 11',
-                      'Edge > 11',
-                    ],
+                    browsers: supportedBrowsers,
                   },
                 },
               ],
