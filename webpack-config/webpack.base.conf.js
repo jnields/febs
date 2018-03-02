@@ -68,7 +68,7 @@ module.exports = {
                       'Firefox > 45',
                       'iOS > 7',
                       'Safari > 7',
-                      'Explorer > 11',
+                      'Explorer >= 11',
                       'Edge > 11',
                     ],
                   },
