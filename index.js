@@ -100,12 +100,12 @@ module.exports = function init(conf = {}) {
   const webpackCompileDone = (err, stats) => {
     const errors = utils.getWebpackErrors(err, stats);
 
-    // Log errors to console
+    // Log errors
     if (!process.env.FEBS_TEST) {
       utils.logErrors(errors);
     }
 
-    // Log results to the console.
+    // Log results
     if (!process.env.FEBS_TEST) {
       logger.info(stats.toString({
         chunks: false,
@@ -156,14 +156,17 @@ module.exports = function init(conf = {}) {
   );
 
   const test = function test() {
-    let cmd = spawn('mocha', ['--colors', `${command.watch ? '--watch' : 'test'}`]);
+    let cmd = spawn(`${__dirname}/node_modules/mocha/bin/mocha`, ['--colors', `${command.watch ? '--watch' : 'test'}`]);
 
     if (command.cover) {
-      cmd = spawn('node_modules/istanbul/lib/cli.js', ['cover', 'node_modules/mocha/bin/_mocha', '--', '--colors', 'test']);
+      cmd = spawn(`${__dirname}/node_modules/istanbul/lib/cli.js`, ['cover', `${__dirname}/node_modules/mocha/bin/_mocha`, '--', '--colors', 'test']);
     }
 
     cmd.stdout.on('data', (data) => {
-      logger.info(data.toString());
+      const d = data.toString();
+      if (d.length > 1) {
+        console.log(d);
+      }
     });
 
     // It seems istanbul report output goes to stderr.
@@ -172,6 +175,7 @@ module.exports = function init(conf = {}) {
         logger.info(data.toString());
         return;
       }
+
       logger.error(data.toString());
     });
   };
