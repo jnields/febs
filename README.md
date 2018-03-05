@@ -37,7 +37,7 @@
   - Updateable via webpack's ecosystem and local webpack conf overrides.
 
 ## Installation
-- `npm install --global --save-dev git+https://github.com/rei/febs.git`
+- `npm install --save-dev git+https://github.com/rei/febs.git`
 
 ### Defaults
 
@@ -48,26 +48,29 @@ By default febs is configured for:
 ### <a name="usage"></a>Usage
 
 #### Help
-```
-$ febs --help
-```
+
+    $ febs --help
+
 #### Start a new febs project
 Requires a package.json file in the same dir where you run the command
-```
-$ febs init
-```
+    
+    $ febs init
+
 #### Production Build
-```
-$ febs prod (or febs)
-```
+
+    $ NODE_ENV=prod febs prod (or febs)
+
 #### Development Build
-```
-$ febs dev
-```
+
+    $ NODE_ENV=dev febs dev --no-dev-server
+
 #### Dev Server (Live reload)
-```
-$ febs dev-server
-```
+
+    $ NODE_ENV=dev febs dev
+
+#### Dev Server (watch)
+
+    $ NODE_ENV=dev febs --no-dev-server --watch
 
 ### Overrides
 

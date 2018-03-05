@@ -64,12 +64,12 @@ module.exports = {
                 babelPresetEnv, {
                   targets: {
                     browsers: [
-                      'Chrome > 45',
-                      'Firefox > 45',
+                      'Chrome >= 41',
+                      'Firefox > 57',
                       'iOS > 7',
-                      'Safari > 7',
-                      'Explorer > 11',
-                      'Edge > 11',
+                      'Safari >= 9',
+                      'Explorer >= 11',
+                      'Edge >= 15',
                     ],
                   },
                 },
