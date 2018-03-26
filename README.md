@@ -2,18 +2,9 @@
 
 # FEBS
 
-## Current Status
-- This is a work in progress and things will likely change for the initial 2.0 release
-
 ## Description
 
-`FEBS` is an extensible front-end build system with a simple, command-line interface that:
-- builds all of your front-end production and development assets.
-- allows extension via webpack overrides of our defaults.
-- runs JavaScript unit tests.
-- runs JavaScript code coverage.
-- performs quality checks using Airbnb's style guide and ESLint rules.
-- provides you with a live-reload development server.
+`FEBS` is an extensible front-end build system with a simple, command-line interface that builds all of your front-end production and development assets.
 
 ## Features
 - Command-line interface (see [Usage](#usage))
@@ -21,20 +12,12 @@
   - Vue
   - Riot
   - Less
-- Creates development and versioned production builds.
-- Creates source maps.
-- Live reloading for fast prototyping and development.
-- Runs quality checks
-  - eslint
+- Creates development and versioned production builds with sourcemaps.
+- Live reloading and code-watching for fast prototyping and development.
+- Runs JavaScript quality checks:
+  - eslint (Airbnb style)
   - unit tests
   - code coverage
-
-## Decisions:
-- Why webpack
-  - Take advantage of the very large open-source community that currently rallies around webpack: new development, issue resolution, etc.
-  - webpack contains functionality that we need either itself or through its ecosystem of loaders and plugins.
-  - Maintainable due to the fact that there is minimal code and it is well tested.
-  - Updateable via webpack's ecosystem and local webpack conf overrides.
 
 ## Installation
 - `npm install --save-dev git+https://github.com/rei/febs.git`
@@ -109,7 +92,7 @@ module.exports = {
     [ ] Vue
 
 [ ] Code coverage of client code:
-    [ ] Node
+    [x] Node
     [ ] Riot
     [ ] Vue
 
