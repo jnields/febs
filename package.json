@@ -1,6 +1,6 @@
 {
   "name": "febs",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "REI's next-gen front-end build system.",
   "main": "index.js",
   "directories": {
@@ -49,7 +49,6 @@
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^5.0.1",
     "eslint-plugin-react": "^7.7.0",
-    "express-thymeleaf": "^0.2.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^0.11.2",
     "fs-extra": "^4.0.3",
@@ -61,12 +60,10 @@
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "postcss-loader": "^2.1.1",
     "ramda": "^0.25.0",
-    "request": "^2.85.0",
     "riot": "^3.9.0",
     "riot-tag-loader": "^2.0.0",
     "sass-loader": "^6.0.7",
     "style-loader": "^0.18.2",
-    "thymeleaf": "^0.6.0",
     "uglifyjs-webpack-plugin": "^1.2.3",
     "vue": "^2.5.15",
     "vue-loader": "^13.7.1",
