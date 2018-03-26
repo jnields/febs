@@ -1,6 +1,6 @@
 {
   "name": "febs",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "REI's next-gen front-end build system.",
   "main": "index.js",
   "directories": {
