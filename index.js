@@ -4,7 +4,6 @@ const wp = require('webpack');
 const logger = require('./lib/logger');
 const merge = require('webpack-merge');
 const path = require('path');
-const { spawn } = require('child_process');
 const devServer = require('./lib/dev-server');
 const webpackConfigBase = require('./webpack-config/webpack.base.conf');
 const R = require('ramda');
@@ -155,31 +154,6 @@ module.exports = function init(conf = {}) {
     cleanDir
   );
 
-  const test = function test() {
-    let cmd = spawn(`${__dirname}/node_modules/mocha/bin/mocha`, ['--colors', `${command.watch ? '--watch' : 'test'}`]);
-
-    if (command.cover) {
-      cmd = spawn(`${__dirname}/node_modules/istanbul/lib/cli.js`, ['cover', `${__dirname}/node_modules/mocha/bin/_mocha`, '--', '--colors', 'test']);
-    }
-
-    cmd.stdout.on('data', (data) => {
-      const d = data.toString();
-      if (d.length > 1) {
-        console.log(d);
-      }
-    });
-
-    // It seems istanbul report output goes to stderr.
-    cmd.stderr.on('data', (data) => {
-      if (command.cover) {
-        logger.info(data.toString());
-        return;
-      }
-
-      logger.error(data.toString());
-    });
-  };
-
   /**
    * Start the webpack dev server.
    */
@@ -203,7 +177,6 @@ module.exports = function init(conf = {}) {
   }
 
   return {
-    test,
     compile,
     createCompiler,
     webpackCompileDone,

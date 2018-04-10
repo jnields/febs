@@ -8,16 +8,18 @@
 
 ## Features
 - Command-line interface (see [Usage](#usage))
-- Supports building:
-  - Vue
-  - Riot
-  - Less
-- Creates development and versioned production builds with sourcemaps.
+- Supports for:
+  - JavaScript/ECMAScript
+    - ECMAScript support via `babel-preset-env` and `browserslist`
+    - Vue.js
+    - Riot.js
+  - Style
+    - LESS
+    - SASS/SCSS
+
+- Creates development and versioned production builds with source maps.
 - Live reloading and code-watching for fast prototyping and development.
-- Runs JavaScript quality checks:
-  - eslint (Airbnb style)
-  - unit tests
-  - code coverage
+- Runs JavaScript lint checks via `eslint` and Airbnb's shared `eslint` config.
 
 ## Installation
 - `npm install --save-dev git+https://github.com/rei/febs.git`
@@ -36,7 +38,7 @@ By default febs is configured for:
 
 #### Start a new febs project
 Requires a package.json file in the same dir where you run the command
-    
+
     $ febs init
 
 #### Production Build
@@ -75,7 +77,7 @@ module.exports = {
   .
   .
   plugins: [
-    new CoolPlugin() 
+    new CoolPlugin()
   ]
 };
 ```
@@ -85,11 +87,6 @@ module.exports = {
 [ ] rename package from febs to rei-febs or scope package to @rei/febs
 
 [ ] Vendor code splitting.
-
-[ ] Unit tests of client code.
-    [x] Node
-    [ ] Riot
-    [ ] Vue
 
 [ ] Code coverage of client code:
     [x] Node
