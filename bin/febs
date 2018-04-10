@@ -53,19 +53,6 @@ program
   });
 
 program
-  .command('test')
-  .description('Runs unit tests.\n')
-  .option('-c, --cover', 'Run test coverage')
-  .action((command) => {
-    const verbose = command.parent.verbose;
-
-    febs({
-      command,
-      logLevel: verbose ? 'verbose' : 'info',
-    }).test();
-  });
-
-program
   .command('init')
   .description('Creates basic scaffolding for a new front-end build\n')
   .action(() => {
