@@ -183,6 +183,19 @@ describe('FEBS Development Tests', function () {
     });
   });
 
+  describe('SASS/SCSS', async function () {
+    it('compiles SASS/SCSS', async function () {
+      const compiled = await compile(lib.createConf({
+        entry: {
+          app: lib.absPath('fixtures/src/main-with-scss.js'),
+        },
+      })).catch(util.logErrors);
+
+      assert(compiled.code[0].app[1].content.includes('color:' +
+        ' #some-color-scss'));
+    });
+  });
+
   describe('Logger', function () {
     const logger = require('../lib/logger');
     it('should contain setLogLevel function', function () {
