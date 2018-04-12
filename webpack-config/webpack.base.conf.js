@@ -4,6 +4,7 @@ const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
+const postCSSImport = require('postcss-import');
 
 const projectPath = process.cwd();
 const babelPresetEnv = require('babel-preset-env');
@@ -14,6 +15,10 @@ const packageName = require(path.join(projectPath, '/package.json')).name;
 
 // Get appropriate environment.
 const env = !process.env.NODE_ENV ? 'prod' : process.env.NODE_ENV;
+
+const extractSass = new ExtractTextPlugin({
+  filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
+});
 
 module.exports = {
 
@@ -39,8 +44,8 @@ module.exports = {
   },
 
   devtool: env === 'dev' ?
-             'eval-source-map' :  /* internal, cheap, fast */
-             'source-map'         /* external */,
+    'eval-source-map' : /* internal, cheap, fast */
+    'source-map' /* external */,
 
   // Resolve loaders relative to rei-febs (as this will be a dependency of another module.)
   resolveLoader: {
@@ -96,34 +101,6 @@ module.exports = {
         },
       },
       {
-        test: /\.(s[ac]|c)ss$/,
-        exclude: path.resolve('./node_modules/rei-cedar'),
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              camelCase: true,
-              localIdentName: '[name]_[local]__[hash:base64:5]',
-            },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: () => [autoprefixer()],
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              outputStyle: 'compressed',
-              precision: 8,
-            },
-          },
-        ],
-      },
-      {
         test: /\.tag$/,
         exclude: /node_modules/,
         loader: 'riot-tag-loader',
@@ -132,6 +109,27 @@ module.exports = {
         test: /\.vue$/,
         exclude: /node_modules/,
         loader: 'vue-loader',
+      }, {
+        test: /\.(s[ac]|c)ss$/,
+        use: extractSass.extract({
+          use: [{
+            loader: 'css-loader',
+          }, {
+            loader: 'postcss-loader',
+            options: {
+              plugins: loader => [
+                postCSSImport({ root: loader.resourcePath }),
+                autoprefixer(),
+              ],
+            },
+          }, {
+            loader: 'sass-loader',
+            options: {
+              outputStyle: env === 'prod' ? 'compressed' : 'nested',
+            },
+          }],
+          fallback: 'style-loader',
+        }),
       },
       {
         test: /\.less$/,
@@ -144,6 +142,14 @@ module.exports = {
               options: {
                 minimize: env === 'prod',
                 sourceMap: env !== 'prod',
+              },
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                plugins: loader => [
+                  postCSSImport({ root: loader.resourcePath }),
+                  autoprefixer(),
+                ],
               },
             },
             {
@@ -164,6 +170,9 @@ module.exports = {
   },
 
   plugins: [
+
+    extractSass,
+
     new ExtractTextPlugin({
       filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
     }),
