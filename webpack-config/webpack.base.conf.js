@@ -5,10 +5,10 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const postCSSImport = require('postcss-import');
-
-const projectPath = process.cwd();
 const babelPresetEnv = require('babel-preset-env');
 const babelPresetES2015Riot = require('babel-preset-es2015-riot');
+
+const projectPath = process.cwd();
 
 // eslint-disable-next-line import/no-dynamic-require
 const packageName = require(path.join(projectPath, '/package.json')).name;
@@ -35,7 +35,6 @@ module.exports = {
   resolve: {
     extensions: [
       '.js',
-      '.jsx',
       '.json',
       '.vue',
       '.scss',
