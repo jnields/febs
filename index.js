@@ -27,7 +27,7 @@ let utils;
 
  */
 module.exports = function init(conf = {}) {
-  const command = conf.command;
+  const { command } = conf;
 
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
@@ -66,7 +66,7 @@ module.exports = function init(conf = {}) {
     return wpConf;
   };
 
- /**
+  /**
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
  *
@@ -167,10 +167,15 @@ module.exports = function init(conf = {}) {
     const pathToWPDSClient = `${path.resolve(__dirname, 'node_modules/webpack-dev-server/client')}?http://localhost:8080`;
 
     Object.keys(wpConf.entry).forEach((key) => {
-      wpConf.entry[key] = [
-        pathToWPDSClient,
-        path.resolve(projectPath, wpConf.entry[key]),
-      ];
+      if (Array.isArray(wpConf.entry[key])) {
+        wpConf.entry[key] = wpConf.entry[key].map(val => path.resolve(projectPath, val));
+        wpConf.entry[key].unshift(pathToWPDSClient);
+      } else {
+        wpConf.entry[key] = [
+          pathToWPDSClient,
+          path.resolve(projectPath, wpConf.entry[key]),
+        ];
+      }
     });
 
     devServer(createCompiler(wpConf), WDS);
