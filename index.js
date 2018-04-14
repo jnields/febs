@@ -27,6 +27,7 @@ let utils;
 
  */
 module.exports = function init(conf = {}) {
+
   const { command } = conf;
 
   // Allow for in-memory fs for testing.
@@ -41,7 +42,7 @@ module.exports = function init(conf = {}) {
     const overridesConfFile = path.resolve(projectPath, './webpack.overrides.conf.js');
 
     if (fs.existsSync(overridesConfFile)) {
-      logger.info('using overridesConfFile: ', overridesConfFile);
+      logger.info('Using webpack.overrides.conf: ', overridesConfFile);
       return require(overridesConfFile);
     }
 

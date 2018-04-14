@@ -63,11 +63,11 @@ program
 program
   .on('--help', () => {
     process.stdout.write(`  Examples:
-        $ febs dev --no-dev-server
-        $ febs dev --watch
-        $ febs build --verbose
-        $ febs test
-        $ febs test --coverage
+        $ NODE_ENV=prod febs
+        $ NODE_ENV=dev febs dev --no-dev-server
+        $ NODE_ENV=dev febs dev --no-dev-server --watch
+        $ NODE_ENV=dev febs dev (starts dev-server)
+        $ NODE_ENV=prod febs [build|prod] --verbose
     `);
   });
 
