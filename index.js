@@ -5,7 +5,6 @@ const logger = require('./lib/logger');
 const merge = require('webpack-merge');
 const path = require('path');
 const devServer = require('./lib/dev-server');
-const webpackConfigBase = require('./webpack-config/webpack.base.conf');
 const R = require('ramda');
 
 const projectPath = process.cwd();
@@ -27,7 +26,6 @@ let utils;
 
  */
 module.exports = function init(conf = {}) {
-
   const { command } = conf;
 
   // Allow for in-memory fs for testing.
@@ -50,6 +48,7 @@ module.exports = function init(conf = {}) {
   };
 
   const getWebpackConfig = (confOverride) => {
+    const webpackConfigBase = require('./webpack-config/webpack.base.conf');
     const configsToMerge = [webpackConfigBase];
 
     // Overrides config.

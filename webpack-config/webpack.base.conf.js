@@ -1,4 +1,7 @@
+/* eslint-disable import/no-dynamic-require */
+
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
@@ -9,10 +12,25 @@ const postCSSImport = require('postcss-import');
 const babelPresetEnv = require('babel-preset-env');
 const babelPresetES2015Riot = require('babel-preset-es2015-riot');
 
+// Client project path.
 const projectPath = process.cwd();
+const projectPackageJson = path.join(projectPath, 'package.json');
 
-// eslint-disable-next-line import/no-dynamic-require
-const packageName = require(path.join(projectPath, '/package.json')).name;
+if (!fs.existsSync(projectPackageJson)) {
+  throw new Error(`
+  No package.json found. Things to check:
+      - Be sure you are building from project root directory.
+      - Be sure your package.json has a name property.
+      `);
+}
+
+const packageName = require(projectPackageJson).name;
+
+if (!packageName || packageName.length === 0) {
+  throw new Error(`
+  Be sure your package.json has a name property.
+      `);
+}
 
 // Get appropriate environment.
 const env = !process.env.NODE_ENV ? 'prod' : process.env.NODE_ENV;
