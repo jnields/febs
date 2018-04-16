@@ -8,7 +8,7 @@
 
 ## Features
 - Command-line interface (see [Usage](#usage))
-- Supports for:
+- Support for:
   - JavaScript/ECMAScript
     - ECMAScript support via 
         - [Babel](https://babeljs.io/)
@@ -24,17 +24,18 @@
         - [autoprefixer](https://github.com/postcss/autoprefixer)
 
 - Creates development and versioned production builds with source maps.
+- Creates manifest.json and HTML fragment with build asset names for consumption in page.
 - Live reloading and code-watching for fast prototyping and development.
 - Runs JavaScript lint checks via [eslint](https://eslint.org/) and [Airbnb's shared eslint config](https://www.npmjs.com/package/eslint-config-airbnb).
 
 ## Installation
-- `npm install --save-dev git+https://github.com/rei/febs.git`
+- `npm install --save-dev git+https://github.com/rei/febs.git#<version>` (Check [releases](https://github.com/rei/febs/releases) for version)
 
 ### Defaults
 
-By default `febs` is configured for:
-  - Source entry point: `/src/js/entry.js`
-  - Style is located at: `/src/style/`
+By default, `febs` is configured for:
+  - JavaScript source/components: `/src/js/`
+  - Style: `/src/style/`
   - Bundles written to: `/dist/<package name>/`.
 
 ### <a name="usage"></a>Usage
