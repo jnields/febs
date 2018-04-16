@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 // Your js entry point..go!
-import Vue from '../../node_modules/vue';
-import App from './App.vue';
+import Vue from '../../node_modules/febs/node_modules/vue/dist/vue.runtime.esm';
+import App from './components/App.vue';
 
 const vm = new Vue({
   el: '#app',

@@ -91,15 +91,10 @@ module.exports = {
 
 ### Todo:
 
-[ ] rename package from febs to rei-febs or scope package to @rei/febs
+[ ] Publish to npm (@rei/febs)
 
 [ ] Vendor code splitting.
 
-[ ] Code coverage of client code:
-    [x] Node
-    [ ] Riot
-    [ ] Vue
-
-[x] HTML snippet generation
+[x] HTML asset fragment
 
 [ ] Asset CDN integration

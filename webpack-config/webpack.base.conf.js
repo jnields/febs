@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -169,6 +170,12 @@ module.exports = {
   },
 
   plugins: [
+
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: env === 'prod' ? '"production"' : '""',
+      },
+    }),
 
     extractSass,
 

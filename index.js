@@ -89,7 +89,7 @@ module.exports = function init(conf = {}) {
   const createCompiler = R.compose(
     createWebpackCompiler,
     configureUtils,
-    getWebpackConfig,
+    getWebpackConfig
   );
 
   /**
