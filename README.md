@@ -63,7 +63,7 @@ Requires a `package.json` file in the same directory where you run the command.
 
 #### Dev Server (watch)
 
-    $ NODE_ENV=dev febs --no-dev-server --watch
+    $ NODE_ENV=dev febs dev --no-dev-server --watch
 
 ### Overrides
 
