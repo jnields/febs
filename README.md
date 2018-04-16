@@ -35,7 +35,7 @@
 By default `febs` is configured for:
   - Source entry point: `/src/js/entry.js`
   - Style is located at: `/src/style/`
-  - Bundles written to: `/dist`.
+  - Bundles written to: `/dist/<package name>/`.
 
 ### <a name="usage"></a>Usage
 
