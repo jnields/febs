@@ -1,24 +1,48 @@
+/* eslint-disable import/no-dynamic-require */
+
 const path = require('path');
+const fs = require('fs');
+const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
-
-const projectPath = process.cwd();
+const postCSSImport = require('postcss-import');
 const babelPresetEnv = require('babel-preset-env');
 const babelPresetES2015Riot = require('babel-preset-es2015-riot');
 
-// eslint-disable-next-line import/no-dynamic-require
-const packageName = require(path.join(projectPath, '/package.json')).name;
+// Client project path.
+const projectPath = process.cwd();
+const projectPackageJson = path.join(projectPath, 'package.json');
+
+if (!fs.existsSync(projectPackageJson)) {
+  throw new Error(`
+  No package.json found. Things to check:
+      - Be sure you are building from project root directory.
+      - Be sure your package.json has a name property.
+      `);
+}
+
+const packageName = require(projectPackageJson).name;
+
+if (!packageName || packageName.length === 0) {
+  throw new Error(`
+  Be sure your package.json has a name property.
+      `);
+}
 
 // Get appropriate environment.
 const env = !process.env.NODE_ENV ? 'prod' : process.env.NODE_ENV;
 
+const extractSass = new ExtractTextPlugin({
+  filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
+});
+
 module.exports = {
 
   entry: {
-    app: path.resolve(projectPath, 'src/entry.js'),
+    app: path.resolve(projectPath, 'src/js/entry.js'),
   },
 
   output: {
@@ -30,7 +54,6 @@ module.exports = {
   resolve: {
     extensions: [
       '.js',
-      '.jsx',
       '.json',
       '.vue',
       '.scss',
@@ -39,8 +62,8 @@ module.exports = {
   },
 
   devtool: env === 'dev' ?
-             'eval-source-map' :  /* internal, cheap, fast */
-             'source-map'         /* external */,
+    'eval-source-map' : /* internal, cheap, fast */
+    'source-map' /* external */,
 
   // Resolve loaders relative to rei-febs (as this will be a dependency of another module.)
   resolveLoader: {
@@ -96,34 +119,6 @@ module.exports = {
         },
       },
       {
-        test: /\.(s[ac]|c)ss$/,
-        exclude: path.resolve('./node_modules/rei-cedar'),
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              camelCase: true,
-              localIdentName: '[name]_[local]__[hash:base64:5]',
-            },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: () => [autoprefixer()],
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              outputStyle: 'compressed',
-              precision: 8,
-            },
-          },
-        ],
-      },
-      {
         test: /\.tag$/,
         exclude: /node_modules/,
         loader: 'riot-tag-loader',
@@ -132,6 +127,27 @@ module.exports = {
         test: /\.vue$/,
         exclude: /node_modules/,
         loader: 'vue-loader',
+      }, {
+        test: /\.(s[ac]|c)ss$/,
+        use: extractSass.extract({
+          use: [{
+            loader: 'css-loader',
+          }, {
+            loader: 'postcss-loader',
+            options: {
+              plugins: loader => [
+                postCSSImport({ root: loader.resourcePath }),
+                autoprefixer(),
+              ],
+            },
+          }, {
+            loader: 'sass-loader',
+            options: {
+              outputStyle: env === 'prod' ? 'compressed' : 'nested',
+            },
+          }],
+          fallback: 'style-loader',
+        }),
       },
       {
         test: /\.less$/,
@@ -144,6 +160,14 @@ module.exports = {
               options: {
                 minimize: env === 'prod',
                 sourceMap: env !== 'prod',
+              },
+            }, {
+              loader: 'postcss-loader',
+              options: {
+                plugins: loader => [
+                  postCSSImport({ root: loader.resourcePath }),
+                  autoprefixer(),
+                ],
               },
             },
             {
@@ -164,6 +188,15 @@ module.exports = {
   },
 
   plugins: [
+
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: env === 'prod' ? '"production"' : '""',
+      },
+    }),
+
+    extractSass,
+
     new ExtractTextPlugin({
       filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
     }),

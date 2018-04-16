@@ -4,31 +4,38 @@
 
 ## Description
 
-`FEBS` is an extensible front-end build system with a simple, command-line interface that builds all of your front-end production and development assets.
+`FEBS` is an extensible, [webpack](https://webpack.js.org/)-based front-end build system with a simple, command-line interface that builds all of your front-end production and development assets. It is essentially a very thin wrapper around `webpack`.
 
 ## Features
 - Command-line interface (see [Usage](#usage))
 - Supports for:
   - JavaScript/ECMAScript
-    - ECMAScript support via `babel-preset-env` and `browserslist`
-    - Vue.js
-    - Riot.js
+    - ECMAScript support via 
+        - [Babel](https://babeljs.io/)
+        - [babel-preset-env](https://babeljs.io/docs/plugins/preset-env/)
+        - [browserslist](https://www.npmjs.com/package/browserslist)
+    - [Vue](https://vuejs.org/)
+    - [Riot](http://riotjs.com/)
   - Style
-    - LESS
-    - SASS/SCSS
+    - [Less](http://lesscss.org/)
+    - [Sass/SCSS](https://sass-lang.com/)
+    - [PostCSS](https://github.com/postcss)
+        - [postcss-import](https://github.com/postcss/postcss-import)
+        - [autoprefixer](https://github.com/postcss/autoprefixer)
 
 - Creates development and versioned production builds with source maps.
 - Live reloading and code-watching for fast prototyping and development.
-- Runs JavaScript lint checks via `eslint` and Airbnb's shared `eslint` config.
+- Runs JavaScript lint checks via [eslint](https://eslint.org/) and [Airbnb's shared eslint config](https://www.npmjs.com/package/eslint-config-airbnb).
 
 ## Installation
 - `npm install --save-dev git+https://github.com/rei/febs.git`
 
 ### Defaults
 
-By default febs is configured for:
-  - Source entry point: `/src/entry.js`
-  - Bundles written to: `/dist`.
+By default `febs` is configured for:
+  - Source entry point: `/src/js/entry.js`
+  - Style is located at: `/src/style/`
+  - Bundles written to: `/dist/<package name>/`.
 
 ### <a name="usage"></a>Usage
 
@@ -37,7 +44,7 @@ By default febs is configured for:
     $ febs --help
 
 #### Start a new febs project
-Requires a package.json file in the same dir where you run the command
+Requires a `package.json` file in the same directory where you run the command.
 
     $ febs init
 
@@ -59,7 +66,7 @@ Requires a package.json file in the same dir where you run the command
 
 ### Overrides
 
-`FEBS` uses webpack under the hood, so we provide a mechanism for you to customize your build simply by creating a local `webpack.overrides.conf.js` file. Anything that webpack understands is fair game for the overrides file. Want to add a loader or a plugin?
+`FEBS` uses `webpack` under the hood, so we provide a mechanism for you to customize your build simply by creating a local `webpack.overrides.conf.js` file. Anything that webpack understands is fair game for the overrides file. Want to add a loader or a plugin?
 
 ```js
 // webpack.overrides.conf.js
@@ -84,15 +91,10 @@ module.exports = {
 
 ### Todo:
 
-[ ] rename package from febs to rei-febs or scope package to @rei/febs
+[ ] Publish to npm (@rei/febs)
 
 [ ] Vendor code splitting.
 
-[ ] Code coverage of client code:
-    [x] Node
-    [ ] Riot
-    [ ] Vue
-
-[x] HTML snippet generation
+[x] HTML asset fragment
 
 [ ] Asset CDN integration

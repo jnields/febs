@@ -1,5 +1,7 @@
 #! /bin/bash
 
+echo "hi"
+
 # febs postinstall script
 set -e
 
@@ -7,7 +9,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "[rei-febs] post-install.."
 
-# Copy the index file template for dev-server
+# Copy the src directory template for dev-server
 # Copying from <client-dir>/node_modules/febs to <client-dir>
 CLIENT_DIR="../.."
 CLIENT_SRC_DIR=$CLIENT_DIR/src
@@ -20,13 +22,13 @@ fi
 # Create src dir/content if doesn't exist.
 if [ ! -d "$CLIENT_SRC_DIR" ]; then
   mkdir "$CLIENT_SRC_DIR"
-  cp templates/entry.js "$CLIENT_SRC_DIR/."
-  cp templates/entry.less "$CLIENT_SRC_DIR/."
+  cp -R templates/src "$CLIENT_DIR/."
 fi
 
 # Create default destination directory.
 if [ ! -d "$CLIENT_DEST_DIR" ]; then
   mkdir "$CLIENT_DEST_DIR"
 fi
+
 # Proxy arguments to the system node binary
 #node "$@"

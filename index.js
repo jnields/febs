@@ -5,7 +5,6 @@ const logger = require('./lib/logger');
 const merge = require('webpack-merge');
 const path = require('path');
 const devServer = require('./lib/dev-server');
-const webpackConfigBase = require('./webpack-config/webpack.base.conf');
 const R = require('ramda');
 
 const projectPath = process.cwd();
@@ -27,7 +26,7 @@ let utils;
 
  */
 module.exports = function init(conf = {}) {
-  const command = conf.command;
+  const { command } = conf;
 
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
@@ -41,7 +40,7 @@ module.exports = function init(conf = {}) {
     const overridesConfFile = path.resolve(projectPath, './webpack.overrides.conf.js');
 
     if (fs.existsSync(overridesConfFile)) {
-      logger.info('using overridesConfFile: ', overridesConfFile);
+      logger.info('Using webpack.overrides.conf: ', overridesConfFile);
       return require(overridesConfFile);
     }
 
@@ -49,6 +48,7 @@ module.exports = function init(conf = {}) {
   };
 
   const getWebpackConfig = (confOverride) => {
+    const webpackConfigBase = require('./webpack-config/webpack.base.conf');
     const configsToMerge = [webpackConfigBase];
 
     // Overrides config.
@@ -66,7 +66,7 @@ module.exports = function init(conf = {}) {
     return wpConf;
   };
 
- /**
+  /**
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
  *
@@ -88,7 +88,7 @@ module.exports = function init(conf = {}) {
   const createCompiler = R.compose(
     createWebpackCompiler,
     configureUtils,
-    getWebpackConfig,
+    getWebpackConfig
   );
 
   /**
@@ -167,10 +167,15 @@ module.exports = function init(conf = {}) {
     const pathToWPDSClient = `${path.resolve(__dirname, 'node_modules/webpack-dev-server/client')}?http://localhost:8080`;
 
     Object.keys(wpConf.entry).forEach((key) => {
-      wpConf.entry[key] = [
-        pathToWPDSClient,
-        path.resolve(projectPath, wpConf.entry[key]),
-      ];
+      if (Array.isArray(wpConf.entry[key])) {
+        wpConf.entry[key] = wpConf.entry[key].map(val => path.resolve(projectPath, val));
+        wpConf.entry[key].unshift(pathToWPDSClient);
+      } else {
+        wpConf.entry[key] = [
+          pathToWPDSClient,
+          path.resolve(projectPath, wpConf.entry[key]),
+        ];
+      }
     });
 
     devServer(createCompiler(wpConf), WDS);

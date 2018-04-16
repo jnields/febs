@@ -13,7 +13,7 @@
 export default {
   data () {
 
-    let str = "Hello world"
+    let str = "Hello world";
 
     return {
       msg: `Vue says, "${str}!"`
