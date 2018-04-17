@@ -15,5 +15,3 @@ const vm = new Vue({
   },
 });
 
-// Bring in less
-require('../style/entry.less');

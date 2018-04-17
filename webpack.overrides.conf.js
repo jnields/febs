@@ -9,9 +9,7 @@ module.exports = {
 
   // entry point
   entry: {
-    // 'main-js': './test/fixtures/src/main-riot.js',
     app: path.resolve(__dirname, 'templates/entry.js'),
-    // 'main-css': '../core-css-build/test/fixtures/src/main.less',
   },
 
   output: {
