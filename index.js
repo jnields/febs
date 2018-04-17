@@ -164,7 +164,7 @@ module.exports = function init(conf = {}) {
 
     // Need to update the app entry for webpack-dev-server. This is necessary for
     // the auto page refresh to happen. See: https://github.com/webpack/webpack-dev-server/blob/master/examples/node-api-simple/webpack.config.js
-    const pathToWPDSClient = `${path.resolve(__dirname, 'node_modules/webpack-dev-server/client')}?http://localhost:8080`;
+    const pathToWPDSClient = `${path.resolve(projectPath, 'node_modules/webpack-dev-server/client')}?http://localhost:8080`;
 
     Object.keys(wpConf.entry).forEach((key) => {
       if (Array.isArray(wpConf.entry[key])) {

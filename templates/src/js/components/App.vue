@@ -13,7 +13,8 @@
 
 <style scoped>
     #c1 {
-        background-color: green;
+        background-color: #39AF78;
+        color: #000000;
         padding: 20px;
         text-align: center;
     }
