@@ -1,5 +1,5 @@
 {
-  "name": "febs",
+  "name": "@rei/febs",
   "version": "2.1.5",
   "description": "REI's next-gen front-end build system.",
   "main": "index.js",
