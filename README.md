@@ -29,13 +29,14 @@
 - Runs JavaScript lint checks via [eslint](https://eslint.org/) and [Airbnb's shared eslint config](https://www.npmjs.com/package/eslint-config-airbnb).
 
 ## Installation
-- `npm install --save-dev git+https://github.com/rei/febs.git#<version>` (Check [releases](https://github.com/rei/febs/releases) for version)
+
+    npm install -g @rei/febs
 
 ### Defaults
 
-By default, `febs` is configured for:
-  - JavaScript source/components: `/src/js/`
-  - Style: `/src/style/`
+By default, `febs` is configured for following entry points:
+  - JavaScript source/components: `/src/js/entry.js`
+  - Style: `/src/style/entry.less`
   - Bundles written to: `/dist/<package name>/`.
 
 ### <a name="usage"></a>Usage
@@ -46,56 +47,50 @@ By default, `febs` is configured for:
 
 #### Start a new febs project
 Requires a `package.json` file in the same directory where you run the command.
-
-    $ febs init
+    
+    febs init
 
 #### Production Build
 
-    $ NODE_ENV=prod febs prod (or febs)
+    NODE_ENV=prod febs prod (or febs)
 
 #### Development Build
 
-    $ NODE_ENV=dev febs dev --no-dev-server
+    NODE_ENV=dev febs dev --no-dev-server
 
 #### Dev Server (Live reload)
 
-    $ NODE_ENV=dev febs dev
+    NODE_ENV=dev febs dev
 
 #### Dev Server (watch)
 
-    $ NODE_ENV=dev febs dev --no-dev-server --watch
+    NODE_ENV=dev febs dev --no-dev-server --watch
 
 ### Overrides
 
 `FEBS` uses `webpack` under the hood, so we provide a mechanism for you to customize your build simply by creating a local `webpack.overrides.conf.js` file. Anything that webpack understands is fair game for the overrides file. Want to add a loader or a plugin?
 
-```js
-// webpack.overrides.conf.js
-module.exports = {
-  .
-  .
-  module: {
-    rules: [{
-      test: '/\.js$/'
-      use: {
-        loader: 'cool-js-loader'
-      }
-    }]
-  },
-  .
-  .
-  plugins: [
-    new CoolPlugin()
-  ]
-};
-```
+    // webpack.overrides.conf.js
+    module.exports = {
+      .
+      .
+      module: {
+        rules: [{
+          test: '/\.js$/'
+          use: {
+            loader: 'cool-js-loader'
+          }
+        }]
+      },
+      .
+      .
+      plugins: [
+        new CoolPlugin()
+      ]
+    };
 
 ### Todo:
 
-[ ] Publish to npm (@rei/febs)
-
 [ ] Vendor code splitting.
-
-[x] HTML asset fragment
 
 [ ] Asset CDN integration
