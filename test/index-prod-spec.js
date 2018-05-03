@@ -3,7 +3,6 @@
 
 // Dependencies.
 const assert = require('assert');
-const util = require('../lib/util')();
 const lib = require('./lib');
 
 describe('FEBS Production Tests', function () {
@@ -21,7 +20,7 @@ describe('FEBS Production Tests', function () {
         app1: lib.absPath('fixtures/src/main-es2015.js'),
       },
     })
-      ).catch(util.logErrors);
+      );
 
     assert(compiled.code[0].app1[0].content.includes('add:function'));
   });
@@ -32,7 +31,7 @@ describe('FEBS Production Tests', function () {
         app1: lib.absPath('fixtures/src/main-es2015.js'),
       },
     })
-      ).catch(util.logErrors);
+      );
 
       // source and sourcemap.
     assert.equal(compiled.code[0].app1.length, 2); // js and map
@@ -48,7 +47,7 @@ describe('FEBS Production Tests', function () {
         app1: lib.absPath('fixtures/src/main-es2015.js'),
       },
     })
-      ).catch(util.logErrors);
+      );
 
     assert(compiled.code[0].app1[0].filename.match(/-[a-z0-9]{10,}\.js$/));
   });
@@ -59,8 +58,21 @@ describe('FEBS Production Tests', function () {
         app1: lib.absPath('fixtures/src/main.less'),
       },
     })
-      ).catch(util.logErrors);
+      );
 
     assert(compiled.code[0].app1[1].filename.match(/-[a-z0-9]{10,}\.css$/));
+  });
+
+  it('should return exit code 1 if error', async function () {
+    process.on('exit', function (code) {
+      assert.equal(code, 1);
+    });
+
+    await compile(lib.createConf({
+      entry: {
+        app1: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
+      },
+    })
+    ).catch(() => {});
   });
 });

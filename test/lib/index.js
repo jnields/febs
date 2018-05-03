@@ -1,7 +1,6 @@
 const path = require('path');
 const MemoryFS = require('memory-fs');
 const R = require('ramda');
-const util = require('../../lib/util')();
 const febsModule = require('../../index');
 
 module.exports = {
@@ -43,11 +42,12 @@ module.exports = {
       febs.webpackCompileDone(err, stats);
 
       const entrypoints = stats.toJson('verbose').entrypoints;
-      const errors = util.getWebpackErrors(err, stats);
 
         // Reject webpack errors
-      if (errors) {
-        return reject(errors);
+      if (err) return reject(err);
+
+      if (stats.compilation.errors && stats.compilation.errors.length > 0) {
+        return reject(stats.compilation.errors);
       }
 
         // Resolve with wp compile results.
