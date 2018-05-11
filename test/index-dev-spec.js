@@ -4,7 +4,6 @@
 // Dependencies.
 const assert = require('assert');
 const path = require('path');
-const util = require('../lib/util')();
 const lib = require('./lib');
 
 // febs module
@@ -30,7 +29,7 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-es2015.js'),
         },
-      })).catch(util.logErrors);
+      }));
 
       assert.equal(compiled.code[0].app[0].filename, 'app.bundle.js');
       assert(compiled.code[0].app[0].content.includes('add: function add()'));
@@ -42,7 +41,7 @@ describe('FEBS Development Tests', function () {
           app1: lib.absPath('fixtures/src/main-es2015.js'),
           app2: lib.absPath('fixtures/src/main-es2015.js'),
         },
-      })).catch(util.logErrors);
+      }));
 
       assert(compiled.code[0].app1[0].content.includes('add: function add()'));
       assert(compiled.code[1].app2[0].content.includes('add: function add()'));
@@ -54,14 +53,7 @@ describe('FEBS Development Tests', function () {
           app: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
         },
       })).catch((errors) => {
-        let hasSyntaxError = false;
-        errors.compile.forEach(function (error) {
-          if (error.includes('SyntaxError')) {
-            hasSyntaxError = true;
-          }
-        });
-
-        assert(hasSyntaxError);
+        assert.ok(errors[0].message.includes('Parsing error'));
       });
     });
   });
@@ -72,7 +64,7 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-riot.js'),
         },
-      })).catch(util.logErrors);
+      }));
 
       assert(compiled.code[0].app[0].content.includes('coolcomponent'));
     });
@@ -83,7 +75,7 @@ describe('FEBS Development Tests', function () {
           app: lib.absPath('fixtures/src/main-riot-syntax-error.js'),
         },
       })).catch((errors) => {
-        assert(errors.compile);
+        assert.ok(errors[1].message.includes('Unexpected token'));
       });
     });
   });
@@ -94,7 +86,7 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-vue.js'),
         },
-      })).catch(util.logErrors);
+      }));
 
       assert(compiled.code[0].app[0].content.includes('Vue says'));
     });
@@ -105,7 +97,7 @@ describe('FEBS Development Tests', function () {
           app: lib.absPath('fixtures/src/main-vue-syntax-error.js'),
         },
       })).catch((errors) => {
-        assert(errors.compile);
+        assert.ok(errors[0].message.includes('Error compiling template'));
       });
     });
   });
@@ -116,7 +108,7 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-es2015.js'),
         },
-      })).catch(util.logErrors);
+      }));
       assert(compiled.code[0].app[0].content.includes('sourceURL'));
     });
   });
@@ -127,7 +119,7 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-es2015.js'),
         },
-      })).catch(util.logErrors);
+      }));
 
       assert(fs.statSync(path.resolve(compiled.options.output.path, 'assets.js.html')).isFile());
     });
@@ -141,7 +133,7 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-es2015.js'),
         },
-      })).catch(util.logErrors);
+      }));
 
       const manifestFile = path.resolve(compiled.options.output.path, 'manifest.json');
       assert(fs.statSync(manifestFile).isFile());
@@ -160,7 +152,7 @@ describe('FEBS Development Tests', function () {
         output: {
           path: lib.absPath('build/modified-output-path'),
         },
-      })).catch(util.logErrors);
+      }));
 
       assert(!compiled.options.output.path.includes('build/modified-output-path'));
     });
@@ -173,7 +165,7 @@ describe('FEBS Development Tests', function () {
             // app: lib.absPath('../../core-css-build/test/fixtures/src/main.less'),
           app: lib.absPath('fixtures/src/main-with-less.js'),
         },
-      })).catch(util.logErrors);
+      }));
 
         // todo: How to not write extraneous js file (due to the output entry in webpack.config)
         // that is always generated when LESS compile runs.
@@ -189,7 +181,7 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-with-scss.js'),
         },
-      })).catch(util.logErrors);
+      }));
 
       assert(compiled.code[0].app[1].content.includes('color:' +
         ' #some-color-scss'));
@@ -217,6 +209,21 @@ describe('FEBS Development Tests', function () {
       const expectedLength = wpDevConf.module.rules.length;
       const wpConfig = febs.getWebpackConfig(wpDevConf);
       assert.equal(expectedLength, wpConfig.module.rules.length);
+    });
+  });
+
+  describe('Exit codes', function () {
+    it('should not return exit code 1 (dev mode only)', async function () {
+      process.on('exit', function (code) {
+        assert.notEqual(code, 1);
+      });
+
+      await compile(lib.createConf({
+        entry: {
+          app1: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
+        },
+      })
+      ).catch(() => {});
     });
   });
 

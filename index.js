@@ -9,8 +9,6 @@ const R = require('ramda');
 
 const projectPath = process.cwd();
 
-let utils;
-
 /**
  * FEBS entry point. The module is initialized with the
  * conf entries from bin/febs.
@@ -75,19 +73,8 @@ module.exports = function init(conf = {}) {
  */
   const createWebpackCompiler = wpConf => wp(wpConf);
 
-  // Configure utility functions with the final webpack conf.
-  const configureUtils = (wpConf) => {
-    utils = require('./lib/util')({
-      env: conf.env,
-      wpConf,
-      fs,
-    });
-    return wpConf;
-  };
-
   const createCompiler = R.compose(
     createWebpackCompiler,
-    configureUtils,
     getWebpackConfig
   );
 
@@ -97,19 +84,17 @@ module.exports = function init(conf = {}) {
  * @param {*} stats
  */
   const webpackCompileDone = (err, stats) => {
-    const errors = utils.getWebpackErrors(err, stats);
-
-    // Log errors
-    if (!process.env.FEBS_TEST) {
-      utils.logErrors(errors);
-    }
-
     // Log results
     if (!process.env.FEBS_TEST) {
       logger.info(stats.toString({
         chunks: false,
         colors: true,
       }));
+    }
+
+    // If errors and prod, return exit code 1 (for linux-based build tools).
+    if (process.env.NODE_ENV === 'prod' && stats.compilation.errors && stats.compilation.errors.length > 0) {
+      process.exitCode = 1;
     }
   };
 
