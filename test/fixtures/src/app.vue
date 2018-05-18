@@ -1,5 +1,5 @@
 // app.vue with ES2015
-<style>
+<style lang="less">
   .red {
     color: #f00;
   }

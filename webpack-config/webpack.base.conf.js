@@ -36,17 +36,20 @@ if (!packageName || packageName.length === 0) {
 const env = !process.env.NODE_ENV ? 'prod' : process.env.NODE_ENV;
 
 const extractSass = new ExtractTextPlugin({
-  filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
+  filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[md5:contenthash:hex:20].css',
 });
 
-module.exports = {
+process.traceDeprecation = true;
 
+module.exports = {
   entry: {
     app: [
       path.resolve(projectPath, 'src/js/entry.js'),
       path.resolve(projectPath, 'src/style/entry.less'),
     ],
   },
+
+  mode: 'none',
 
   output: {
     path: path.resolve(projectPath, 'dist', packageName),
@@ -201,7 +204,7 @@ module.exports = {
     extractSass,
 
     new ExtractTextPlugin({
-      filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
+      filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[md5:contenthash:hex:20].css',
     }),
 
     new AssetTagPlugin({

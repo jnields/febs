@@ -139,7 +139,7 @@ describe('FEBS Development Tests', function () {
       assert(fs.statSync(manifestFile).isFile());
 
       const manifestJson = getJsonFromFS(manifestFile);
-      assert.equal(manifestJson['app.js'], 'app.bundle.js');
+      assert.equal(manifestJson['app.js'], '/dist/app.bundle.js');
     });
   });
 
