@@ -2,11 +2,9 @@
 
 const path = require('path');
 const fs = require('fs');
-const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const postCSSImport = require('postcss-import');
 const babelPresetEnv = require('babel-preset-env');
@@ -195,12 +193,6 @@ module.exports = {
 
   plugins: [
 
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: env === 'prod' ? '"production"' : '""',
-      },
-    }),
-
     extractSass,
 
     new ExtractTextPlugin({
@@ -212,12 +204,5 @@ module.exports = {
     }),
 
     new ManifestPlugin(),
-
-    new UglifyJsPlugin({
-      sourceMap: env === 'prod',
-      uglifyOptions: {
-        compress: env === 'prod',
-      },
-    }),
   ],
 };

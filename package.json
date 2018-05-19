@@ -44,6 +44,7 @@
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^5.0.1",
     "eslint-plugin-react": "^7.7.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^0.11.2",
     "fs-extra": "^4.0.3",
     "istanbul": "~0.4.5",
@@ -64,15 +65,14 @@
     "vue-loader": "^14.2.2",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.0.0",
+    "webpack-manifest-plugin": "^2.0.2",
     "webpack-merge": "^4.1.2",
     "winston": "^2.4.1"
   },
   "devDependencies": {
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "memory-fs": "^0.4.1",
     "riot-compiler": "^3.4.0",
-    "webpack-dev-server": "^3.1.4",
-    "webpack-manifest-plugin": "^2.0.2"
+    "webpack-dev-server": "^3.1.4"
   },
   "contributors": [
     {
