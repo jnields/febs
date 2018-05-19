@@ -28,7 +28,7 @@
   "license": "MIT",
   "repository": "https://github.com/rei/febs",
   "dependencies": {
-    "asset-tag-frag-webpack-plugin": "git+https://github.com/rei/asset-tag-frag-webpack-plugin.git#v2.1.0",
+    "asset-tag-frag-webpack-plugin": "git+https://github.com/rei/asset-tag-frag-webpack-plugin.git#2.2.0",
     "autoprefixer": "^7.2.6",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.3",
