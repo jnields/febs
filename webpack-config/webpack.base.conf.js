@@ -49,7 +49,7 @@ module.exports = {
     ],
   },
 
-  mode: 'none',
+  mode: env === 'prod' ? 'production' : 'development',
 
   output: {
     path: path.resolve(projectPath, 'dist', packageName),
