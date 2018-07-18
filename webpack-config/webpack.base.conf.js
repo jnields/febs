@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
