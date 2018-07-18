@@ -204,10 +204,6 @@ module.exports = {
       filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
     }),
 
-    new AssetTagPlugin({
-      test: process.env.FEBS_TEST,
-    }),
-
     new ManifestPlugin(),
 
     new UglifyJsPlugin({
