@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const AssetTagPlugin = require('asset-tag-frag-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
@@ -202,10 +201,6 @@ module.exports = {
 
     new ExtractTextPlugin({
       filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
-    }),
-
-    new AssetTagPlugin({
-      test: process.env.FEBS_TEST,
     }),
 
     new ManifestPlugin(),
