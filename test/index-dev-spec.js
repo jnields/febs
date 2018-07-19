@@ -113,18 +113,6 @@ describe('FEBS Development Tests', function () {
     });
   });
 
-  describe('Asset Fragments', async function () {
-    it('generates js asset fragment', async function () {
-      const compiled = await compile(lib.createConf({
-        entry: {
-          app: lib.absPath('fixtures/src/main-es2015.js'),
-        },
-      }));
-
-      assert(fs.statSync(path.resolve(compiled.options.output.path, 'assets.js.html')).isFile());
-    });
-  });
-
   describe('Manifest', async function () {
     it('generates a manifest json file for versioned asset mappings', async function () {
       const getJsonFromFS = lib.getJsonFromFile(fs);
