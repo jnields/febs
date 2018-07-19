@@ -100,6 +100,16 @@ describe('FEBS Development Tests', function () {
         assert.ok(errors[0].message.includes('Error compiling template'));
       });
     });
+
+    it('detects Vue lint errors', async function () {
+      await compile(lib.createConf({
+        entry: {
+          app: lib.absPath('fixtures/src/main-vue-lint-error.js'),
+        },
+      })).catch((errors) => {
+        assert.ok(errors[0].message.includes('Expected 1 space'));
+      });
+    });
   });
 
   describe('Sourcemaps', async function () {
