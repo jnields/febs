@@ -78,7 +78,6 @@
     "winston": "^2.4.1"
   },
   "devDependencies": {
-    "eslint-plugin-html": "^4.0.5",
     "riot-compiler": "^3.4.0"
   },
   "contributors": [
