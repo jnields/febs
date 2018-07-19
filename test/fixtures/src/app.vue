@@ -3,21 +3,20 @@
   .red {
     color: #f00;
   }
-</style> 
- 
+</style>
+
 <template>
-  <h1 class="red">{{msg}}</h1>
+  <h1 class="red">{{ msg }}</h1>
 </template>
- 
+
 <script>
 export default {
-  data () {
-
-    let str = "Hello world";
+  data() {
+    const str = 'Hello world';
 
     return {
-      msg: `Vue says, "${str}!"`
-    }
-  }
-}
+      msg: `Vue says, "${str}!"`,
+    };
+  },
+};
 </script>

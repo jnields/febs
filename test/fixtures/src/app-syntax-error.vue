@@ -1,23 +1,23 @@
 // app.vue with ES2015
-<style>
+// Syntax error is on line 3.
+<style
   .red {
     color: #f00;
   }
-</style> 
- 
+</style>
+
 <template>
-  <h1 class="red">{{msg}}</h
+  <h1 class="red">{{ msg }}</h1>
 </template>
- 
+
 <script>
-export default {
-  data () {
+  export default {
+    data() {
+      const str = 'Hello world';
 
-    let str = "Hello world"
-
-    return {
-      msg: `Vue says, "${str}!"`
-    }
-  }
-}
-</scr
+      return {
+        msg: `Vue says, "${str}!"`,
+      };
+    },
+  };
+</script>

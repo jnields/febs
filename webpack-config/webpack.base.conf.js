@@ -107,11 +107,12 @@ module.exports = {
       },
       {
         enforce: 'pre',
-        test: /\.jsx?$/,
+        test: /\.(js|vue)$/,
         include: path.resolve('.'),
         use: {
           loader: 'eslint-loader',
           options: {
+            configFile: path.resolve(__dirname, '..', '.eslintrc.json'),
             // cache: true,
             fix: false,
             failOnWarning: false,
