@@ -26,7 +26,9 @@
 - Creates development and versioned production builds with source maps.
 - Creates manifest.json and HTML fragment with build asset names for consumption in page.
 - Live reloading and code-watching for fast prototyping and development.
-- Runs JavaScript lint checks via [eslint](https://eslint.org/) and [Airbnb's shared eslint config](https://www.npmjs.com/package/eslint-config-airbnb).
+- Runs linting on:
+    - JavaScript via [eslint](https://eslint.org/) and [Airbnb's shared eslint config](https://www.npmjs.com/package/eslint-config-airbnb).
+    - Vue components via [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue)
 
 ## Installation
 
