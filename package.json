@@ -78,7 +78,8 @@
     "winston": "^2.4.1"
   },
   "devDependencies": {
-    "riot-compiler": "^3.4.0"
+    "riot-compiler": "^3.4.0",
+    "sinon": "^6.1.4"
   },
   "contributors": [
     {
