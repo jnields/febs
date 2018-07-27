@@ -99,14 +99,29 @@ module.exports = function init(conf = {}) {
   };
 
   /**
-   * Simple directory clean. Assumes 1 level of files only.
+   * Recursive directory clean. Does not delete parent directory.
    * @param dir The directory to clean.
    */
-  const cleanDir = (dir = getWebpackConfig().output.path) => {
-    if (dir && fs.existsSync(dir)) {
-      const files = fs.readdirSync(dir);
-      files.forEach(file => fs.unlinkSync(path.join(dir, file)));
+  const cleanDir = function cleanDir(dir = getWebpackConfig().output.path) {
+    if (!dir || !fs.existsSync(dir)) {
+      throw new Error(`Non-existent directory: ${dir}`);
     }
+
+    const items = fs.readdirSync(dir).map(i => path.resolve(dir, i));
+
+    items.forEach((item) => {
+      if (fs.lstatSync(item).isFile()) {
+        fs.unlinkSync(item);
+      } else {
+        const nextItems = fs.readdirSync(item);
+        if (nextItems.length !== 0) {
+          cleanDir(item);
+        }
+        fs.rmdirSync(item);
+      }
+    });
+
+    return true;
   };
 
   /**
@@ -172,5 +187,8 @@ module.exports = function init(conf = {}) {
     webpackCompileDone,
     startDevServer,
     getWebpackConfig,
+    private: {
+      cleanDir,
+    },
   };
 };

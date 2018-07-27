@@ -5,6 +5,7 @@
 const assert = require('assert');
 const path = require('path');
 const lib = require('./lib');
+const sinon = require('sinon');
 
 // febs module
 const febsModule = require('../index');
@@ -223,6 +224,90 @@ describe('FEBS Development Tests', function () {
       })
       ).catch(() => {});
     });
+  });
+
+  describe.only('Utility functions', function () {
+    describe('cleanDir', function () {
+      /*
+        Test directory structure:
+                /parent
+                   /dir1
+                      a
+                      b
+                   /dir2
+                      /dir3
+                        c
+                        d
+       */
+
+      it('should return error if trying to delete non-existent directory', function () {
+
+        // Create test dir structure
+        fs.mkdirpSync('/parent');
+
+        const febs = febsModule({
+          fs,
+        });
+
+        assert.throws(() => febs.private.cleanDir('/parent2'), /Non-existent directory/)
+      });
+
+      it('should delete contents of a directory, leaving the parent', function () {
+
+        // Need to stub lstatSync().isFile() values since lstatSync doesn't
+        // exist in memory-fs.
+        const lstatSyncStub = sinon.stub();
+
+        lstatSyncStub.withArgs('/parent/dir1/a').returns({
+          isFile: () => true
+        });
+        lstatSyncStub.withArgs('/parent/dir1/b').returns({
+          isFile: () => true
+        });
+        lstatSyncStub.withArgs('/parent/dir2/dir3/c').returns({
+          isFile: () => true
+        });
+
+        lstatSyncStub.withArgs('/parent/dir2/dir3/d').returns({
+          isFile: () => true
+        });
+
+        lstatSyncStub.withArgs('/parent').returns({
+          isFile: () => false
+        });
+
+        lstatSyncStub.withArgs('/parent/dir1').returns({
+          isFile: () => false
+        });
+
+        lstatSyncStub.withArgs('/parent/dir2').returns({
+          isFile: () => false
+        });
+
+        lstatSyncStub.withArgs('/parent/dir2/dir3').returns({
+          isFile: () => false
+        });
+
+        // Create test dir structure
+        fs.mkdirpSync('/parent/dir1');
+        fs.mkdirpSync('/parent/dir2/dir3');
+        fs.writeFileSync('/parent/dir1/a', 'a');
+        fs.writeFileSync('/parent/dir1/b', 'b');
+        fs.writeFileSync('/parent/dir2/dir3/c', 'c');
+        fs.writeFileSync('/parent/dir2/dir3/d', 'd');
+
+        fs.lstatSync = lstatSyncStub;
+
+        const febs = febsModule({
+          fs,
+        });
+
+        assert.deepEqual(fs.readdirSync('/parent'), ['dir1', 'dir2']);
+        febs.private.cleanDir('/parent');
+        assert.deepEqual(fs.readdirSync('/parent'), []);
+      });
+    });
+
   });
 
   describe('Dev Server', function () {
