@@ -249,7 +249,7 @@ describe('FEBS Development Tests', function () {
           fs,
         });
 
-        assert.throws(() => febs.private.cleanDir('/parent2'), /Non-existent directory/)
+        assert(!febs.private.cleanDir('/parent2'), /Non-existent directory/);
       });
 
       it('should delete contents of a directory, leaving the parent', function () {
