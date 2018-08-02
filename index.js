@@ -104,7 +104,7 @@ module.exports = function init(conf = {}) {
    */
   const cleanDir = function cleanDir(dir = getWebpackConfig().output.path) {
     if (!dir || !fs.existsSync(dir)) {
-      throw new Error(`Non-existent directory: ${dir}`);
+      return false;
     }
 
     const items = fs.readdirSync(dir).map(i => path.resolve(dir, i));
@@ -120,7 +120,6 @@ module.exports = function init(conf = {}) {
         fs.rmdirSync(item);
       }
     });
-
     return true;
   };
 
