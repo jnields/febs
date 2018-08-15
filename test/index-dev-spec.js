@@ -226,7 +226,7 @@ describe('FEBS Development Tests', function () {
     });
   });
 
-  describe.only('Utility functions', function () {
+  describe('Utility functions', function () {
     describe('cleanDir', function () {
       /*
         Test directory structure:
