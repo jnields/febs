@@ -54,7 +54,7 @@ Requires a `package.json` file in the same directory where you run the command.
 
 #### Production Build
 
-    NODE_ENV=prod febs prod (or febs)
+    NODE_ENV=prod febs prod
 
 #### Development Build
 
@@ -90,9 +90,3 @@ Requires a `package.json` file in the same directory where you run the command.
         new CoolPlugin()
       ]
     };
-
-### Todo:
-
-[ ] Vendor code splitting.
-
-[ ] Asset CDN integration
