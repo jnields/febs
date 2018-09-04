@@ -78,7 +78,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js|\.jsx|\.vue|\.tag$/,
+        test: /\.js|\.vue|\.tag$/,
         use: {
           loader: 'babel-loader',
           options: {
