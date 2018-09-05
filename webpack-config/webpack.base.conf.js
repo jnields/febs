@@ -8,8 +8,6 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const postCSSImport = require('postcss-import');
-const babelPresetEnv = require('babel-preset-env');
-const babelPresetES2015Riot = require('babel-preset-es2015-riot');
 
 // Client project path.
 const projectPath = process.cwd();
