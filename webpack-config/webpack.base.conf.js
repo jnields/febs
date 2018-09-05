@@ -78,28 +78,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js|\.tag$/,
+        test: /\.(js|tag)$/,
         use: {
           loader: 'babel-loader',
           options: {
             cacheDirectory: path.resolve('./.babelcache'),
-            presets: [
-              [
-                babelPresetEnv, {
-                  targets: {
-                    browsers: [
-                      'Chrome >= 41',
-                      'Firefox > 57',
-                      'iOS > 7',
-                      'Safari >= 9',
-                      'Explorer >= 11',
-                      'Edge >= 15',
-                    ],
-                  },
-                },
-              ],
-              babelPresetES2015Riot,
-            ],
           },
         },
       },
