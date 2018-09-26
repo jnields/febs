@@ -59,6 +59,8 @@ respect to the second argument.
 
 `npm run watch` - Uses the [Code watching](#live-reloading) feature
 
+See [Command-line Interface]() for more details and additional ways to run.
+
 ## Defaults
 
 By default, `febs` is configured for following entry points:
@@ -96,7 +98,7 @@ This config is used by both `webpack` during a build and `eslint` at the command
 
 - To fix eslint errors, `npx eslint --fix <file/directory/etc>`
 
-- Currently, on `febs init`, we copy over the `.eslintrc.json` file but in the future we'll likely be creating a shared eslint config used by both `wp` and the `eslint` at the command line.
+- Currently, `febs init` copies over the `.eslintrc.json` file but in the future we'll likely be creating a shared eslint config used by both `wp` and the `eslint` at the command line.
 
 ### Code watching
 @TODO: additional detail
@@ -107,7 +109,9 @@ This config is used by both `webpack` during a build and `eslint` at the command
   - [PostCSS](https://github.com/postcss)
 
 ## FEBS Core
-@TODO: additional detail
+
+### Command-line interface
+@TODO: additional detail (npx tip)
 
 ### Production and Development Builds
 
@@ -161,19 +165,19 @@ FEBS uses `Webpack` to build and is providing a default Webpack configuration. W
 
 ## Release management
 
-We strictly use [semver](https://semver.org/).
+The project strictly use [semver](https://semver.org/).
 
 The main thing to call out here is that if maintainers (intentionally) introduce
 an incompatible Webpack configuration change, the major version is bumped. When
 the project moves from Webpack 3 to 4, the major version is bumped.
 
 If the project unintentionally introduces a new bug through a change through
-febs core OR build features, there will be a prompt fix. Additionally we will
-continue to improve our unit and functional testing strategies and bug
+febs core or build features, there will be a prompt fix. Additionally maintainers
+will continue to improve our unit and functional testing strategies and bug
 response times.
 
 Somewhat related, the intention is to move the Webpack configuration to a separate
-repository and having that configurable. At that point we can have more fine
+repository and having that configurable. At that point the project can have more fine
 grained release management and flexibility as well as let people who are
 not using the same technology to have some control over their configuration.
 
@@ -185,7 +189,7 @@ release but will continue to get [supported](#support) for the previous version.
 ## Support
 
 The project focus is around FEBS core. For [Build Features](#build-features)
-we look at this as community of practice effort, this is one of the main ideas.
+it should be look at as community of practice effort, this is one of the main ideas.
 However, a maintainer should be a major contributors to features.
 
 *For our internal customers:* Think of FEBS as just a base Webpack
@@ -196,7 +200,7 @@ up major version releases to reduce upgrade/support burden.
 
 ### External open source customers
 
-We will respond to github issues within a week for issues with FEBS core.
+Maintainers will respond to github issues within a week for issues with FEBS core.
 Unfortunately, there are no guarantees for "immediate" support due to bandwidth.
 However, we are happy to collaborate and work together on pull requests. You are
 very much welcome and encouraged to fork this project and see where it goes.
