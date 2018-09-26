@@ -89,7 +89,14 @@ You can find out all of the Webpack defaults by reviewing the base
 ### Linting
 Linting is provided via [eslint](https://eslint.org/)
 
-@TODO: additional detail
+ `eslint` will run on both JavaScript and Vue components using the `.eslintrc.json` that is created on `febs init`.
+This config is used by both `webpack` during a build and `eslint` at the command line so the results should be identical.
+
+- To run eslint at the command line:  `npx eslint <file/directory/etc>`
+
+- To fix eslint errors, `npx eslint --fix <file/directory/etc>`
+
+- Currently, on `febs init`, we copy over the `.eslintrc.json` file but in the future we'll likely be creating a shared eslint config used by both `wp` and the `eslint` at the command line.
 
 ### Code watching
 @TODO: additional detail
@@ -112,7 +119,7 @@ Linting is provided via [eslint](https://eslint.org/)
 
 ### Build Manifest
 
-A manifest.json is built to `./dist/manifest.json` this is a mechnism to be used
+A manifest.json is built to `./dist/manifest.json` this is a mechanism to be used
 by an asset injector to insert assets onto a page
 
 @TODO: Additional detail
@@ -170,9 +177,9 @@ repository and having that configurable. At that point we can have more fine
 grained release management and flexibility as well as let people who are
 not using the same technology to have some control over their configuration.
 
-## Depreciation
+## Deprecation
 
-When something gets depreciated, it will not be supported in the next major
+When something gets deprecated, it will not be supported in the next major
 release but will continue to get [supported](#support) for the previous version.
 
 ## Support
@@ -181,7 +188,7 @@ The project focus is around FEBS core. For [Build Features](#build-features)
 we look at this as community of practice effort, this is one of the main ideas.
 However, a maintainer should be a major contributors to features.
 
-For our internal customers, just think think of FEBS as just a base Webpack
+*For our internal customers:* Think of FEBS as just a base Webpack
 config that you can edit that happens to be in a different repository
 
 Maintainers support one major version behind and attempt to minimize and group
@@ -190,19 +197,16 @@ up major version releases to reduce upgrade/support burden.
 ### External open source customers
 
 We will respond to github issues within a week for issues with FEBS core.
-Unfortunately, there are no guarantees for "good" support due to bandwidth.
+Unfortunately, there are no guarantees for "immediate" support due to bandwidth.
 However, we are happy to collaborate and work together on pull requests. You are
 very much welcome and encouraged to fork this project and see where it goes.
 
-Also, we'd love to hear from you if you think we are approaching the problem
-from the wrong direction or if there are better solutions out there that
-reduce code / effort duplication for a community of front-end developers or
-a series of projects using the same technologies.
+Also, we'd love to hear your ideas and feedback on different approaches or similar solutions in the community that you think could improve FEBS.
 
 ### Internal open source customers
 
-We fully support our internal customers. That means we will respond to slack
+We fully support our internal customers. That means we will respond to Slack
 messages and help troubleshoot issues, feature requests, etc.
 
-Feel free to swing by or hit us up on slack or just file a bug here :)
+Feel free to swing by or hit us up on Slack or just file a bug here :)
 
