@@ -122,11 +122,12 @@ by an asset injector to insert assets onto a page
 An asset injector uses a [manifest.json](#build-manifest) to insert production
 assets into the markup of a webpage.
 
-See our example client/server javascript implementation of the an asset
-injector. One could create one for to be used by Thymleaf, Freemarker, JSP Tags,
-Vue, React, Mustache, Handlebars, etc.
+See our example javascript implementation of the an asset injector. One could
+create one for to be used by Thymleaf, Freemarker, JSP Tags, Vue, React,
+Mustache, Handlebars, etc.
 
-@TODO: publish javascript implementation and asset pipeline architectual diagrams.
+@TODO: publish javascript implementation and asset pipeline architectual
+diagrams and relate to an "asset pipeline".
 
 ### Overrides
 
@@ -194,7 +195,9 @@ However, we are happy to collaborate and work together on pull requests. You are
 very much welcome and encouraged to fork this project and see where it goes.
 
 Also, we'd love to hear from you if you think we are approaching the problem
-from the wrong direction or if there are better solutions out there
+from the wrong direction or if there are better solutions out there that
+reduce code / effort duplication for a community of front-end developers or
+a series of projects using the same technologies.
 
 ### Internal open source customers
 
