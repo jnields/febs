@@ -1,14 +1,19 @@
 <template>
-    <div>
-        <div id="c1">{{message}}</div>
-    </div>
+  <div class="example-vue-component">
+    <div id="c1">{{ message }}</div>
+  </div>
 </template>
 
 <script>
-  export default {
-    name: 'App',
-    props: ['message'],
-  };
+export default {
+  name: 'App',
+  props: {
+    message: {
+      type: String,
+      default: 'default message',
+    },
+  },
+};
 </script>
 
 <style scoped>
