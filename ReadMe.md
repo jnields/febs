@@ -75,12 +75,12 @@ You can find out all of the Webpack defaults by reviewing the base
 
 ### JavaScript
   - [Vue](https://vuejs.org/)
-  - [Riot](http://riotjs.com/) - [depreciated](#depreciation)
+  - [Riot](http://riotjs.com/) - [deprecated](#deprecation)
 
 @TODO: additional detail
 
 ### Style
-  - [Less](http://lesscss.org/) - [depreciated](#depreciation)
+  - [Less](http://lesscss.org/) - [deprecated](#deprecation)
   - PostCSS
 
 @TODO: additional detail
