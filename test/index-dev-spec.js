@@ -53,8 +53,18 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
         },
-      })).catch((errors) => {
-        assert.ok(errors[0].message.includes('Parsing error'));
+      })).catch((o) => {
+        assert.ok(o.stats.compilation.errors[0].message.includes('Parsing error'));
+      });
+    });
+
+    it('detects ES lint errors', async function () {
+      await compile(lib.createConf({
+        entry: {
+          app: lib.absPath('fixtures/src/main-es2015-lint-errors.js'),
+        },
+      })).then(o => { assert.equal(o.exitCode, 0)})
+        .catch((stats) => {
       });
     });
   });
@@ -234,17 +244,14 @@ describe('FEBS Development Tests', function () {
   });
 
   describe('Exit codes', function () {
-    it('should not return exit code 1 (dev mode only)', async function () {
-      process.on('exit', function (code) {
-        assert.notEqual(code, 1);
-      });
+    it('should not return exit code 1 in dev mode so that watching persists)', async function () {
 
       await compile(lib.createConf({
         entry: {
           app1: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
         },
       })
-      ).catch(() => {});
+      ).then((o) => { assert.equal(o.exitCode, 0)});
     });
   });
 

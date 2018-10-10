@@ -64,15 +64,25 @@ describe('FEBS Production Tests', function () {
   });
 
   it('should return exit code 1 if error', async function () {
-    process.on('exit', function (code) {
-      assert.equal(code, 1);
-    });
-
     await compile(lib.createConf({
       entry: {
         app1: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
       },
     })
-    ).catch(() => {});
+    ).then((o) => {
+      assert.equal(o.exitCode, 1);
+    });
+  });
+
+  it('should not return exit code 1 if lint only error', async function () {
+    await compile(lib.createConf({
+        entry: {
+          app1: lib.absPath('fixtures/src/main-es2015-lint-errors.js'),
+        },
+      })
+    ).then((o) => {
+      assert.equal(o.exitCode, 0)
+    })
+      .catch(() => {});
   });
 });

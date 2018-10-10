@@ -2,6 +2,7 @@ const path = require('path');
 const MemoryFS = require('memory-fs');
 const R = require('ramda');
 const febsModule = require('../../index');
+const lib = require('../../lib');
 
 module.exports = {
 
@@ -26,47 +27,47 @@ module.exports = {
    */
 
   createCompileFn: R.curry((fs, conf) => new Promise((resolve, reject) => {
-      // create compiler instance
+    // create compiler instance
     const febs = febsModule({
       fs,
     });
 
     const compiler = febs.createCompiler(conf);
 
-      // Set up in-memory file system for tests.
+    // Set up in-memory file system for tests.
     compiler.outputFileSystem = fs;
 
-      // Run webpack
+    // Run webpack
     compiler.run((err, stats) => {
-        // call the source done callback.
-      febs.webpackCompileDone(err, stats);
-
+      const webpackResults = febs.webpackCompileDone(err, stats);
       const entrypoints = stats.toJson('verbose').entrypoints;
 
-        // Reject webpack errors
+      // Reject webpack errors
       if (err) return reject(err);
 
-      if (stats.compilation.errors && stats.compilation.errors.length > 0) {
-        return reject(stats.compilation.errors);
-      }
-
-        // Resolve with wp compile results.
+      // Resolve with wp compile results.
       const code = Object.keys(entrypoints).map((key) => { // key is entrypoint key (e.g. "app")
         const res = {};
         res[key] = []; // an array of built assets will be under the key
 
         const assets = entrypoints[key].assets; // array of assets under that key.
         assets.forEach((asset) => {
-          const o = {};
-          o.filename = asset;
-          o.content = fs.readFileSync(path.resolve(`${compiler.outputPath}/${asset}`), 'utf8');
-          res[key].push(o);
+          res[key].push({
+            filename: asset,
+            content: fs.readFileSync(path.resolve(`${compiler.outputPath}/${asset}`), 'utf8'),
+          });
         });
 
         return res;
       });
 
-      return resolve({ err, stats, code, options: compiler.options });
+      return resolve({
+        err,
+        stats,
+        code,
+        options: compiler.options,
+        exitCode: webpackResults.exitCode,
+      });
     });
   })),
 
