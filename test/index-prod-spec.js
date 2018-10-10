@@ -57,13 +57,12 @@ describe('FEBS Production Tests', function () {
       entry: {
         app1: lib.absPath('fixtures/src/main.less'),
       },
-    })
-      );
+    }));
 
     assert(compiled.code[0].app1[1].filename.match(/-[a-z0-9]{10,}\.css$/));
   });
 
-  it('should return exit code 1 if error', async function () {
+  it('should return exit code 1 on syntax errors', async function () {
     await compile(lib.createConf({
       entry: {
         app1: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
@@ -74,15 +73,13 @@ describe('FEBS Production Tests', function () {
     });
   });
 
-  it('should not return exit code 1 if lint only error', async function () {
+  it('should not return exit code 1 only lint errors', async function () {
     await compile(lib.createConf({
         entry: {
           app1: lib.absPath('fixtures/src/main-es2015-lint-errors.js'),
         },
-      })
-    ).then((o) => {
+      })).then((o) => {
       assert.equal(o.exitCode, 0)
     })
-      .catch(() => {});
   });
 });

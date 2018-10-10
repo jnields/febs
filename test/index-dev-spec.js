@@ -202,6 +202,7 @@ describe('FEBS Development Tests', function () {
         // that is always generated when LESS compile runs.
         // Currently, need to require less in the js.. Is this how we should be
         // pulling in less in wp?
+
       assert(compiled.code[0].app[1].content.includes('border-color'));
     });
   });

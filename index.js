@@ -104,7 +104,7 @@ module.exports = function init(conf = {}) {
     }
 
     // If only lint errors, return 0 (success), i.e., don't fail the build.
-    if (lib.isLintOnlyErrors(stats)) {
+    if (!lib.isSyntaxParseOnlyErrors(stats)) {
       return {
         err,
         stats,
@@ -122,7 +122,6 @@ module.exports = function init(conf = {}) {
     }
 
     // Syntax and/or parse errors.
-
     // Set error exit code to fail external build tools.
     process.exitCode = 1;
     return {
