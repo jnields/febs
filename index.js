@@ -6,6 +6,7 @@ const merge = require('webpack-merge');
 const path = require('path');
 const devServer = require('./lib/dev-server');
 const R = require('ramda');
+const lib = require('./lib');
 
 const projectPath = process.cwd();
 
@@ -79,10 +80,11 @@ module.exports = function init(conf = {}) {
   );
 
   /**
- * The Webpack run callback.
- * @param {*} err
- * @param {*} stats
- */
+   * The webpack run callback.
+   * @param err
+   * @param stats
+   * @returns {{err: *, stats: *, exitCode: number}}
+   */
   const webpackCompileDone = (err, stats) => {
     // Log results
     if (!process.env.FEBS_TEST) {
@@ -92,10 +94,41 @@ module.exports = function init(conf = {}) {
       }));
     }
 
-    // If errors and prod, return exit code 1 (for linux-based build tools).
-    if (process.env.NODE_ENV === 'prod' && stats.compilation.errors && stats.compilation.errors.length > 0) {
-      process.exitCode = 1;
+    // No errors.
+    if (stats.compilation.errors && stats.compilation.errors.length === 0) {
+      return {
+        err,
+        stats,
+        exitCode: 0,
+      };
     }
+
+    // If only lint errors, return 0 (success), i.e., don't fail the build.
+    if (!lib.isSyntaxParseOnlyErrors(stats)) {
+      return {
+        err,
+        stats,
+        exitCode: 0,
+      };
+    }
+
+    // If dev mode, do not exit as it will kill watcher.
+    if (process.env.NODE_ENV === 'dev') {
+      return {
+        err,
+        stats,
+        exitCode: 0,
+      };
+    }
+
+    // Syntax and/or parse errors.
+    // Set error exit code to fail external build tools.
+    process.exitCode = 1;
+    return {
+      err,
+      stats,
+      exitCode: 1,
+    };
   };
 
   /**
