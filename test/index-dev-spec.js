@@ -53,7 +53,7 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
         },
-      })).catch((o) => {
+      })).then((o) => {
         assert.ok(o.stats.compilation.errors[0].message.includes('Parsing error'));
       });
     });
@@ -64,8 +64,6 @@ describe('FEBS Development Tests', function () {
           app: lib.absPath('fixtures/src/main-es2015-lint-errors.js'),
         },
       })).then(o => { assert.equal(o.exitCode, 0)})
-        .catch((stats) => {
-      });
     });
   });
 
@@ -96,8 +94,8 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-riot-syntax-error.js'),
         },
-      })).catch((errors) => {
-        assert.ok(errors[1].message.includes('Unexpected token'));
+      })).then((o) => {
+        assert.ok(o.stats.compilation.errors[1].message.includes('Unexpected token'));
       });
     });
   });
@@ -124,13 +122,13 @@ describe('FEBS Development Tests', function () {
       assert(!compiled.code[0].app[0].content.includes('const str = \'Hello world\''));
     });
 
-    it('detects Vue parse errors', async function () {
+    it('detects Vue JavaScript syntax errors', async function () {
       await compile(lib.createConf({
         entry: {
           app: lib.absPath('fixtures/src/main-vue-syntax-error.js'),
         },
-      })).catch((errors) => {
-        assert.ok(errors[0].message.includes('Error compiling template'));
+      })).then((o) => {
+        assert.ok(o.stats.compilation.errors[0].message.includes('SyntaxError'));
       });
     });
 
@@ -139,8 +137,8 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-vue-lint-error.js'),
         },
-      })).catch((errors) => {
-        assert.ok(errors[0].message.includes('Expected 1 space'));
+      })).then((o) => {
+        assert.ok(o.stats.compilation.errors[0].message.includes('Expected 1 space'));
       });
     });
   });
