@@ -78,7 +78,7 @@ module.exports = function init(conf = {}) {
     })(configsToMerge);
 
     // Force output path to always be the same
-    // wpConf.output.path = webpackConfigBase.output.path;
+    wpConf.output.path = webpackConfigBase.output.path;
 
     // Ensure febs config makes the final configurable decisions
     const febsConf = getfebsConf();
