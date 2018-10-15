@@ -6,6 +6,7 @@ const assert = require('assert');
 const path = require('path');
 const lib = require('./lib');
 const sinon = require('sinon');
+const logger = require('../lib/logger');
 
 // febs module
 const febsModule = require('../index');
@@ -172,21 +173,6 @@ describe('FEBS Development Tests', function () {
     });
   });
 
-  describe('Webpack config', async function () {
-    it('Output path cannot be modified', async function () {
-      const compiled = await compile(lib.createConf({
-        entry: {
-          app: lib.absPath('fixtures/src/main-es2015.js'),
-        },
-        output: {
-          path: lib.absPath('build/modified-output-path'),
-        },
-      }));
-
-      assert(!compiled.options.output.path.includes('build/modified-output-path'));
-    });
-  });
-
   describe('LESS', async function () {
     it('compiles LESS', async function () {
       const compiled = await compile(lib.createConf({
@@ -239,6 +225,35 @@ describe('FEBS Development Tests', function () {
       const expectedLength = wpDevConf.module.rules.length;
       const wpConfig = febs.getWebpackConfig(wpDevConf);
       assert.equal(expectedLength, wpConfig.module.rules.length);
+    });
+  });
+
+  describe('Webpack config', async function () {
+    it('Output path cannot be modified', async function () {
+      const compiled = await compile(lib.createConf({
+        entry: {
+          app: lib.absPath('fixtures/src/main-es2015.js'),
+        },
+        output: {
+          path: lib.absPath('build/modified-output-path'),
+        },
+      }));
+
+      assert(!compiled.options.output.path.includes('build/modified-output-path'));
+    });
+  });
+
+  describe('febs-config file respected', function (conf) {
+    it('dist path can be changed', async function () {
+
+      const febs = febsModule({
+        fs,
+      });
+
+      let webpackConfig = febs.getWebpackConfig();
+
+      assert(webpackConfig.output.path, './cool_output_path');
+
     });
   });
 
