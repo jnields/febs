@@ -21,7 +21,6 @@ const projectPath = process.cwd();
  *
  * passed in at test-time
  * @param conf.fs The file system (passed in from unit tests.)
-
  */
 module.exports = function init(conf = {}) {
   const { command } = conf;
@@ -45,6 +44,26 @@ module.exports = function init(conf = {}) {
     return {};
   };
 
+  const getfebsConf = () => {
+    let febsConf = {};
+
+    const febsConfPath = path.resolve(projectPath, './febs-config.json');
+    const febsConfDefaultsPath = path.resolve('./febs-config-default.json');
+
+    if (require('fs').existsSync(febsConfPath)) {
+      febsConf = R.merge(require(febsConfDefaultsPath), require(febsConfPath));
+    }
+
+    return febsConf;
+  };
+
+  // Applies febs-config to the webpack configuration
+  const febsConfMerge = (febsConf, wpConf) => {
+    // eslint-disable-next-line no-param-reassign
+    wpConf.output.path = path.resolve(febsConf.output.path);
+    return wpConf;
+  };
+
   const getWebpackConfig = (confOverride) => {
     const webpackConfigBase = require('./webpack-config/webpack.base.conf');
     const configsToMerge = [webpackConfigBase];
@@ -59,9 +78,12 @@ module.exports = function init(conf = {}) {
     })(configsToMerge);
 
     // Force output path to always be the same
-    wpConf.output.path = webpackConfigBase.output.path;
-    logger.verbose(wpConf);
-    return wpConf;
+    // wpConf.output.path = webpackConfigBase.output.path;
+
+    // Ensure febs config makes the final configurable decisions
+    const febsConf = getfebsConf();
+
+    return febsConfMerge(febsConf, wpConf);
   };
 
   /**
