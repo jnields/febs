@@ -44,14 +44,23 @@ module.exports = function init(conf = {}) {
     return {};
   };
 
+  const getFebsConfDefaults = () => {
+    const configDefaults = {
+      output: {
+        path: './dist',
+      },
+    };
+
+    return configDefaults;
+  };
+
   const getfebsConf = () => {
     let febsConf = {};
 
     const febsConfPath = path.resolve(projectPath, './febs-config.json');
-    const febsConfDefaultsPath = path.resolve('./febs-config-default.json');
 
     if (require('fs').existsSync(febsConfPath)) {
-      febsConf = R.merge(require(febsConfDefaultsPath), require(febsConfPath));
+      febsConf = R.merge(getFebsConfDefaults(), require(febsConfPath));
     }
 
     return febsConf;
