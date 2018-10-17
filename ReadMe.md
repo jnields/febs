@@ -4,11 +4,10 @@
 
 ## Summary
 
-`FEBS` is an extensible [Webpack](https://Webpack.js.org/)-based [front-end build
-system](https://engineering.rei.com/frontend/the-rei-front-end-build-system.html) designed to be used by a community of front-end developers or a series of
-projects using a similar set of technologies.
+`FEBS` is an extensible [Webpack](https://webpack.js.org/)-based [front-end build
+system](https://engineering.rei.com/frontend/the-rei-front-end-build-system.html) designed to be used by a community of front-end developers or a series of projects using a similar set of technologies in order to reduce duplicate effort on build configuration.
 
-Its code falls into two categories
+It's code falls into two categories
 
 ### [Build Features](#build-features)
 
@@ -35,7 +34,7 @@ by checking out the introductory post on the
 
 #### Assign build tasks
 
-FEBS exposes an executable to be used within the scripts of your package.json
+FEBS exposes an executable named `febs` to be used within the scripts of your `package.json`
 
     "scripts": {
       "build": "NODE_ENV=prod febs prod",
@@ -47,7 +46,7 @@ FEBS exposes an executable to be used within the scripts of your package.json
 There is [some work](#23) to remove the requirement on `NODE_ENV` and give full
 respect to the second argument.
 
-#### Add code to the [default](#defaults) paths for css and js and [run](#run)
+#### Update or use [defaults](#default-configuration) to specify paths for the css and js you want to compile and [run](#run)
 
 ### Run
 
@@ -61,49 +60,21 @@ respect to the second argument.
 
 See [Command-line Interface]() for more details and additional ways to run.
 
-## Configuration
+## Default Configuration
 
-## Defaults
+### Entry points
+  - Default JavaScript entry point: `/src/js/entry.js`
+  - Default Style entry point: `/src/style/entry.css`
 
-### Entry points:
-  - JavaScript: `/src/js/entry.js`
-  - Style: `/src/style/entry.css`
-
-#### Output path:
+### Output path
   - Bundles written to: `/dist/<package name>/`.
 
-### febs-config.json
+Given the above defaults, FEBS will generate two bundles at the following paths:
 
-If the default entry points / output paths don't work for you, you can configure
-febs to use your own entry points or output path.
+    ./dist/app.1234.js
+    ./dist/app.1234.css
 
-Configuration override:
-
-*`febs-config.json` Example:*
-
-    {
-      "entry": {
-        "details": [
-          "src/main/js/pages/details/entry.js"
-        ],
-        "details-reviews": [
-          "src/main/js/pages/details/reviews.js"
-          "src/main/js/pages/details/write-review.js"
-        ]
-      }
-      "output": {
-        "path": "./target/classes/dist"
-      }
-    }
-
-Given the above example, febs will generate two bundles at the following paths:
-
-    ./target/classes/dist/details.1234.js
-    ./target/classes/dist/detail-reviews.1234.js
-
-- `details.1234.js` will only contain Javascript contained in entry.js (including its dependencies)
-
-- `details-reviews.1234.js` will be bundle reviews.js and write-review.js files into one bundle
+You can adjust these default configurations using the [febs configuration](#febs-configuration)
 
 ## Build Features
 
@@ -121,6 +92,8 @@ Given the above example, febs will generate two bundles at the following paths:
 
 ### Source Maps
 @TODO: additional detail
+
+If you'd like to further configure febs, you can look at the [Webpack overrides]()
 
 ### Linting
 Linting is provided via [eslint](https://eslint.org/)
@@ -160,24 +133,49 @@ This config is used by both `webpack` during a build and `eslint` at the command
 #### Development Build Task
 @TODO: additional detail
 
-### Build Manifest
 
-A manifest.json is built to `./dist/manifest.json` this is a mechanism to be used
-by an asset injector to insert assets onto a page
+### Febs Configuration
 
-@TODO: Additional detail
+If the default entry points / output paths don't work for you, you can override them by using a `febs-config.json` file next to your package.json that is using `febs`.
 
-### Asset Injector
+Here is an example of a entry / output configuration that might be made to use a more java like file structure.
 
-An asset injector uses a [manifest.json](#build-manifest) to insert production
-assets into the markup of a webpage.
+*`./febs-config.json`:*
 
-See our example Javascript implementation of the an asset injector. One could
-create one for to be used by Thymleaf, Freemarker, JSP Tags, Vue, React,
-Mustache, Handlebars, etc.
+    {
+      "entry": {
+        "details": [
+          "src/main/js/pages/details/entry.js"
+        ],
+        "details-reviews": [
+          "src/main/js/pages/details/reviews.js"
+          "src/main/js/pages/details/write-review.js"
+        ]
+      }
+      "output": {
+        "path": "./target/classes/dist"
+      }
+    }
 
-@TODO: publish Javascript implementation and asset pipeline architectual
-diagrams and relate to an "asset pipeline".
+####  `entry` property override
+
+Above we are creating our own entry points, instead of using the [defaults](#default-configuration). We specify the path where our javascript code lives. In the above example, we are using a java-like file structure.
+
+#### `output` property override
+
+Above we are override
+
+Given the above example, FEBS will generate two bundles at the following paths:
+
+    ./target/classes/dist/details.1234.js
+    ./target/classes/dist/detail-reviews.1234.js
+
+- `details.1234.js` will only contain Javascript contained in entry.js (including its dependencies)
+
+- `details-reviews.1234.js` will be bundle reviews.js and write-review.js files into one bundle
+
+
+#### Additional Concepts
 
 ### Overrides
 
@@ -209,6 +207,28 @@ loader or a plugin?
       ]
     };
 
+# Additional Concepts
+
+## Build Manifest
+
+A manifest.json is built to `./dist/manifest.json` this is a mechanism to be used
+by an asset injector to insert assets onto a page
+
+@TODO: Additional detail
+
+## Asset Injector
+
+An asset injector uses a [manifest.json](#build-manifest) to insert production
+assets into the markup of a webpage.
+
+See our example Javascript implementation of the an asset injector. One could
+create one for to be used by Thymleaf, Freemarker, JSP Tags, Vue, React,
+Mustache, Handlebars, etc.
+
+@TODO: publish Javascript implementation and asset pipeline architectual
+diagrams and relate to an "asset pipeline".
+
+
 You can find out all of the Webpack defaults by reviewing the base
 [Webpack configuration file](webpack-config/webpack.base.conf.js).
 
@@ -228,7 +248,7 @@ response times.
 Somewhat related, the intention is to move the Webpack configuration to a separate
 repository and having that configurable. At that point the project can have more fine
 grained release management and flexibility as well as let people who are
-not using the same technology to have some control over their configuration.
+not using the same technology to have some control over their base configuration.
 
 ## Deprecation
 
@@ -247,6 +267,13 @@ config that you can edit that happens to be in a different repository
 Maintainers support one major version behind and attempt to minimize and group
 up major version releases to reduce upgrade/support burden.
 
+### Internal open source customers
+
+We fully support our internal customers. That means we will respond to Slack
+messages and help troubleshoot issues, feature requests, etc.
+
+Feel free to swing by or hit us up on Slack or just file a bug here :)
+
 ### External open source customers
 
 Maintainers will respond to github issues within a week for issues with FEBS core.
@@ -255,11 +282,4 @@ However, we are happy to collaborate and work together on pull requests. You are
 very much welcome and encouraged to fork this project and see where it goes.
 
 Also, we'd love to hear your ideas and feedback on different approaches or similar solutions in the community that you think could improve FEBS.
-
-### Internal open source customers
-
-We fully support our internal customers. That means we will respond to Slack
-messages and help troubleshoot issues, feature requests, etc.
-
-Feel free to swing by or hit us up on Slack or just file a bug here :)
 
