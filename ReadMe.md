@@ -61,15 +61,49 @@ respect to the second argument.
 
 See [Command-line Interface]() for more details and additional ways to run.
 
+## Configuration
+
 ## Defaults
 
-By default, `febs` is configured for following entry points:
+### Entry points:
   - JavaScript: `/src/js/entry.js`
   - Style: `/src/style/entry.css`
+
+#### Output path:
   - Bundles written to: `/dist/<package name>/`.
 
-You can find out all of the Webpack defaults by reviewing the base
-[Webpack configuration file](Webpack-config/Webpack.base.conf.js).
+### febs-config.json
+
+If the default entry points / output paths don't work for you, you can configure
+febs to use your own entry points or output path.
+
+Configuration override:
+
+*`febs-config.json` Example:*
+
+    {
+      "entry": {
+        "details": [
+          "src/main/js/pages/details/entry.js"
+        ],
+        "details-reviews": [
+          "src/main/js/pages/details/reviews.js"
+          "src/main/js/pages/details/write-review.js"
+        ]
+      }
+      "output": {
+        "path": "./target/classes/dist"
+      }
+    }
+
+Given the above example, febs will generate two bundles at the following paths:
+
+    ./target/classes/dist/details.1234.js
+    ./target/classes/dist/detail-reviews.1234.js
+
+- `details.1234.js` will only contain Javascript contained in entry.js (including its dependencies)
+
+- `details-reviews.1234.js` will be bundle reviews.js and write-review.js files into one bundle
 
 ## Build Features
 
@@ -138,16 +172,23 @@ by an asset injector to insert assets onto a page
 An asset injector uses a [manifest.json](#build-manifest) to insert production
 assets into the markup of a webpage.
 
-See our example javascript implementation of the an asset injector. One could
+See our example Javascript implementation of the an asset injector. One could
 create one for to be used by Thymleaf, Freemarker, JSP Tags, Vue, React,
 Mustache, Handlebars, etc.
 
-@TODO: publish javascript implementation and asset pipeline architectual
+@TODO: publish Javascript implementation and asset pipeline architectual
 diagrams and relate to an "asset pipeline".
 
 ### Overrides
 
-FEBS uses `Webpack` to build and is providing a default Webpack configuration. We provide a mechanism for you to customize your build simply by creating a `Webpack.overrides.conf.js` at the root of your npm package. Anything that Webpack understands is fair game for the overrides file. Want to add a loader or a plugin?
+FEBS uses `Webpack` to build and is providing a default Webpack configuration under the hood.
+
+You can override or create new configurations where necissary. If you think others might need the
+configuration your override or adding please file a ticket. Where you can, avoid using this feature.
+
+To customize your build simply by creating a `Webpack.overrides.conf.js` at the root of your npm
+package. Anything that Webpack understands is fair game for the overrides file. Want to add a
+loader or a plugin?
 
     // Webpack.overrides.conf.js
     module.exports = {
@@ -167,6 +208,9 @@ FEBS uses `Webpack` to build and is providing a default Webpack configuration. W
         new CoolPlugin()
       ]
     };
+
+You can find out all of the Webpack defaults by reviewing the base
+[Webpack configuration file](webpack-config/webpack.base.conf.js).
 
 ## Release management
 
