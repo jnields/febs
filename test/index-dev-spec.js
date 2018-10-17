@@ -54,9 +54,17 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
         },
-      })).catch((errors) => {
-        assert.ok(errors[0].message.includes('Parsing error'));
+      })).then((o) => {
+        assert.ok(o.stats.compilation.errors[0].message.includes('Parsing error'));
       });
+    });
+
+    it('detects ES lint errors', async function () {
+      await compile(lib.createConf({
+        entry: {
+          app: lib.absPath('fixtures/src/main-es2015-lint-errors.js'),
+        },
+      })).then(o => { assert.equal(o.exitCode, 0)})
     });
   });
 
@@ -87,8 +95,8 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-riot-syntax-error.js'),
         },
-      })).catch((errors) => {
-        assert.ok(errors[1].message.includes('Unexpected token'));
+      })).then((o) => {
+        assert.ok(o.stats.compilation.errors[1].message.includes('Unexpected token'));
       });
     });
   });
@@ -115,13 +123,13 @@ describe('FEBS Development Tests', function () {
       assert(!compiled.code[0].app[0].content.includes('const str = \'Hello world\''));
     });
 
-    it('detects Vue parse errors', async function () {
+    it('detects Vue JavaScript syntax errors', async function () {
       await compile(lib.createConf({
         entry: {
           app: lib.absPath('fixtures/src/main-vue-syntax-error.js'),
         },
-      })).catch((errors) => {
-        assert.ok(errors[0].message.includes('Error compiling template'));
+      })).then((o) => {
+        assert.ok(o.stats.compilation.errors[0].message.includes('SyntaxError'));
       });
     });
 
@@ -130,8 +138,8 @@ describe('FEBS Development Tests', function () {
         entry: {
           app: lib.absPath('fixtures/src/main-vue-lint-error.js'),
         },
-      })).catch((errors) => {
-        assert.ok(errors[0].message.includes('Expected 1 space'));
+      })).then((o) => {
+        assert.ok(o.stats.compilation.errors[0].message.includes('Expected 1 space'));
       });
     });
   });
@@ -178,6 +186,7 @@ describe('FEBS Development Tests', function () {
         // that is always generated when LESS compile runs.
         // Currently, need to require less in the js.. Is this how we should be
         // pulling in less in wp?
+
       assert(compiled.code[0].app[1].content.includes('border-color'));
     });
   });
@@ -249,17 +258,14 @@ describe('FEBS Development Tests', function () {
   });
 
   describe('Exit codes', function () {
-    it('should not return exit code 1 (dev mode only)', async function () {
-      process.on('exit', function (code) {
-        assert.notEqual(code, 1);
-      });
+    it('should not return exit code 1 in dev mode so that watching persists)', async function () {
 
       await compile(lib.createConf({
         entry: {
           app1: lib.absPath('fixtures/src/main-es2015-syntax-errors.js'),
         },
       })
-      ).catch(() => {});
+      ).then((o) => { assert.equal(o.exitCode, 0)});
     });
   });
 

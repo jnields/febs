@@ -100,6 +100,11 @@ This config is used by both `webpack` during a build and `eslint` at the command
 
 - Currently, `febs init` copies over the `.eslintrc.json` file but in the future we'll likely be creating a shared eslint config used by both `wp` and the `eslint` at the command line.
 
+- `febs` is configured to return Linux compatible exit codes in order to signal to a global build
+ tool (such as maven) the success/failure of the front-end build. In the case of lint-only 
+ errors, we do not return an error code 1 (error) as we don't want to fail the global build due 
+ to linting errors, however, they are still reported. In the near future, this will be configurable.
+
 ### Code watching
 @TODO: additional detail
 

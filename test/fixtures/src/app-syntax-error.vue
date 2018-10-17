@@ -1,5 +1,5 @@
 // app.vue with ES2015
-// Syntax error is on line 3.
+// Syntax error is on line 14.
 <style
   .red {
     color: #f00;
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  export default {
+  expor default { // <-- Syntax error here
     data() {
       const str = 'Hello world';
 
