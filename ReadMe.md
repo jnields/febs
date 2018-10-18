@@ -204,6 +204,9 @@ loader or a plugin?
         new CoolPlugin()
       ]
     };
+    
+You can find out all of the Webpack defaults by reviewing the base
+[Webpack configuration file](webpack-config/webpack.base.conf.js).
 
 ## Additional Concepts
 
@@ -226,9 +229,7 @@ Mustache, Handlebars, etc.
 @TODO: publish Javascript implementation and asset pipeline architectual
 diagrams and relate to an "asset pipeline".
 
-
-You can find out all of the Webpack defaults by reviewing the base
-[Webpack configuration file](webpack-config/webpack.base.conf.js).
+## Project Documentation
 
 ### Release management
 
