@@ -26,6 +26,8 @@ const projectPath = process.cwd();
 module.exports = function init(conf = {}) {
   const { command } = conf;
 
+  const febsConfigArg = conf;
+
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
 
@@ -45,7 +47,7 @@ module.exports = function init(conf = {}) {
     return {};
   };
 
-  const getFebsConfDefaults = () => {
+  const getFebsConfigDefaults = () => {
     const configDefaults = {
       output: {
         path: './dist',
@@ -55,22 +57,23 @@ module.exports = function init(conf = {}) {
     return configDefaults;
   };
 
-  const getfebsConf = () => {
-    let febsConf = {};
+  const getFebsConfig = () => {
+    let febsConfig = getFebsConfigDefaults();
 
-    const febsConfPath = path.resolve(projectPath, './febs-config.json');
+    const febsConfigPath = path.resolve(projectPath, './febs-config.json');
+    const febsConfigFileJSON = febsConfigArg || require(febsConfigPath);
 
-    if (require('fs').existsSync(febsConfPath)) {
-      febsConf = R.merge(getFebsConfDefaults(), require(febsConfPath));
+    if (febsConfigFileJSON) {
+      febsConfig = R.merge(febsConfig, febsConfigFileJSON);
     }
 
-    return febsConf;
+    return febsConfig;
   };
 
   // Applies febs-config to the webpack configuration
-  const febsConfMerge = (febsConf, wpConf) => {
+  const febsConfigMerge = (febsConfig, wpConf) => {
     // eslint-disable-next-line no-param-reassign
-    wpConf.output.path = path.resolve(febsConf.output.path);
+    wpConf.output.path = path.resolve(projectPath, febsConfig.output.path);
     return wpConf;
   };
 
@@ -91,9 +94,9 @@ module.exports = function init(conf = {}) {
     wpConf.output.path = webpackConfigBase.output.path;
 
     // Ensure febs config makes the final configurable decisions
-    const febsConf = getfebsConf();
+    const febsConfig = getFebsConfig();
 
-    return febsConfMerge(febsConf, wpConf);
+    return febsConfigMerge(febsConfig, wpConf);
   };
 
   /**

@@ -243,17 +243,19 @@ describe('FEBS Development Tests', function () {
     });
   });
 
-  describe('febs-config file respected', function (conf) {
-    it('dist path can be changed', async function () {
+  describe('febs-config via constructor respected', function () {
+    it('dist path can be changed', function () {
 
-      const febs = febsModule({
+      const desiredOutputPath = path.resolve('./cool_output_path');
+
+      const webpackConfig = febsModule({
+        output: {
+          path: desiredOutputPath
+        },
         fs,
-      });
+      }).getWebpackConfig();
 
-      let webpackConfig = febs.getWebpackConfig();
-
-      assert(webpackConfig.output.path, './cool_output_path');
-
+      assert.equal(webpackConfig.output.path, desiredOutputPath);
     });
   });
 
