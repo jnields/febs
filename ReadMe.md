@@ -131,7 +131,7 @@ This config is used by both `webpack` during a build and `eslint` at the command
 #### Development Build Task
 @TODO: additional detail
 
-### Febs Configuration
+### FEBS Configuration
 
 If the default entry points / output paths don't work for you, you can specify them by using a `febs-config.json` file next to your package.json that is using `febs`.
 
