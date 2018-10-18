@@ -229,7 +229,7 @@ Mustache, Handlebars, etc.
 @TODO: publish Javascript implementation and asset pipeline architectual
 diagrams and relate to an "asset pipeline".
 
-## Project Documentation
+## Project Information
 
 ### Release management
 
