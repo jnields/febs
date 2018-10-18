@@ -160,7 +160,7 @@ In the `febs-config.json` example above we are creating our own entry points, in
 
 #### `output` property
 
-In the `febs-config.json` example above we change the default output path to the java classpath where a java asset injector will be able to read for injection.
+In the `febs-config.json` example above we change the default output path to the Java classpath where a Java asset injector will be able to read for injection.
 
 #### Example configuration output
 Given the above example, FEBS will generate two bundles at the following paths:
@@ -172,7 +172,7 @@ Given the above example, FEBS will generate two bundles at the following paths:
 
 - `details-reviews.1234.js` will be bundle reviews.js and write-review.js files into one bundle
 
-If you'd like to further configure FEBS, you can look at the [webpack overrides](#Overrides)
+If you'd like to further configure FEBS, you can look at the [webpack overrides](#overrides)
 
 #### Additional Concepts
 
@@ -211,7 +211,7 @@ loader or a plugin?
 ### Build Manifest
 
 A manifest.json is built to `./dist/manifest.json` this is a mechanism to be used
-by an asset injector to insert assets onto a page
+by an asset injector to insert assets onto a page.
 
 @TODO: Additional detail
 
@@ -245,9 +245,9 @@ will continue to improve our unit and functional testing strategies and bug
 response times.
 
 Somewhat related, the intention is to move the Webpack configuration to a separate
-repository and having that configurable. At that point the project can have more fine
-grained release management and flexibility as well as let people who are
-not using the same technology to have some control over their base configuration.
+repository and have that be configurable. At that point the project can have more fine
+grained release management and flexibility as well as allow non-internal customers to
+have complete control over their shared base configuration.
 
 ### Deprecation
 
