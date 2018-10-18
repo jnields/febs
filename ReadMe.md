@@ -172,11 +172,9 @@ Given the above example, FEBS will generate two bundles at the following paths:
 
 - `details-reviews.1234.js` will be bundle reviews.js and write-review.js files into one bundle
 
-If you'd like to further configure FEBS, you can look at the [webpack overrides](#overrides)
+If you'd like to further configure FEBS, you can look at the [webpack overrides](#webpack-overrides)
 
-#### Additional Concepts
-
-### Overrides
+### Webpack Overrides
 
 FEBS uses `Webpack` to build and is providing a default Webpack configuration under the hood.
 
