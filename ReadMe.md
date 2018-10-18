@@ -180,8 +180,9 @@ If you'd like to further configure FEBS, you can look at the [webpack overrides]
 
 FEBS uses `Webpack` to build and is providing a default Webpack configuration under the hood.
 
-You can override or create new configurations where necessary. If you think others might need the
-configuration your override or adding please file a ticket. Where you can, avoid using this feature.
+You can override or create new configurations through webpack directly where necessary. If you
+think others might need the override please file a ticket or reach out for [support](#support).
+Where you can, attempt to avoid using this feature to reduce duplication of work.
 
 To customize your build simply by creating a `webpack.overrides.conf.js` at the root of your npm
 package. Anything that Webpack understands is fair game for the overrides file. Want to add a
