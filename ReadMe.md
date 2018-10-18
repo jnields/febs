@@ -163,7 +163,7 @@ In the `febs-config.json` example above we are creating our own entry points, in
 
 #### `output` property override
 
-In the `febs-config.json` example above we change the default output path to the java classpath where an java asset injector will be able to read for injection.
+In the `febs-config.json` example above we change the default output path to the java classpath where a java asset injector will be able to read for injection.
 
 #### Example configuration output
 Given the above example, FEBS will generate two bundles at the following paths:
@@ -174,7 +174,6 @@ Given the above example, FEBS will generate two bundles at the following paths:
 - `details.1234.js` will only contain Javascript contained in entry.js (including its dependencies)
 
 - `details-reviews.1234.js` will be bundle reviews.js and write-review.js files into one bundle
-
 
 #### Additional Concepts
 
@@ -208,16 +207,16 @@ loader or a plugin?
       ]
     };
 
-# Additional Concepts
+## Additional Concepts
 
-## Build Manifest
+### Build Manifest
 
 A manifest.json is built to `./dist/manifest.json` this is a mechanism to be used
 by an asset injector to insert assets onto a page
 
 @TODO: Additional detail
 
-## Asset Injector
+### Asset Injector
 
 An asset injector uses a [manifest.json](#build-manifest) to insert production
 assets into the markup of a webpage.
@@ -233,7 +232,7 @@ diagrams and relate to an "asset pipeline".
 You can find out all of the Webpack defaults by reviewing the base
 [Webpack configuration file](webpack-config/webpack.base.conf.js).
 
-## Release management
+### Release management
 
 The project strictly use [semver](https://semver.org/).
 
@@ -251,12 +250,12 @@ repository and having that configurable. At that point the project can have more
 grained release management and flexibility as well as let people who are
 not using the same technology to have some control over their base configuration.
 
-## Deprecation
+### Deprecation
 
 When something gets deprecated, it will not be supported in the next major
 release but will continue to get [supported](#support) for the previous version.
 
-## Support
+### Support
 
 The project focus is around FEBS core. For [Build Features](#build-features)
 it should be look at as community of practice effort, this is one of the main ideas.
@@ -268,14 +267,14 @@ config that you can edit that happens to be in a different repository
 Maintainers support one major version behind and attempt to minimize and group
 up major version releases to reduce upgrade/support burden.
 
-### Internal open source customers
+#### Internal open source customers
 
 We fully support our internal customers. That means we will respond to Slack
 messages and help troubleshoot issues, feature requests, etc.
 
 Feel free to swing by or hit us up on Slack or just file a bug here :)
 
-### External open source customers
+#### External open source customers
 
 Maintainers will respond to github issues within a week for issues with FEBS core.
 Unfortunately, there are no guarantees for "immediate" support due to bandwidth.
