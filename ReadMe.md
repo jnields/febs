@@ -271,7 +271,8 @@ up major version releases to reduce upgrade/support burden.
 We fully support our internal customers. That means we will respond to Slack
 messages and help troubleshoot issues, feature requests, etc.
 
-Feel free to swing by or hit us up on Slack or just file a bug here :)
+Feel free to swing by or hit us up on Slack in the #febs-users channel or just file
+an issue here :)
 
 #### External open source customers
 
