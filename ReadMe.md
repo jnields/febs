@@ -140,7 +140,7 @@ If the default entry points / output paths don't work for you, you can override 
 
 Here is an example of a entry / output configuration that might be made to use a more java like file structure.
 
-*`./febs-config.json`:*
+*`febs-config.json`*
 
     {
       "entry": {
@@ -159,12 +159,13 @@ Here is an example of a entry / output configuration that might be made to use a
 
 ####  `entry` property override
 
-Above we are creating our own entry points, instead of using the [defaults](#default-configuration). We specify the path where our javascript code lives. In the above example, we are using a java-like file structure.
+In the `febs-config.json` example above we are creating our own entry points, instead of using the [defaults](#default-configuration). We specify the path where our javascript and styles live.
 
 #### `output` property override
 
-Above we are override
+In the `febs-config.json` example above we change the default output path to the java classpath where an java asset injector will be able to read for injection.
 
+#### Example configuration output
 Given the above example, FEBS will generate two bundles at the following paths:
 
     ./target/classes/dist/details.1234.js
