@@ -58,22 +58,35 @@ module.exports = function init(conf = {}) {
   };
 
   const getFebsConfig = () => {
-    let febsConfig = getFebsConfigDefaults();
+    const febsConfig = getFebsConfigDefaults();
 
     const febsConfigPath = path.resolve(projectPath, './febs-config.json');
-    const febsConfigFileJSON = febsConfigArg || require(febsConfigPath);
 
-    if (febsConfigFileJSON) {
-      febsConfig = R.merge(febsConfig, febsConfigFileJSON);
+    let febsConfigFileJSON;
+    if (fs.existsSync(febsConfigPath)) {
+      febsConfigFileJSON = require(febsConfigPath);
+    } else if (febsConfigArg && (febsConfigArg.output || febsConfigArg.entry)) {
+      febsConfigFileJSON = febsConfigArg;
     }
 
-    return febsConfig;
+    return R.merge(febsConfig, febsConfigFileJSON);
   };
 
   // Applies febs-config to the webpack configuration
   const febsConfigMerge = (febsConfig, wpConf) => {
     // eslint-disable-next-line no-param-reassign
     wpConf.output.path = path.resolve(projectPath, febsConfig.output.path);
+
+    // working to style guide this
+    if (febsConfig.entry) {
+      for (let key in febsConfig.entry) {
+        febsConfig.entry[key] = febsConfig.entry[key].map(function(entryFile) {
+          return path.resolve(projectPath, entryFile);
+        });
+      }
+      wpConf.entry = febsConfig.entry;
+    }
+
     return wpConf;
   };
 

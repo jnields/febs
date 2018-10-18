@@ -243,8 +243,8 @@ describe('FEBS Development Tests', function () {
     });
   });
 
-  describe('febs-config via constructor respected', function () {
-    it('dist path can be changed', function () {
+  describe('febs-config via constructor', function () {
+    it('should allow dist path to be changed', function () {
 
       const desiredOutputPath = path.resolve('./cool_output_path');
 
@@ -257,6 +257,23 @@ describe('FEBS Development Tests', function () {
 
       assert.equal(webpackConfig.output.path, desiredOutputPath);
     });
+
+    it('should allow entry points can be changed', function () {
+
+      const desiredEntryPath = 'src/js/entryX.js';
+
+      const webpackConfig = febsModule({
+        entry: {
+          app: [
+            desiredEntryPath
+          ],
+        },
+        fs,
+      }).getWebpackConfig();
+
+      assert(webpackConfig.entry.app[0].endsWith(desiredEntryPath));
+    });
+
   });
 
   describe('Exit codes', function () {
