@@ -36,6 +36,18 @@ const extractSass = new ExtractTextPlugin({
   filename: env === 'dev' ? '[name].bundle.css' : '[name].bundle-[contenthash].css',
 });
 
+/**
+ * Gets UglifyJS compression options.
+ * @returns {*}
+ */
+const getUglifyCompressionOptions = () => {
+  if (env === 'prod') {
+    return { comparisons: false };
+  }
+  return false;
+};
+
+
 module.exports = {
 
   entry: {
@@ -189,7 +201,7 @@ module.exports = {
     new UglifyJsPlugin({
       sourceMap: env === 'prod',
       uglifyOptions: {
-        compress: env === 'prod',
+        compress: getUglifyCompressionOptions(),
       },
     }),
   ],
