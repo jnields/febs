@@ -72,10 +72,15 @@ module.exports = function init(conf = {}) {
     return R.merge(febsConfig, febsConfigFileJSON);
   };
 
+  const getPackageName = () => {
+    const projectPackageJson = path.join(projectPath, 'package.json');
+    return require(projectPackageJson).name;
+  };
+
   // Applies febs-config to the webpack configuration
   const febsConfigMerge = (febsConfig, wpConf) => {
     // eslint-disable-next-line no-param-reassign
-    wpConf.output.path = path.resolve(projectPath, febsConfig.output.path);
+    wpConf.output.path = path.resolve(projectPath, febsConfig.output.path, getPackageName());
 
     // working to style guide this
     if (febsConfig.entry) {
@@ -107,9 +112,7 @@ module.exports = function init(conf = {}) {
     wpConf.output.path = webpackConfigBase.output.path;
 
     // Ensure febs config makes the final configurable decisions
-    const febsConfig = getFebsConfig();
-
-    return febsConfigMerge(febsConfig, wpConf);
+    return febsConfigMerge(getFebsConfig(), wpConf);
   };
 
   /**
