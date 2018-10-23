@@ -248,14 +248,16 @@ describe('FEBS Development Tests', function () {
 
       const desiredOutputPath = path.resolve('./cool_output_path');
 
-      const webpackConfig = febsModule({
+      const febs = febsModule({
         output: {
           path: desiredOutputPath
         },
         fs,
-      }).getWebpackConfig();
+      });
 
-      assert.equal(webpackConfig.output.path, desiredOutputPath);
+      const webpackConfig = febs.getWebpackConfig();
+
+      assert.equal(webpackConfig.output.path, path.resolve(desiredOutputPath, '@rei', 'febs'));
     });
 
     it('should allow entry points can be changed', function () {
