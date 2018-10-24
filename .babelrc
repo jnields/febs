@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
         "targets": {
           "browsers": [
@@ -15,6 +15,5 @@
         }
       }
     ],
-    ["es2015-riot"]
   ]
 }

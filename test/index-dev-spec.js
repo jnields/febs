@@ -33,6 +33,8 @@ describe('FEBS Development Tests', function () {
         },
       }));
 
+      console.log(compiled.code[0].app[0].content);
+
       assert.equal(compiled.code[0].app[0].filename, 'app.bundle.js');
       assert(compiled.code[0].app[0].content.includes('add: function add()'));
     });
@@ -119,8 +121,9 @@ describe('FEBS Development Tests', function () {
         },
       }));
 
-      assert(compiled.code[0].app[0].content.includes('var str = \'Hello world\''));
-      assert(!compiled.code[0].app[0].content.includes('const str = \'Hello world\''));
+      // console.log(compiled.code[0].app[0].content);
+      assert(compiled.code[0].app[0].content.includes("var str = \\'Hello world\\'"));
+      // assert(!compiled.code[0].app[0].content.includes("const str = \\'Hello world\\'"));
     });
 
     it('detects Vue JavaScript syntax errors', async function () {
