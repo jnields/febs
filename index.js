@@ -26,6 +26,8 @@ const projectPath = process.cwd();
 module.exports = function init(conf = {}) {
   const { command } = conf;
 
+  const febsConfigArg = conf;
+
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
 
@@ -45,23 +47,47 @@ module.exports = function init(conf = {}) {
     return {};
   };
 
-  const getfebsConf = () => {
-    let febsConf = {};
+  const getFebsConfigDefaults = () => ({
+    output: {
+      path: './dist',
+    },
+  });
 
-    const febsConfPath = path.resolve(projectPath, './febs-config.json');
-    const febsConfDefaultsPath = path.resolve('./febs-config-default.json');
+  const getFebsConfig = () => {
+    const febsConfig = getFebsConfigDefaults();
 
-    if (require('fs').existsSync(febsConfPath)) {
-      febsConf = R.merge(require(febsConfDefaultsPath), require(febsConfPath));
+    const febsConfigPath = path.resolve(projectPath, './febs-config.json');
+
+    let febsConfigFileJSON;
+    if (fs.existsSync(febsConfigPath)) {
+      febsConfigFileJSON = require(febsConfigPath);
+    } else if (febsConfigArg && (febsConfigArg.output || febsConfigArg.entry)) {
+      febsConfigFileJSON = febsConfigArg;
     }
 
-    return febsConf;
+    return R.merge(febsConfig, febsConfigFileJSON);
+  };
+
+  const getPackageName = () => {
+    const projectPackageJson = path.join(projectPath, 'package.json');
+    return require(projectPackageJson).name;
   };
 
   // Applies febs-config to the webpack configuration
-  const febsConfMerge = (febsConf, wpConf) => {
+  const febsConfigMerge = (febsConfig, wpConf) => {
     // eslint-disable-next-line no-param-reassign
-    wpConf.output.path = path.resolve(febsConf.output.path);
+    wpConf.output.path = path.resolve(projectPath, febsConfig.output.path, getPackageName());
+
+    // working to style guide this
+    if (febsConfig.entry) {
+      for (let key in febsConfig.entry) {
+        febsConfig.entry[key] = febsConfig.entry[key].map(function(entryFile) {
+          return path.resolve(projectPath, entryFile);
+        });
+      }
+      wpConf.entry = febsConfig.entry;
+    }
+
     return wpConf;
   };
 
@@ -82,9 +108,7 @@ module.exports = function init(conf = {}) {
     wpConf.output.path = webpackConfigBase.output.path;
 
     // Ensure febs config makes the final configurable decisions
-    const febsConf = getfebsConf();
-
-    return febsConfMerge(febsConf, wpConf);
+    return febsConfigMerge(getFebsConfig(), wpConf);
   };
 
   /**

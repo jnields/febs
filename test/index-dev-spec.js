@@ -243,18 +243,39 @@ describe('FEBS Development Tests', function () {
     });
   });
 
-  describe('febs-config file respected', function (conf) {
-    it('dist path can be changed', async function () {
+  describe('febs-config via constructor', function () {
+    it('should allow dist path to be changed', function () {
+
+      const desiredOutputPath = path.resolve('./cool_output_path');
 
       const febs = febsModule({
+        output: {
+          path: desiredOutputPath
+        },
         fs,
       });
 
-      let webpackConfig = febs.getWebpackConfig();
+      const webpackConfig = febs.getWebpackConfig();
 
-      assert(webpackConfig.output.path, './cool_output_path');
-
+      assert.equal(webpackConfig.output.path, path.resolve(desiredOutputPath, '@rei', 'febs'));
     });
+
+    it('should allow entry points to be changed', function () {
+
+      const desiredEntryPath = 'src/js/entryX.js';
+
+      const webpackConfig = febsModule({
+        entry: {
+          app: [
+            desiredEntryPath
+          ],
+        },
+        fs,
+      }).getWebpackConfig();
+
+      assert(webpackConfig.entry.app[0].endsWith(desiredEntryPath));
+    });
+
   });
 
   describe('Exit codes', function () {
