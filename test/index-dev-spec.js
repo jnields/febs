@@ -6,6 +6,7 @@ const assert = require('assert');
 const path = require('path');
 const lib = require('./lib');
 const sinon = require('sinon');
+const logger = require('../lib/logger');
 
 // febs module
 const febsModule = require('../index');
@@ -172,21 +173,6 @@ describe('FEBS Development Tests', function () {
     });
   });
 
-  describe('Webpack config', async function () {
-    it('Output path cannot be modified', async function () {
-      const compiled = await compile(lib.createConf({
-        entry: {
-          app: lib.absPath('fixtures/src/main-es2015.js'),
-        },
-        output: {
-          path: lib.absPath('build/modified-output-path'),
-        },
-      }));
-
-      assert(!compiled.options.output.path.includes('build/modified-output-path'));
-    });
-  });
-
   describe('LESS', async function () {
     it('compiles LESS', async function () {
       const compiled = await compile(lib.createConf({
@@ -240,6 +226,56 @@ describe('FEBS Development Tests', function () {
       const wpConfig = febs.getWebpackConfig(wpDevConf);
       assert.equal(expectedLength, wpConfig.module.rules.length);
     });
+  });
+
+  describe('Webpack config', async function () {
+    it('Output path cannot be modified', async function () {
+      const compiled = await compile(lib.createConf({
+        entry: {
+          app: lib.absPath('fixtures/src/main-es2015.js'),
+        },
+        output: {
+          path: lib.absPath('build/modified-output-path'),
+        },
+      }));
+
+      assert(!compiled.options.output.path.includes('build/modified-output-path'));
+    });
+  });
+
+  describe('febs-config via constructor', function () {
+    it('should allow dist path to be changed', function () {
+
+      const desiredOutputPath = path.resolve('./cool_output_path');
+
+      const febs = febsModule({
+        output: {
+          path: desiredOutputPath
+        },
+        fs,
+      });
+
+      const webpackConfig = febs.getWebpackConfig();
+
+      assert.equal(webpackConfig.output.path, path.resolve(desiredOutputPath, '@rei', 'febs'));
+    });
+
+    it('should allow entry points to be changed', function () {
+
+      const desiredEntryPath = 'src/js/entryX.js';
+
+      const webpackConfig = febsModule({
+        entry: {
+          app: [
+            desiredEntryPath
+          ],
+        },
+        fs,
+      }).getWebpackConfig();
+
+      assert(webpackConfig.entry.app[0].endsWith(desiredEntryPath));
+    });
+
   });
 
   describe('Exit codes', function () {

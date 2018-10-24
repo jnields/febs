@@ -22,10 +22,11 @@ const projectPath = process.cwd();
  *
  * passed in at test-time
  * @param conf.fs The file system (passed in from unit tests.)
-
  */
 module.exports = function init(conf = {}) {
   const { command } = conf;
+
+  const febsConfigArg = conf;
 
   // Allow for in-memory fs for testing.
   const fs = conf.fs || require('fs');
@@ -46,6 +47,50 @@ module.exports = function init(conf = {}) {
     return {};
   };
 
+  const getFebsConfigDefaults = () => ({
+    output: {
+      path: './dist',
+    },
+  });
+
+  const getFebsConfig = () => {
+    const febsConfig = getFebsConfigDefaults();
+
+    const febsConfigPath = path.resolve(projectPath, './febs-config.json');
+
+    let febsConfigFileJSON;
+    if (fs.existsSync(febsConfigPath)) {
+      febsConfigFileJSON = require(febsConfigPath);
+    } else if (febsConfigArg && (febsConfigArg.output || febsConfigArg.entry)) {
+      febsConfigFileJSON = febsConfigArg;
+    }
+
+    return R.merge(febsConfig, febsConfigFileJSON);
+  };
+
+  const getPackageName = () => {
+    const projectPackageJson = path.join(projectPath, 'package.json');
+    return require(projectPackageJson).name;
+  };
+
+  // Applies febs-config to the webpack configuration
+  const febsConfigMerge = (febsConfig, wpConf) => {
+    // eslint-disable-next-line no-param-reassign
+    wpConf.output.path = path.resolve(projectPath, febsConfig.output.path, getPackageName());
+
+    // working to style guide this
+    if (febsConfig.entry) {
+      for (let key in febsConfig.entry) {
+        febsConfig.entry[key] = febsConfig.entry[key].map(function(entryFile) {
+          return path.resolve(projectPath, entryFile);
+        });
+      }
+      wpConf.entry = febsConfig.entry;
+    }
+
+    return wpConf;
+  };
+
   const getWebpackConfig = (confOverride) => {
     const webpackConfigBase = require('./webpack-config/webpack.base.conf');
     const configsToMerge = [webpackConfigBase];
@@ -61,8 +106,9 @@ module.exports = function init(conf = {}) {
 
     // Force output path to always be the same
     wpConf.output.path = webpackConfigBase.output.path;
-    logger.verbose(wpConf);
-    return wpConf;
+
+    // Ensure febs config makes the final configurable decisions
+    return febsConfigMerge(getFebsConfig(), wpConf);
   };
 
   /**
