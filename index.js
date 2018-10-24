@@ -47,15 +47,11 @@ module.exports = function init(conf = {}) {
     return {};
   };
 
-  const getFebsConfigDefaults = () => {
-    const configDefaults = {
-      output: {
-        path: './dist',
-      },
-    };
-
-    return configDefaults;
-  };
+  const getFebsConfigDefaults = () => ({
+    output: {
+      path: './dist',
+    },
+  });
 
   const getFebsConfig = () => {
     const febsConfig = getFebsConfigDefaults();

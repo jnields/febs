@@ -260,7 +260,7 @@ describe('FEBS Development Tests', function () {
       assert.equal(webpackConfig.output.path, path.resolve(desiredOutputPath, '@rei', 'febs'));
     });
 
-    it('should allow entry points can be changed', function () {
+    it('should allow entry points to be changed', function () {
 
       const desiredEntryPath = 'src/js/entryX.js';
 

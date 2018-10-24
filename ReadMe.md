@@ -67,12 +67,12 @@ See [Command-line Interface]() for more details and additional ways to run.
   - Default Style entry point: `/src/style/entry.css`
 
 ### Output path
-  - Bundles written to: `/dist/<package name>/`.
+  - Bundles written to: `/dist/<packageName>/`.
 
 Given the above defaults, FEBS will generate two bundles at the following paths:
 
-    ./dist/app.1234.js
-    ./dist/app.1234.css
+    ./dist/<packageName>/app.1234.js
+    ./dist/<packageName>/app.1234.css
 
 You can adjust these default configurations using the [febs configuration](#febs-configuration)
 
@@ -135,7 +135,7 @@ This config is used by both `webpack` during a build and `eslint` at the command
 
 If the default entry points / output paths don't work for you, you can specify them by using a `febs-config.json` file next to your package.json that is using `febs`.
 
-Here is an example of a entry / output configuration that might be made to use a more java like file structure.
+Here is an example of a entry / output configuration that might be made to use a more Java / Maven like file structure.
 
 *`febs-config.json`*
 
@@ -156,7 +156,7 @@ Here is an example of a entry / output configuration that might be made to use a
 
 ####  `entry` property
 
-In the `febs-config.json` example above we are creating our own entry points, instead of using the [defaults](#default-configuration). We specify the path where our javascript and styles live.
+In the `febs-config.json` example above we are creating our own entry points, instead of using the [defaults](#default-configuration). We specify the path where our JavaScript and styles live.
 
 #### `output` property
 
@@ -165,12 +165,12 @@ In the `febs-config.json` example above we change the default output path to the
 #### Example configuration output
 Given the above example, FEBS will generate two bundles at the following paths:
 
-    ./target/classes/dist/details.1234.js
-    ./target/classes/dist/detail-reviews.1234.js
+    ./target/classes/dist/<packageName>/details.1234.js
+    ./target/classes/dist/<packageName>/detail-reviews.1234.js
 
-- `details.1234.js` will only contain Javascript contained in entry.js (including its dependencies)
+- `details.1234.js` will only contain JavaScript contained in entry.js (including its dependencies)
 
-- `details-reviews.1234.js` will be bundle reviews.js and write-review.js files into one bundle
+- `details-reviews.1234.js` will bundle reviews.js and write-review.js files into one bundle
 
 If you'd like to further configure FEBS, you can look at the [webpack overrides](#webpack-overrides)
 
@@ -182,7 +182,7 @@ You can override or create new configurations through webpack directly where nec
 think others might need the override please file a ticket or reach out for [support](#support).
 Where you can, attempt to avoid using this feature to reduce duplication of work.
 
-To customize your build simply by creating a `webpack.overrides.conf.js` at the root of your npm
+To customize your build, creating a `webpack.overrides.conf.js` at the root of your npm
 package. Anything that Webpack understands is fair game for the overrides file. Want to add a
 loader or a plugin?
 
@@ -212,8 +212,8 @@ You can find out all of the Webpack defaults by reviewing the base
 
 ### Build Manifest
 
-A manifest.json is built to `./dist/manifest.json` this is a mechanism to be used
-by an asset injector to insert assets onto a page.
+A manifest.json is built to `./dist/<packageName>/manifest.json`. This is a
+mechanism to be used by an asset injector to insert assets onto a page.
 
 @TODO: Additional detail
 
@@ -222,11 +222,11 @@ by an asset injector to insert assets onto a page.
 An asset injector uses a [manifest.json](#build-manifest) to insert production
 assets into the markup of a webpage.
 
-See our example Javascript implementation of the an asset injector. One could
-create one for to be used by Thymleaf, Freemarker, JSP Tags, Vue, React,
+See our example JavaScript implementation of the an asset injector. One could
+create one to be used by Thymleaf, Freemarker, JSP Tags, Vue, React,
 Mustache, Handlebars, etc.
 
-@TODO: publish Javascript implementation and asset pipeline architectual
+@TODO: publish JavaScript implementation and asset pipeline architectual
 diagrams and relate to an "asset pipeline".
 
 ## Project Information
