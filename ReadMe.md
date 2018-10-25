@@ -46,7 +46,7 @@ FEBS exposes an executable named `febs` to be used within the scripts of your `p
 There is [some work](#23) to remove the requirement on `NODE_ENV` and give full
 respect to the second argument.
 
-#### Update or use [defaults](#default-configuration) to specify paths for the css and js you want to compile and [run](#run)
+#### Update or use [defaults](#default-configuration) to specify paths for the CSS and JS you want to compile and [run](#run)
 
 ### Run
 
@@ -226,7 +226,7 @@ See our example JavaScript implementation of the an asset injector. One could
 create one to be used by Thymleaf, Freemarker, JSP Tags, Vue, React,
 Mustache, Handlebars, etc.
 
-@TODO: publish JavaScript implementation and asset pipeline architectual
+@TODO: publish JavaScript implementation and asset pipeline architectural
 diagrams and relate to an "asset pipeline".
 
 ## Project Information
@@ -240,14 +240,14 @@ an incompatible Webpack configuration change, the major version is bumped. When
 the project moves from Webpack 3 to 4, the major version is bumped.
 
 If the project unintentionally introduces a new bug through a change through
-febs core or build features, there will be a prompt fix. Additionally maintainers
+febs core or build features, there will be a prompt fix. Additionally, maintainers
 will continue to improve our unit and functional testing strategies and bug
 response times.
 
 Somewhat related, the intention is to move the Webpack configuration to a separate
-repository and have that be configurable. At that point the project can have more fine
-grained release management and flexibility as well as allow non-internal customers to
-have complete control over their shared base configuration.
+repository and have that be configurable. At that point the project can have more
+fine-grained release management and flexibility as well as allow non-internal
+customers to have complete control over their shared base configuration.
 
 ### Deprecation
 
@@ -258,7 +258,7 @@ release but will continue to get [supported](#support) for the previous version.
 
 The project focus is around FEBS core. For [Build Features](#build-features)
 it should be look at as community of practice effort, this is one of the main ideas.
-However, a maintainer should be a major contributors to features.
+However, a maintainer should be a major contributor to features.
 
 *For our internal customers:* Think of FEBS as just a base Webpack
 config that you can edit that happens to be in a different repository
