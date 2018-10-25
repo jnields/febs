@@ -77,6 +77,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|tag)$/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -88,6 +89,7 @@ module.exports = {
         enforce: 'pre',
         test: /\.(js|vue)$/,
         include: path.resolve('.'),
+        exclude: /node_modules/,
         use: {
           loader: 'eslint-loader',
           options: {
