@@ -191,6 +191,9 @@ module.exports = {
     new UglifyJsPlugin({
       sourceMap: env === 'prod',
       uglifyOptions: {
+        mangle: {
+          safari10: true, // See https://github.com/webpack-contrib/uglifyjs-webpack-plugin/issues/92
+        },
         compress: env === 'prod',
       },
     }),
