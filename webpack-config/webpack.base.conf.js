@@ -8,6 +8,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const postCSSImport = require('postcss-import');
+const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 
 // Client project path.
 const projectPath = process.cwd();
@@ -49,7 +50,10 @@ module.exports = {
     path: path.resolve(projectPath, 'dist', packageName),
     filename: env === 'prod' ? '[name].bundle-[hash].js' : '[name].bundle.js',
     publicPath: '/dist/',
+    libraryTarget: 'commonjs2',
   },
+
+  target: 'node',
 
   resolve: {
     extensions: [
@@ -197,5 +201,7 @@ module.exports = {
         compress: env === 'prod',
       },
     }),
+
+    new VueSSRServerPlugin(),
   ],
 };
