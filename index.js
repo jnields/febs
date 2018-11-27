@@ -102,7 +102,6 @@ module.exports = function init(conf = {}) {
     //  - entry
     const wpConf = merge.smartStrategy({
       entry: 'replace',
-      plugins: 'append', /* @TODO: create PR to febs*/
     })(configsToMerge);
 
     // Force output path to always be the same
