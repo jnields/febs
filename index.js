@@ -1,8 +1,8 @@
 /* eslint-disable global-require, import/no-dynamic-require */
 
-const wp = require('webpack');
+const webpack = require('webpack');
 const logger = require('./lib/logger');
-const merge = require('webpack-merge');
+const webpackMerge = require('webpack-merge');
 const path = require('path');
 const devServer = require('./lib/dev-server');
 const R = require('ramda');
@@ -91,16 +91,23 @@ module.exports = function init(conf = {}) {
     return wpConf;
   };
 
-  const getWebpackConfig = (confOverride) => {
+  const getWebpackConfig = (confOverride, ssr = false) => {
+
     const webpackConfigBase = require('./webpack-config/webpack.base.conf');
     const configsToMerge = [webpackConfigBase];
 
+    /*
+    if (ssr) {
+      configsToMerge.push(require('./webpack-config/webpack.server.conf'));
+    }
+    */
+
     // Overrides config.
-    configsToMerge.push(getOverridesConf(confOverride));
+    if (confOverride) configsToMerge.push(getOverridesConf(confOverride));
 
     // Always replace:
     //  - entry
-    const wpConf = merge.smartStrategy({
+    const wpConf = webpackMerge.smartStrategy({
       entry: 'replace',
     })(configsToMerge);
 
@@ -111,6 +118,11 @@ module.exports = function init(conf = {}) {
     return febsConfigMerge(getFebsConfig(), wpConf);
   };
 
+
+  const getWebpackConfigServer = (confOverride) => {
+    getWebpackConfig(confOverride, true)
+  };
+
   /**
  * Create's compiler instance with appropriate environmental
  * webpack.conf merged with the webpack.overrides.
@@ -118,11 +130,16 @@ module.exports = function init(conf = {}) {
  * @param {Object} wpConf The final webpack conf object.
  * @return {Object} The webpack compiler.
  */
-  const createWebpackCompiler = wpConf => wp(wpConf);
+  const createWebpackCompiler = wpConf => webpack(wpConf);
 
   const createCompiler = R.compose(
     createWebpackCompiler,
     getWebpackConfig
+  );
+
+  const createCompilerServer = R.compose(
+    createWebpackCompiler,
+    getWebpackConfigServer
   );
 
   /**
@@ -218,6 +235,16 @@ module.exports = function init(conf = {}) {
   };
 
   /**
+   * Runs the webpack compile either via 'run' or 'watch'.
+   * @returns {*} The webpack compiler instance.
+   */
+  const runCompileServer = () => {
+    const compiler = createCompilerServer();
+    return compiler.run(webpackCompileDone);
+  };
+
+
+  /**
    * Compile function.
    *
    * - Cleans the /dist directory
@@ -228,15 +255,14 @@ module.exports = function init(conf = {}) {
    * @returns {Object} Webpack compiler instance.
    */
   const compile = R.compose(
-    runCompile,
-    cleanDir
+    runCompile
   );
 
   /**
    * Start the webpack dev server.
    */
   function startDevServer() {
-    const WDS = require('webpack-dev-server');
+    const webpackDevServer = require('webpack-dev-server');
 
     const wpConf = getWebpackConfig();
 
@@ -256,7 +282,7 @@ module.exports = function init(conf = {}) {
       }
     });
 
-    devServer(createCompiler(wpConf), WDS);
+    devServer(createCompiler(wpConf), webpackDevServer);
   }
 
   return {
