@@ -113,25 +113,12 @@ module.exports = function init(conf = {}) {
 
     wpConf = merge.smartStrategy(wpMergeConf)(configsToMerge);
 
-    // if (ssr) {
-    //   configsToMerge.push(webpackServerConf);
-    //   wpConf = merge.smartStrategy({
-    //     plugins: 'append',
-    //   })(configsToMerge);
-    // } else {
-    //   wpConf = merge.smartStrategy({
-    //     entry: 'replace',
-    //   })(configsToMerge);
-    // }
-
     // Force output path to always be the same
     wpConf.output.path = webpackConfigBase.output.path;
 
     // Ensure febs config makes the final configurable decisions
     return febsConfigMerge(getFebsConfig(), wpConf);
   };
-
-
 
   /**
  * Create's compiler instance with appropriate environmental
