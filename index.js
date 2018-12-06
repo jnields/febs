@@ -238,15 +238,13 @@ module.exports = function init(conf = {}) {
    */
   const compile = function compile() {
     cleanDir();
+
+    // Create client-side bundle
+    runCompile();
+
+    // Create vue-ssr-server-bundle.json
     ssr = getFebsConfig().ssr;
     if (ssr) {
-      // Create vue-ssr-server-bundle.json
-      runCompile();
-
-      // Create client-side bundle
-      ssr = false;
-      runCompile();
-    } else {
       runCompile();
     }
   };
