@@ -25,6 +25,7 @@ const projectPath = process.cwd();
  */
 module.exports = function init(conf = {}) {
   const { command } = conf;
+  let ssr = false;
 
   const febsConfigArg = conf;
 
@@ -93,16 +94,35 @@ module.exports = function init(conf = {}) {
 
   const getWebpackConfig = (confOverride) => {
     const webpackConfigBase = require('./webpack-config/webpack.base.conf');
+    const webpackServerConf = require('./webpack-config/webpack.server.conf');
     const configsToMerge = [webpackConfigBase];
+    let wpConf;
+    let wpMergeConf = {
+      entry: 'replace',
+    };
 
     // Overrides config.
     configsToMerge.push(getOverridesConf(confOverride));
 
-    // Always replace:
-    //  - entry
-    const wpConf = merge.smartStrategy({
-      entry: 'replace',
-    })(configsToMerge);
+    if (ssr) {
+      configsToMerge.push(webpackServerConf);
+      wpMergeConf = R.merge(wpMergeConf, {
+        plugins: 'append',
+      });
+    }
+
+    wpConf = merge.smartStrategy(wpMergeConf)(configsToMerge);
+
+    // if (ssr) {
+    //   configsToMerge.push(webpackServerConf);
+    //   wpConf = merge.smartStrategy({
+    //     plugins: 'append',
+    //   })(configsToMerge);
+    // } else {
+    //   wpConf = merge.smartStrategy({
+    //     entry: 'replace',
+    //   })(configsToMerge);
+    // }
 
     // Force output path to always be the same
     wpConf.output.path = webpackConfigBase.output.path;
@@ -110,6 +130,8 @@ module.exports = function init(conf = {}) {
     // Ensure febs config makes the final configurable decisions
     return febsConfigMerge(getFebsConfig(), wpConf);
   };
+
+
 
   /**
  * Create's compiler instance with appropriate environmental
@@ -227,10 +249,20 @@ module.exports = function init(conf = {}) {
    *
    * @returns {Object} Webpack compiler instance.
    */
-  const compile = R.compose(
-    runCompile,
-    cleanDir
-  );
+  const compile = function compile() {
+    cleanDir();
+    ssr = getFebsConfig().ssr;
+    if (ssr) {
+      // Create vue-ssr-server-bundle.json
+      runCompile();
+
+      // Create client-side bundle
+      ssr = false;
+      runCompile();
+    } else {
+      runCompile();
+    }
+  };
 
   /**
    * Start the webpack dev server.
