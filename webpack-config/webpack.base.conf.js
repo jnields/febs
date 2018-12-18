@@ -51,7 +51,7 @@ module.exports = {
     publicPath: '/dist/',
   },
 
-  target: 'node',
+  target: 'web',
 
   resolve: {
     extensions: [
