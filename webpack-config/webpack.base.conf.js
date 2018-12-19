@@ -86,24 +86,6 @@ module.exports = {
         },
       },
       {
-        enforce: 'pre',
-        test: /\.(js|vue)$/,
-        include: path.resolve('.'),
-        exclude: /node_modules/,
-        use: {
-          loader: 'eslint-loader',
-          options: {
-            configFile: path.resolve(__dirname, '..', '.eslintrc.json'),
-            // cache: true,
-            fix: false,
-            failOnWarning: false,
-            failOnError: false,
-            emitError: false,
-            emitWarning: false,
-          },
-        },
-      },
-      {
         test: /\.tag$/,
         exclude: /node_modules/,
         loader: 'riot-tag-loader',
